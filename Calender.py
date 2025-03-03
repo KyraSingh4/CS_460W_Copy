@@ -10,18 +10,18 @@ class Calender:
         reservations_friday = []
         reservations_saturday = []
         self.reservations = {
-            0: reservations_sunday,
-            1: reservations_monday,
-            2: reservations_tuesday,
-            3: reservations_wednesday,
-            4: reservations_thursday,
-            5: reservations_friday,
-            6: reservations_saturday
+            0: reservations_monday,
+            1: reservations_tuesday,
+            2: reservations_wednesday,
+            3: reservations_thursday,
+            4: reservations_friday,
+            5: reservations_saturday,
+            6: reservations_sunday
         }
         self.date = datetime.datetime.now()
         self.weekDay = date.weekday()
     
-    def getReservations(self, weekDay, court):
+    def getReservations(self, weekDay, court): #gets reservation for a specific court on a specific day
         matching_reservations = []
         for reservation in self.reservations[weekDay]:
             if reservation.getCourt() == court:
@@ -30,10 +30,10 @@ class Calender:
         # Sort the reservations by time
         return matching_reservations
     
-    def sortByTime(self, reservations):
+    def sortByTime(self, reservations): #sorts a list of reservations by time
         return sorted(reservations, key=lambda x: x.getTime())
     
-    def addReservation(self, reservation, weekDay):
+    def addReservation(self, reservation, weekDay): #adds a reservation to the list of reservations for a specific day
         self.reservations[weekDay].append(reservation)
 
     def getDay(self):
