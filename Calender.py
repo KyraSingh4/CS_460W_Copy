@@ -26,8 +26,16 @@ class Calender:
         for reservation in self.reservations[weekDay]:
             if reservation.getCourt() == court:
                 matching_reservations.append(reservation)
+        sortByTime(matching_reservations)
+        # Sort the reservations by time
         return matching_reservations
     
+    def sortByTime(self, reservations):
+        return sorted(reservations, key=lambda x: x.getTime())
+    
+    def addReservation(self, reservation, weekDay):
+        self.reservations[weekDay].append(reservation)
+
     def getDay(self):
         return self.weekDay
     
@@ -37,20 +45,4 @@ class Calender:
     def updateDate(self, date):
         self.date = datetime.datetime.now()
         self.weekDay = date.weekday()
-
-    def purgeOldReservations(self):
-        match weekDay:
-            case 0:
-                self.reservations[0] = []
-            case 1:
-                self.reservations[1] = []
-            case 2:
-                self.reservations[2] = []
-            case 3:
-                self.reservations[3] = []
-            case 4:
-                self.reservations[4] = []
-            case 5:
-                self.reservations[5] = []
-            case 6:
-                self.reservations[6] = []
+        self.reservations[weekDay] = []
