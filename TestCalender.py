@@ -16,7 +16,7 @@ reservation1 = Reservation(
 )
 
 reservation2 = Reservation(
-    members=["Alice", "Bob"],
+    members=["Alice", "Bob", "Charlie","David"],
     guests=["Guest2", "Guest3"],
     court="2",
     date=datetime.datetime(2025, 3, 7),
