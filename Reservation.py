@@ -1,13 +1,18 @@
 import datetime
 
 class Reservation:
-    def __init__(members,guests,court,date,time,weekDay):
+    members = []
+    guests = []
+    court = 0
+    date = datetime.datetime.now()
+    time = datetime.time()
+    weekDay = 0
+
+    def __init__(self, members, guests, court, date, time, weekDay):
         #initialize the members and guests lists
-        members = []
-        guests = []
-        self.members = members
-        self.guests = guests
-        self.court = court
+        self.members = members #list of members
+        self.guests = guests #list of guests
+        self.court = court #court number
         self.date = date #datetime date object
         self.time = time #datetime time object
         self.weekDay = weekDay #monday to sunday (0-6)

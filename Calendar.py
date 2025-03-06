@@ -1,7 +1,9 @@
 import datetime
+import csv
+from Reservation import Reservation
 
 class Calender:
-    def __init__():
+    def __init__(self):
         reservations_sunday = []
         reservations_monday = []
         reservations_tuesday = []
@@ -19,14 +21,14 @@ class Calender:
             6: reservations_sunday
         }
         self.date = datetime.datetime.now()
-        self.weekDay = date.weekday()
+        self.weekDay = self.date.weekday()
     
     def getReservations(self, weekDay, court): #gets reservation for a specific court on a specific day
         matching_reservations = []
         for reservation in self.reservations[weekDay]:
             if reservation.getCourt() == court:
                 matching_reservations.append(reservation)
-        sortByTime(matching_reservations)
+        self.sortByTime(matching_reservations)
         # Sort the reservations by time
         return matching_reservations
     
@@ -44,5 +46,34 @@ class Calender:
     
     def updateDate(self, date):
         self.date = datetime.datetime.now()
+        self.reservations[self.weekDay] = []
         self.weekDay = date.weekday()
-        self.reservations[weekDay] = []
+
+    def saveToCSV(self, filename):
+        with open(filename, 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(['WeekDay', 'Court', 'Date', 'Time', 'Members', 'Guests'])
+            for weekDay, reservations in self.reservations.items():
+                for reservation in reservations:
+                    writer.writerow([
+                        weekDay,
+                        reservation.getCourt(),
+                        reservation.getDate().isoformat(),
+                        reservation.getTime().isoformat(),
+                        ','.join(reservation.getMembers()),
+                        ','.join(reservation.getGuests())
+                    ])
+
+    def loadFromCSV(self, filename):
+        with open(filename, 'r') as csvfile:
+            reader = csv.reader(csvfile)
+            next(reader)  # Skip header row
+            for row in reader:
+                weekDay = int(row[0])
+                court = row[1]
+                date = datetime.datetime.fromisoformat(row[2])
+                time = datetime.time.fromisoformat(row[3])
+                members = row[4].split(',')
+                guests = row[5].split(',')
+                reservation = Reservation(members, guests, court, date, time, weekDay)
+                self.addReservation(reservation, weekDay)
