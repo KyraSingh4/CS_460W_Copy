@@ -13,4 +13,14 @@ CREATE TABLE IF NOT EXISTS member (
     optIN       BOOLEAN         NOT NULL,
 
     PRIMARY KEY(member_id)
+);
+
+CREATE TABLE IF NOT EXISTS charges (
+    member_id   INT                 NOT NULL,
+    amount      DOUBLE PRECISION    NOT NULL,
+    date        DATE                NOT NULL,
+    description  VARCHAR(128)        NOT NULL,
+
+    FOREIGN KEY(member_id) REFERENCES member(member_ID)
+                                   ON DELETE CASCADE
 )
