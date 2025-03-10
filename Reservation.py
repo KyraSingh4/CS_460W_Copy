@@ -12,7 +12,7 @@ class Reservation:
         #initialize the members and guests lists
         self.members = members #list of members
         self.guests = guests #list of guests
-        self.court = court #court number
+        self.court = court #court number (1-12)
         self.date = date #datetime date object
         self.time = time #datetime time object
         self.weekDay = weekDay #monday to sunday (0-6)
