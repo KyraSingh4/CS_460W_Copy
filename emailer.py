@@ -10,7 +10,7 @@ class Emailer:
         self.smtp = None
 
     def connect(self):
-        self.smtp = smtplib.SMTP('smtp.gmail.com', 587) #server and port
+        self.smtp = smtplib.SMTP('smtp.gmail.com', 587) #server and port of your SMTP server
         self.smtp.ehlo() 
         self.smtp.starttls() 
         self.smtp.login('ACED.Tennis.Team@gmail.com', 'psmgnqwgvxaxzxou') #login email and password
