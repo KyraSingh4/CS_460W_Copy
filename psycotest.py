@@ -9,15 +9,16 @@ def main():
     #cur.execute("INSERT INTO test (num, data) VALUES (%s, %s)",
     #            (100, "abc'def"))
 
-    cur.execute("SELECT * FROM test;")
+    cur.execute("SELECT num FROM test;")
 
     data = cur.fetchall()
 
     print(data)
 
-    test = data[1]
+    #print(data[1][1])
+    #test = data[1]
 
-    print(test[1])
+    #print(test[1])
 
     conn.commit()
 
