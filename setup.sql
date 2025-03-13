@@ -1,3 +1,10 @@
+CREATE USER aceduser WITH PASSWORD 'acedpassword';
+GRANT ALL PRIVILEGES ON DATABASE aced TO aceduser;
+GRANT ALL PRIVILEGES ON TABLE member TO aceduser;
+GRANT ALL PRIVILEGES ON TABLE charges TO aceduser;
+GRANT ALL PRIVILEGES ON TABLE reservation TO aceduser;
+GRANT ALL PRIVILEGES ON TABLE attendees TO aceduser;
+
 CREATE TABLE IF NOT EXISTS member (
     member_id   INT             NOT NULL,
     firstname   VARCHAR(32)     NOT NULL,
@@ -44,3 +51,23 @@ CREATE TABLE IF NOT EXISTS attendees (
     FOREIGN KEY(reservation_id) REFERENCES reservation(reservation_id)
                                     ON DELETE CASCADE
 );
+
+INSERT INTO member VALUES (
+    1,
+    'President',
+    'Staff',
+    'president@aced.com',
+    '111-111-1111',
+    FALSE,
+    TRUE
+    );
+
+INSERT INTO member VALUES (
+    2,
+    'Billing',
+    'Staff',
+    'billing@aced.com',
+    '111-111-1112',
+    FALSE,
+    TRUE
+    );
