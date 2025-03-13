@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS member (
     lastname    VARCHAR(32)     NOT NULL,
     email       VARCHAR(64)     NOT NULL,
     phonenum    VARCHAR(12)     NOT NULL,
+    guestpass   INT             NOT NULL DEFAULT 4,
     optIN       BOOLEAN         NOT NULL,
     active      BOOLEAN         NOT NULL,
 
@@ -29,7 +30,7 @@ CREATE TABLE IF NOT EXISTS charges (
 );
 
 CREATE TABLE IF NOT EXISTS reservation (
-    reservation_id  INT             NOT NULL,
+    reservation_id  SERIAL          NOT NULL,
     court_num       INT             NOT NULL,
     res_day         INT             NOT NULL,
     start_time      TIME            NOT NULL,
@@ -58,6 +59,7 @@ INSERT INTO member VALUES (
     'Staff',
     'president@aced.com',
     '111-111-1111',
+    0,
     FALSE,
     TRUE
     );
@@ -68,6 +70,7 @@ INSERT INTO member VALUES (
     'Staff',
     'billing@aced.com',
     '111-111-1112',
+    0,
     FALSE,
     TRUE
     );

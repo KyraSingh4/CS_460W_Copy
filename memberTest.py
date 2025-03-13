@@ -1,7 +1,9 @@
 from Member import Member
 
-mem = Member(1)
+mem = Member(3)
 
 print(mem.getBill())
 
-print(mem.updateInformation('firstname', "Joe"))
+print(mem.getReservations())
+
+mem.updateInformation('firstname', "Joe")
