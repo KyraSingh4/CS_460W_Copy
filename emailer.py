@@ -21,6 +21,7 @@ class Emailer:
         msg.attach(MIMEText(text)) 
         self.smtp.sendmail(from_addr="Your Login Email", to_addrs=email, msg=msg.as_string()) 
         self.smtp.quit()
+        
 #emailer testing (must have SMPTP server set up)
 emailer = Emailer()
 emailer.connect()
