@@ -52,6 +52,11 @@ class Member:
             with conn.cursor() as cur:
                 cur.execute("INSERT INTO attendees (reservation_id, firstname, lastname) VALUES ((%s), (%s), (%s))",
                             (res_id, guest[0], guest[1]))
+                cur.execute("SELECT guestpass FROM member WHERE member_id = (%s)", (self.memberid,))
+                rem_passes = cur.fetchall()
+                cur.execute("UPDATE member SET guestpass = (%s) WHERE member_id = (%s)",
+                            (rem_passes[0][0]-1, self.memberid))
+            self.my_bill.createCharge(5, "Guest Fee", "Other")
 
         conn.close()
         return True
@@ -128,3 +133,57 @@ class Member:
             return False
 
         conn.close()
+
+
+class President(Member):
+    def __init__(self):
+        super().__init__(1)
+
+    def addEventFee(self, fee: float, memo: str, memberid: int):
+        bill = Bill(memberid)
+        bill.createCharge(fee, memo, "Other")
+
+    def checkBillStatus(self, memberid: int):
+        bill = Bill(memberid)
+        return bill.isPaid()
+
+    def createMember(self, firstname: str, lastname: str, email: str, phonenum: str, optin: bool):
+        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+            with conn.cursor() as cur:
+                cur.execute("INSERT INTO member (firstname, lastname, email, phonenum, optin) VALUES (%s, %s, %s, %s, %s)",
+                            (firstname, lastname, email, phonenum, optin))
+
+    def updateInformation(self, search: str, svalue: str, attribute: str, value: str):
+        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    sql.SQL("UPDATE member SET {attr} = %s WHERE {sear} = %s", ).format(attr = sql.Identifier(attribute), sear = sql.Identifier(search)),
+                    (value, svalue))
+
+    def deactivateMember(self, search: str, value: str):
+        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+            with conn.cursor() as cur:
+                cur.execute(sql.SQL("UPDATE member SET active = FALSE WHERE {sear} = %s").format(sear = sql.Identifier(search)),
+                            (value,))
+
+class BillingStaff(Member):
+    def __init__(self):
+        super().__init__(2)
+
+    def addEventFee(self, fee: float, memo: str, memberid: int):
+        bill = Bill(memberid)
+        bill.createCharge(fee, memo, "Other")
+
+    def checkBillStatus(self, memberid: int):
+        bill = Bill(memberid)
+        return bill.isPaid()
+
+    def modifyBill(self, memberid: int, search: str, svalue: str, attribute: str, value: str):
+        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+            with conn.cursor() as cur:
+                cur.execute(sql.SQL("UPDATE charges SET {attr} = %s WHERE {sear} = %s AND member_id = (%s)").format(attr = sql.Identifier(attribute), sear = sql.Identifier(search)),
+                            (value, svalue, memberid))
+
+    def getBill(self,memberid: int):
+        bill = Bill(memberid)
+        return bill.getBill()

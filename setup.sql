@@ -1,12 +1,8 @@
+create database aced;
 CREATE USER aceduser WITH PASSWORD 'acedpassword';
-GRANT ALL PRIVILEGES ON DATABASE aced TO aceduser;
-GRANT ALL PRIVILEGES ON TABLE member TO aceduser;
-GRANT ALL PRIVILEGES ON TABLE charges TO aceduser;
-GRANT ALL PRIVILEGES ON TABLE reservation TO aceduser;
-GRANT ALL PRIVILEGES ON TABLE attendees TO aceduser;
 
 CREATE TABLE IF NOT EXISTS member (
-    member_id   INT             NOT NULL,
+    member_id   SERIAL          NOT NULL,
     firstname   VARCHAR(32)     NOT NULL,
     lastname    VARCHAR(32)     NOT NULL,
     email       VARCHAR(64)     NOT NULL,
@@ -53,24 +49,28 @@ CREATE TABLE IF NOT EXISTS attendees (
                                     ON DELETE CASCADE
 );
 
-INSERT INTO member VALUES (
-    1,
+GRANT ALL PRIVILEGES ON DATABASE aced TO aceduser;
+GRANT ALL PRIVILEGES ON TABLE member TO aceduser;
+GRANT ALL PRIVILEGES ON TABLE charges TO aceduser;
+GRANT ALL PRIVILEGES ON TABLE reservation TO aceduser;
+GRANT ALL PRIVILEGES ON TABLE attendees TO aceduser;
+GRANT ALL PRIVILEGES ON SEQUENCE member_member_id_seq to aceduser;
+GRANT ALL PRIVILEGES ON SEQUENCE reservation_reservation_id_seq to aceduser;
+
+INSERT INTO member (firstname, lastname, email, phonenum, optin, active) VALUES (
     'President',
     'Staff',
     'president@aced.com',
     '111-111-1111',
-    0,
     FALSE,
     TRUE
     );
 
-INSERT INTO member VALUES (
-    2,
+INSERT INTO member (firstname, lastname, email, phonenum, optin, active) VALUES (
     'Billing',
     'Staff',
     'billing@aced.com',
     '111-111-1112',
-    0,
     FALSE,
     TRUE
     );
