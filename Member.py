@@ -36,13 +36,13 @@ class Member:
             cur.execute("INSERT INTO reservation (courtnum, res_day, start_time, end_time, member_id, type) VALUES "
                         "((%s), (%s), (%s), (%s), (%s), (%s))", (court, day, start, end, self.memberid, restype))
         with conn.cursor() as cur:
-            cur.execute("SELECT (reservation_id) FROM reservation WHERE member_ID = (%s) AND start_time = (%s) AND courtnum = (%s)",
+            cur.execute("SELECT reservation_id FROM reservation WHERE member_ID = (%s) AND start_time = (%s) AND courtnum = (%s)",
                         (self.memberid, start, court))
             res_id = cur.fetch()
 
         for i in range(len(members)):
             with conn.cursor() as cur:
-                cur.execute("SELECT (firstname, lastname) FROM member WHERE member_ID = (%s)", (members[i],))
+                cur.execute("SELECT firstname, lastname FROM member WHERE member_ID = (%s)", (members[i],))
                 memname = cur.fetchall()
                 cur.execute("INSERT INTO attendees VALUES ((%s), (%s), (%s), (%s))",
                             (res_id, memname[0][0], memname[0][1],members[i]))
@@ -66,7 +66,7 @@ class Member:
         conn = psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432")
             #Rule 1: Overlapping reservation
         with conn.cursor() as cur:
-            cur.execute("SELECT (start_time, end_time) FROM reservation WHERE res_day = (%s) AND court_num = (%s)",
+            cur.execute("SELECT start_time, end_time FROM reservation WHERE res_day = (%s) AND court_num = (%s)",
                         (day, court))
             check = cur.fetchall()
         for i in range(len(check)):
