@@ -1,6 +1,8 @@
 create database aced;
 CREATE USER aceduser WITH PASSWORD 'acedpassword';
 
+CREATE EXTENSION pgcrypto;
+
 CREATE TABLE IF NOT EXISTS member (
     member_id   SERIAL          NOT NULL,
     firstname   VARCHAR(32)     NOT NULL,
@@ -10,6 +12,7 @@ CREATE TABLE IF NOT EXISTS member (
     guestpass   INT             NOT NULL DEFAULT 4,
     optIN       BOOLEAN         NOT NULL,
     active      BOOLEAN         NOT NULL,
+    password    VARCHAR(64)     NOT NULL,
 
     PRIMARY KEY(member_id)
 );
@@ -57,20 +60,22 @@ GRANT ALL PRIVILEGES ON TABLE attendees TO aceduser;
 GRANT ALL PRIVILEGES ON SEQUENCE member_member_id_seq to aceduser;
 GRANT ALL PRIVILEGES ON SEQUENCE reservation_reservation_id_seq to aceduser;
 
-INSERT INTO member (firstname, lastname, email, phonenum, optin, active) VALUES (
+INSERT INTO member (firstname, lastname, email, phonenum, optin, active, password) VALUES (
     'President',
     'Staff',
     'president@aced.com',
     '111-111-1111',
     FALSE,
-    TRUE
+    TRUE,
+    crypt('ilovetennis',gen_salt('md5'))
     );
 
-INSERT INTO member (firstname, lastname, email, phonenum, optin, active) VALUES (
+INSERT INTO member (firstname, lastname, email, phonenum, optin, active, password) VALUES (
     'Billing',
     'Staff',
     'billing@aced.com',
     '111-111-1112',
     FALSE,
-    TRUE
+    TRUE,
+    crypt('ilovemoney', gen_salt('md5'))
     );

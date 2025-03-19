@@ -1,7 +1,7 @@
 import psycopg2
 from psycopg2 import sql
 
-def Directory():
+class Directory():
     def __init__(self):
         pass
 
@@ -41,7 +41,7 @@ def Directory():
         if memberid != 1 and memberid !=2:
             with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
                 with conn.cursor() as cur:
-                    cur.execute("SELECT fristname, lastname, email, phonenum FROM member"
+                    cur.execute("SELECT firstname, lastname, email, phonenum FROM member"
                                 "WHERE firstname = (%s) OR lastname = (%s) OR email = (%s) OR phonenum = (%s)",
                                 (value, value, value, value))
                     return cur.fetchall()

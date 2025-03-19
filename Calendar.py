@@ -2,7 +2,22 @@ import datetime
 import csv
 from Reservation import Reservation
 
-class Calender:
+import psycopg2
+
+
+class Calendar:
+    def __init__(self):
+        pass
+
+    def RetrieveCourt(self,courtnum):
+        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT * FROM reservation WHERE court_num = %s", (courtnum,))
+                return cur.fetchall()
+
+
+
+class Calender2:
     def __init__(self):
         reservations_sunday = []
         reservations_monday = []

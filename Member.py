@@ -147,17 +147,21 @@ class President(Member):
         bill = Bill(memberid)
         return bill.isPaid()
 
-    def createMember(self, firstname: str, lastname: str, email: str, phonenum: str, optin: bool):
+    def createMember(self, firstname: str, lastname: str, email: str, phonenum: str, optin: bool, pw: str):
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
             with conn.cursor() as cur:
-                cur.execute("INSERT INTO member (firstname, lastname, email, phonenum, optin) VALUES (%s, %s, %s, %s, %s)",
-                            (firstname, lastname, email, phonenum, optin))
+                cur.execute("INSERT INTO member (firstname, lastname, email, phonenum, optin, password) "
+                            "VALUES (%s, %s, %s, %s, %s, crypt(%s, gen_salt('md5')))",
+                            (firstname, lastname, email, phonenum, optin, pw))
 
     def updateInformation(self, search: str, svalue: str, attribute: str, value: str):
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
             with conn.cursor() as cur:
-                cur.execute(
-                    sql.SQL("UPDATE member SET {attr} = %s WHERE {sear} = %s", ).format(attr = sql.Identifier(attribute), sear = sql.Identifier(search)),
+                if attribute == 'password':
+                    cur.execute(sql.SQL("UPDATE member SET {attr} = crypt(%s, gen_salt('md5')) WHERE {sear} = %s", ).format(attr = sql.Identifier(attribute), sear = sql.Identifier(search)),
+                    (value, svalue))
+                else:
+                    cur.execute(sql.SQL("UPDATE member SET {attr} = %s WHERE {sear} = %s", ).format(attr = sql.Identifier(attribute), sear = sql.Identifier(search)),
                     (value, svalue))
 
     def deactivateMember(self, search: str, value: str):
