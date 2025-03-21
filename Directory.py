@@ -5,7 +5,7 @@ class Directory():
     def __init__(self):
         pass
 
-    def getAll(memberid: int):
+    def getAll(self, memberid: int):
             #Member View
         if memberid != 1 and memberid !=2:
             with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
@@ -20,7 +20,7 @@ class Directory():
                     cur.execute("SELECT * FROM member")
                     return cur.fetchall()
 
-    def searchAttr(memberid: str, attribute: str, value: str):
+    def searchAttr(self, memberid: str, attribute: str, value: str):
             #member View
         if memberid != 1 and memberid !=2:
             with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
@@ -37,7 +37,7 @@ class Directory():
                                 (value,))
                     return cur.fetchall()
 
-    def searchAll(memberid: str, value: str):
+    def searchAll(self, memberid: str, value: str):
         if memberid != 1 and memberid !=2:
             with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
                 with conn.cursor() as cur:
