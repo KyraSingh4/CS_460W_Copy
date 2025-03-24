@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS member (
     phonenum    VARCHAR(12)     NOT NULL,
     guestpass   INT             NOT NULL DEFAULT 4,
     optIN       BOOLEAN         NOT NULL,
-    active      BOOLEAN         NOT NULL,
+    active      BOOLEAN         NOT NULL DEFAULT TRUE,
     password    VARCHAR(64)     NOT NULL,
 
     PRIMARY KEY(member_id)
