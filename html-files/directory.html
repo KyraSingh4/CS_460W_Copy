@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <link href="style.css" rel="stylesheet"/>
+
+<div class="navbar">
+  <h1 class="app-name">A.C.E.D.</h1>
+  <nav class="nav">
+    <a href="scheduler.html" class="nav-elem">Court Scheduler</a>
+    <a href="billing.html" class="nav-elem">Billing</a>
+    <a href="directory.html" class="nav-elem">Member Directory</a>
+    <a href="account.html" class="nav-elem">My Account</a>
+    <a href="login.html" class="nav-elem">Log Out</a>
+  </nav>
+</div>
+
+<center>
+  <div class="dir-page">
+  <h2 id="dir-title">Search Directory</h2>
+<form class="dropdown">
+  <label class="drop-btn" for="search">Select Attribute:</label>
+  <select id="attributes">
+    <option class="attribute" value="fname">First Name</option>
+    <option class="attribute" value="lname">Last Name</option>
+    <option class="attribute" value="email">Email</option>
+    <option class="attribute" value="number">Phone Number</option>
+    <option class="attribute" value="mem-id">Member ID</option>
+  </select>
+    <input class="searchbar" placeholder="Select attribute, then search value">
+    <input id="search-btn" type="submit" value="Search">
+</form>
+<br> <br>
+<button id="view-dir">View Full Directory</button>
+</div>
+</center>
+
+</html>
