@@ -14,13 +14,13 @@
   <div id="login">
     <form method="post">
       {% csrf_token %}
-      <div id="email-login">
-        <label for="email">Email: </label>
-        <input id="enter-email" name="email" required> <br><br>
+      <div id="login">
+        <label for="username">Email: </label>
+        <input type="username" id="username" name="username" required> <br><br>
       </div>
       <div id="pwd-login">
         <label for="pwd">Password: </label>
-        <input id="enter-pwd" type="password" required> <br><br>
+        <input type="password" id="password" name="password" required> <br><br>
       </div>
       <center>
         <input id="login-btn" type="submit" value="Login">
