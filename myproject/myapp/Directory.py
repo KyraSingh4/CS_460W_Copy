@@ -10,8 +10,7 @@ class Directory():
         if memberid != 1 and memberid !=2:
             with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
                 with conn.cursor() as cur:
-                    cur.execute("SELECT firstname, lastname, email, phonenum FROM member"
-                                "WHERE optin = TRUE AND active = true")
+                    cur.execute("SELECT firstname, lastname, email, phonenum FROM member WHERE optin = true AND active = true")
                     return cur.fetchall()
             #Admin View
         else:
@@ -25,8 +24,7 @@ class Directory():
         if memberid != 1 and memberid !=2:
             with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
                 with conn.cursor() as cur:
-                    cur.execute(sql.SQL("SELECT firstname, lastname, email, phonenum FROM member"
-                                "WHERE optin = TRUE AND active = true AND {attr} = %s").format(attr=sql.Identifier(attribute)),
+                    cur.execute(sql.SQL("SELECT firstname, lastname, email, phonenum FROM member WHERE optin = TRUE AND active = true AND {attr} = %s").format(attr=sql.Identifier(attribute)),
                                 (value,))
                     return cur.fetchall()
             #Admin View
@@ -41,8 +39,7 @@ class Directory():
         if memberid != 1 and memberid !=2:
             with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
                 with conn.cursor() as cur:
-                    cur.execute("SELECT firstname, lastname, email, phonenum FROM member"
-                                "WHERE firstname = (%s) OR lastname = (%s) OR email = (%s) OR phonenum = (%s)",
+                    cur.execute("SELECT firstname, lastname, email, phonenum FROM member WHERE firstname = (%s) OR lastname = (%s) OR email = (%s) OR phonenum = (%s)",
                                 (value, value, value, value))
                     return cur.fetchall()
         else:
