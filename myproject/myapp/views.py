@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .Directory import Directory  # Use relative import
-from .Authenticator import Authenticator  # Import the Authenticator class
+from Directory import Directory  # Use relative import
+from Authenticator import Authenticator  # Import the Authenticator class
 
 def search_directory(request):
     results = None
@@ -8,7 +8,7 @@ def search_directory(request):
         attribute = request.POST.get('attribute')
         value = request.POST.get('value')
         directory = Directory()
-        results = directory.searchAttr(1, attribute, value)  # Assuming memberid 1 for admin view
+        results = directory.searchAttr(request.session.get('member_id'), attribute, value)
 
     return render(request, 'myapp/search_form.html', {'results': results})
 
