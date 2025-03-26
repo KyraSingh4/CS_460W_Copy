@@ -5,10 +5,14 @@ from Authenticator import Authenticator  # Import the Authenticator class
 def search_directory(request):
     results = None
     if request.method == 'POST':
-        attribute = request.POST.get('attribute')
-        value = request.POST.get('value')
         directory = Directory()
-        results = directory.searchAttr(request.session.get('member_id'), attribute, value)
+        if request.POST.get('attribute') == 'View the Full Directory':
+            results = directory.getAll(request.session.get('member_id'))
+        else:
+            attribute = request.POST.get('attribute')
+            value = request.POST.get('value')
+
+            results = directory.searchAttr(request.session.get('member_id'), attribute, value)
 
     return render(request, 'myapp/directory.html', {'results': results})
 

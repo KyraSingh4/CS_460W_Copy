@@ -12,22 +12,43 @@
     <a href="login.html" class="nav-elem">Log Out</a>
   </nav>
 </div>
-
+'''
 <center>
   <div class="dir-page">
   <h2 id="dir-title">Search Directory</h2>
 <form class="dropdown" method="post">
-  <label class="drop-btn" for="search">Select Attribute:</label>
-  <select id="attributes">
-    <option class="attribute" value="fname">First Name</option>
-    <option class="attribute" value="lname">Last Name</option>
-    <option class="attribute" value="email">Email</option>
-    <option class="attribute" value="number">Phone Number</option>
-  </select>
-    <input class="searchbar" placeholder="Select attribute, then search value">
-    <input id="search-btn" type="submit" value="Search">
-</form>
+    {% csrf_token %}
+    {% if request.session.member_id != 1 and request.session.member_id != 2 %}
+        <label class="drop-btn" for="search">Select Attribute:</label>
+        <select name = "attribute" id="attribute">
+            <option class="attribute" value="firstname">First Name</option>
+            <option class="attribute" value="lastname">Last Name</option>
+            <option class="attribute" value="email">Email</option>
+            <option class="attribute" value="phonenum">Phone Number</option>
+        </select>
+            <input name = "value" class="searchbar" placeholder="Select attribute, then search value">
+            <input id="search-btn" type="submit" value="Search">
+    {% else %}
+        <label class="drop-btn" for="search">Select Attribute:</label>
+        <select name = "attribute" id="attribute">
+            <option class="attribute" value="member_id">Member ID</option>
+            <option class="attribute" value="firstname">First Name</option>
+            <option class="attribute" value="lastname">Last Name</option>
+            <option class="attribute" value="email">Email</option>
+            <option class="attribute" value="phonenum">Phone Number</option>
+            <option class="attribute" value="guestpass">Guest Passes</option>
+            <option class="attribute" value="optIN">Opt-In Status</option>
+            <option class="attribute" value="active">Active Status</option>
+        </select>
+            <input name = "value" class="searchbar" placeholder="Select attribute, then search value">
+            <input id="search-btn" type="submit" value="Search">
+    {% endif %}
+    </form>
 <br> <br>
+<form method="post">
+    {% csrf_token %}
+    <input name="attribute" type="submit" value="View the Full Directory">
+</form>
 <button id="view-dir">View Full Directory</button>
 </div>
 
