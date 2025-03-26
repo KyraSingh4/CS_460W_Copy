@@ -10,7 +10,7 @@ def search_directory(request):
         directory = Directory()
         results = directory.searchAttr(request.session.get('member_id'), attribute, value)
 
-    return render(request, 'myapp/search_form.html', {'results': results})
+    return render(request, 'myapp/directory.html', {'results': results})
 
 def login_view(request):
     if request.method == 'POST':
