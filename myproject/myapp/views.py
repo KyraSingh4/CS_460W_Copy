@@ -89,34 +89,33 @@ def scheduler_view(request):
             if request.session.get('type') == 'singles':
                 mem = Member(request.session.get('member_id'))
                 if request.session.get('num_guests') == '1':
-                    mem.createReservation(request.session.get('type'), request.session.get('day'), 
-                                      request.POST.get('start'), request.POST.get('end'), request.POST.get('court'),
-                                      [mem], [request.POST.get('guest1')])
+                    members = [mem]
+                    guests = [request.POST.get('guest1')]
                 else:
-                    mem.createReservation(request.session.get('type'), request.session.get('day'), 
+                    members = [mem, request.POST.get('member2')]
+                    guests = []
+                mem.createReservation(request.session.get('type'), request.session.get('day'), 
                                       request.POST.get('start'), request.POST.get('end'), request.POST.get('court'),
-                                      [mem, request.POST.get('member2')])
+                                      members, guests)
             elif request.session.get('type') == 'doubles':
                 mem = Member(request.session.get('member_id'))
-                if request.session.get('num_guests') == '1': # 1 guest pass, 3 members
-                    mem.createReservation(request.session.get('type'), request.session.get('day'), 
+                match request.session.get('num_guests'):
+                    case '1':  # 1 guest pass, 3 members
+                        members = [mem, request.POST.get('member2'), request.POST.get('member3')]
+                        guests = [request.POST.get('guest1')]
+                    case '2':  # 2 guest passes, 2 members
+                        members = [mem, request.POST.get('member2')]
+                        guests = [request.POST.get('guest1'), request.POST.get('guest2')]
+                    case '3':  # 3 guest passes, 1 member
+                        members = [mem]
+                        guests = [request.POST.get('guest1'), request.POST.get('guest2'), request.POST.get('guest3')]
+                    case _:  # 0 guest passes, 4 members
+                        members = [mem, request.POST.get('member2'), request.POST.get('member3'), request.POST.get('member4')]
+                        guests = []
+                mem.createReservation(request.session.get('type'), request.session.get('day'), 
                                       request.POST.get('start'), request.POST.get('end'), request.POST.get('court'),
-                                      [mem, request.POST.get('member2'), request.POST.get('member3')], 
-                                      [request.POST.get('guest1')])
-                elif request.session.get('num_guests') == '2': # 2 guest passes, 2 members
-                    mem.createReservation(request.session.get('type'), request.session.get('day'), 
-                                      request.POST.get('start'), request.POST.get('end'), request.POST.get('court'),
-                                      [mem, request.POST.get('member2')], 
-                                      [request.POST.get('guest1'), request.POST.get('guest2')])
-                elif request.session.get('num_guests') == '3': # 3 guest passes, 1 member
-                    mem.createReservation(request.session.get('type'), request.session.get('day'), 
-                                      request.POST.get('start'), request.POST.get('end'), request.POST.get('court'),
-                                      [mem], 
-                                      [request.POST.get('guest1'), request.POST.get('guest2'), request.POST.get('guest3')])
-                else: # 0 guest passes, 4 members
-                    mem.createReservation(request.session.get('type'), request.session.get('day'), 
-                                      request.POST.get('start'), request.POST.get('end'), request.POST.get('court'),
-                                      [mem, request.POST.get('member2'), request.POST.get('member3'), request.POST.get('member4')])
+                                      members, guests)
+    return render(request, 'myapp/scheduler.html')
 
 def account_view(request):
     result = None
