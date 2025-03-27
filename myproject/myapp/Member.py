@@ -13,6 +13,13 @@ class Member:
                 cur.execute("SELECT reservation_id FROM reservation WHERE member_ID = (%s)", (self.memberid,))
                 self.reservations = cur.fetchall()
 
+    def getInformation(self):
+        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT firstname, lastname, email, phonenum, OptIn, guestpass FROM member WHERE member_ID = (%s) ", (self.memberid,))
+                information = cur.fetchall()
+        return information
+
     def getReservations(self):
         return self.reservations
 

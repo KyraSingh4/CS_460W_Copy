@@ -76,3 +76,14 @@ def billing_view(request):
             return render(request, 'myapp/billing.html', {'success': success})
 
     return render(request, 'myapp/billing.html')
+
+def account_view(request):
+    result = None
+    if request.method == 'POST':
+        if request.POST.get('submittype') == 'Fetch Information':
+            mem = Member(request.session.get('member_id'))
+            result = mem.getInformation()
+            return render(request, 'myapp/account.html', {'result': result})
+
+
+    return render(request, 'myapp/account.html')
