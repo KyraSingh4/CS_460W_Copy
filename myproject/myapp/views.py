@@ -29,3 +29,10 @@ def login_view(request):
             return render(request, 'myapp/login.html', {'error': 'Invalid credentials'})
 
     return render(request, 'myapp/login.html')
+
+def logout_view(request):
+    if request.method == 'POST':
+        request.session['member_id'] = None
+        return redirect('login')
+
+    return render(request, 'myapp/logout.html')

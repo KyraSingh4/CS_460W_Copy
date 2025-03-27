@@ -9,10 +9,10 @@
     <a href="billing.html" class="nav-elem">Billing</a>
     <a href="directory.html" class="nav-elem">Member Directory</a>
     <a href="account.html" class="nav-elem">My Account</a>
-    <a href="login.html" class="nav-elem">Log Out</a>
+    <a href="login.html" class="nav-elem">Log In</a>
   </nav>
 </div>
-'''
+  {% if request.session.member_id != none %}
 <center>
   <div class="dir-page">
   <h2 id="dir-title">Search Directory</h2>
@@ -49,7 +49,6 @@
     {% csrf_token %}
     <input name="attribute" type="submit" value="View the Full Directory">
 </form>
-<button id="view-dir">View Full Directory</button>
 </div>
 
 {% if results %}
@@ -97,5 +96,8 @@
     </table>
 {% endif %}
 </center>
-
+{% else %}
+<b>Please log in.</b>
+<a href="../login.html" class="nav-elem">Log In</a>
+{% endif %}
 </html>
