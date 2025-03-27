@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <link href="style.css" rel="stylesheet"/>
+  <link href="../myapp/style.css" rel="stylesheet"/>
 
 <div class="navbar">
   <h1 class="app-name">A.C.E.D.</h1>
@@ -14,17 +14,83 @@
 </div>
 
 <center>
-<h2 id="charges-title">Charges</h2>
+<h2 id="charges-title">Billing Menu</h2>
 <ul id="charges-list"></ul>
-No charges yet.
-</center>
+  {% if request.session.member_id == None %}
+  <b>Please log in.</b>
+  <a href="../login.html" class="nav-elem">Log In</a>
 
-<!-- let data = [list of charges];
-        let list = document.getElementById("charges-list");
-        for (i = 0; i < data.length; ++i) {
-            let li = document.createElement('li');
-            li.innerText = data[i];
-            list.appendChild(li);
-        } -->
+
+  {% elif request.session.member_id == 1 or request.session.member_id == 2 %}
+    <h3>Search for a Bill</h3>
+    <form method = "post">
+      {% csrf_token %}
+      <input name="mem_id" class="searchbar" placeholder="Enter Member ID">
+      <input name="submittype" type="submit" value="Get Bill">
+    </form>
+    <h3>Add a Charge to a Bill</h3>
+    <form method = "post">
+      {% csrf_token %}
+      <input name="mem_id" class="searchbar" placeholder="Enter Member ID">
+      <input name="amount" class="searchbar" placeholder="Enter Amount">
+      <input name="desc" class="searchbar" placeholder="Enter Charge Description">
+      <input name="submittype" type="submit" value="Create Charge">
+    </form>
+    {% if success %}
+      <b>Charge Created!</b>
+    {% endif %}
+
+
+    {% if bill %}
+        <h2>Bill</h2>
+        <table border = "1">
+          <tr>
+           <th>Amount</th>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Type</th>
+          </tr>
+        {% for charge in bill %}
+          <tr>
+            <td>{{ charge.0 }}</td>
+            <td>{{ charge.1 }}</td>
+            <td>{{ charge.2 }}</td>
+            <td>{{ charge.3 }}</td>
+          </tr>
+        {% endfor %}
+        </table>
+    {% endif %}
+
+
+
+
+
+  {% else %}
+    <form method = "post">
+      {% csrf_token %}
+      <input id="bill" type="submit" value="Get Bill">
+    </form>
+    {% if bill %}
+      <h2>Your Bill</h2>
+      <table border = "1">
+        <tr>
+          <th>Amount</th>
+          <th>Date</th>
+          <th>Description</th>
+          <th>Type</th>
+        </tr>
+      {% for charge in bill %}
+        <tr>
+          <td>{{ charge.0 }}</td>
+          <td>{{ charge.1 }}</td>
+          <td>{{ charge.2 }}</td>
+          <td>{{ charge.3 }}</td>
+        </tr>
+      {% endfor %}
+      </table>
+    {% endif %}
+  {% endif %}
+
+</center>
 
 </html>

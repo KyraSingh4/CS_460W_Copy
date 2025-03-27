@@ -150,8 +150,8 @@ class President(Member):
     def createMember(self, firstname: str, lastname: str, email: str, phonenum: str, optin: bool, pw: str):
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
             with conn.cursor() as cur:
-                cur.execute("INSERT INTO member (firstname, lastname, email, phonenum, optin, password) "
-                            "VALUES (%s, %s, %s, %s, %s, crypt(%s, gen_salt('md5')))",
+                cur.execute("INSERT INTO member (firstname, lastname, email, phonenum, optin, active, password) "
+                            "VALUES (%s, %s, %s, %s, %s, true, crypt(%s, gen_salt('md5')))",
                             (firstname, lastname, email, phonenum, optin, pw))
 
     def updateInformation(self, search: str, svalue: str, attribute: str, value: str):
@@ -164,11 +164,14 @@ class President(Member):
                     cur.execute(sql.SQL("UPDATE member SET {attr} = %s WHERE {sear} = %s", ).format(attr = sql.Identifier(attribute), sear = sql.Identifier(search)),
                     (value, svalue))
 
-    def deactivateMember(self, search: str, value: str):
+    def deactivateMember(self, value: str):
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
             with conn.cursor() as cur:
-                cur.execute(sql.SQL("UPDATE member SET active = FALSE WHERE {sear} = %s").format(sear = sql.Identifier(search)),
-                            (value,))
+                cur.execute("UPDATE member SET active = FALSE WHERE member_id = %s", (value,))
+
+    def getBill(self,memberid: int):
+        bill = Bill(memberid)
+        return bill.getBill()
 
 class BillingStaff(Member):
     def __init__(self):

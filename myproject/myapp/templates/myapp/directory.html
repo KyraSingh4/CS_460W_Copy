@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <link href="style.css" rel="stylesheet"/>
+  <link href="../style.css" rel="stylesheet"/>
 
 <div class="navbar">
   <h1 class="app-name">A.C.E.D.</h1>
@@ -9,7 +9,7 @@
     <a href="billing.html" class="nav-elem">Billing</a>
     <a href="directory.html" class="nav-elem">Member Directory</a>
     <a href="account.html" class="nav-elem">My Account</a>
-    <a href="login.html" class="nav-elem">Log In</a>
+    <a href="../login/" class="nav-elem">Log In</a>
   </nav>
 </div>
   {% if request.session.member_id != none %}
@@ -40,16 +40,44 @@
             <option class="attribute" value="optIN">Opt-In Status</option>
             <option class="attribute" value="active">Active Status</option>
         </select>
-            <input name = "value" class="searchbar" placeholder="Select attribute, then search value">
-            <input id="search-btn" type="submit" value="Search">
+            <input name="value" class="searchbar" placeholder="Select attribute, then search value">
+            <input name="submittype" type="submit" value="Search">
     {% endif %}
     </form>
 <br> <br>
 <form method="post">
     {% csrf_token %}
-    <input name="attribute" type="submit" value="View the Full Directory">
+    <input name="submittype" type="submit" value="View the Full Directory">
 </form>
+{% if request.session.member_id == 1 %}
+<h2>Register a New Member</h2>
+<form method="post">
+    {% csrf_token %}
+    <input name="fname" class="searchbar" placeholder="First Name">
+    <input name="lname" class="searchbar" placeholder="Last Name">
+    <input name="email" class="searchbar" placeholder="Email">
+    <input name="phonenum" class="searchbar" placeholder="Phone Number">
+    <input name="optin" class="searchbar" placeholder="Opt-In Status (True or False)">
+    <input name="password" class="searchbar" placeholder="Password">
+    <input name="submittype" type="submit" value="Create Member">
+</form>
+{% if success %}
+      <b>Member Created!</b>
+{% endif %}
+<h2>Deactivate a Member</h2>
+<form method="post">
+    {% csrf_token %}
+    <input name="memid" class="searchbar" placeholder="Member ID">
+    <input name="submittype" type="submit" value="Deactivate Member">
+</form>
+{% if success %}
+      <b>Member Deactivated!</b>
+{% endif %}
+{% endif %}
+
+
 </div>
+
 
 {% if results %}
     <h2>Search Results</h2>
