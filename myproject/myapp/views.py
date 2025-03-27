@@ -117,3 +117,14 @@ def scheduler_view(request):
                     mem.createReservation(request.session.get('type'), request.session.get('day'), 
                                       request.POST.get('start'), request.POST.get('end'), request.POST.get('court'),
                                       [mem, request.POST.get('member2'), request.POST.get('member3'), request.POST.get('member4')])
+
+def account_view(request):
+    result = None
+    if request.method == 'POST':
+        if request.POST.get('submittype') == 'Fetch Information':
+            mem = Member(request.session.get('member_id'))
+            result = mem.getInformation()
+            return render(request, 'myapp/account.html', {'result': result})
+
+
+    return render(request, 'myapp/account.html')
