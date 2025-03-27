@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
-  <link href="style.css" rel="stylesheet"/>
+{% load static %}
+  <link rel="stylesheet" href="{% static 'style.css' %}" />
 
 <div class="app-name-login">
   <h1 id="name">A.C.E.D.</h1>
@@ -17,7 +18,7 @@
     <form method="post">
       {% csrf_token %}
       <div id="login">
-        <label for="username">Email: </label>
+        <label for="username">Username: </label>
         <input type="username" id="username" name="username" required> <br><br>
       </div>
       <div id="pwd-login">

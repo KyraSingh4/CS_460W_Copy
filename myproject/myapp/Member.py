@@ -82,19 +82,19 @@ class Member:
             cur.execute("SELECT (start_time, end_time) FROM reservation WHERE member_ID = (%s) AND day = (%s)",
                         (self.memberid,day))
             check = cur.fetchall()
-        for i in range(len(check)):
-            if check[i][0] <= start <= check[i][1]:
-                conn.close()
-                return False
-            if check[i][0] <= end <= check[i][1]:
-                conn.close()
-                return False
+            for i in range(len(check)):
+                if check[i][0] <= start <= check[i][1]:
+                    conn.close()
+                    return False
+                if check[i][0] <= end <= check[i][1]:
+                    conn.close()
+                    return False
 
             #Rule 3: Reservation proximity before.
-        for i in range(len(check)):
-            if check[i][0] > end and datetime.combine(datetime.now(), check[i][0]) < (datetime.combine(datetime.now(), end) + timedelta(minutes=60)):
-                conn.close()
-                return False
+            for i in range(len(check)):
+                if check[i][0] > end and datetime.combine(datetime.now(), check[i][0]) < (datetime.combine(datetime.now(), end) + timedelta(minutes=60)):
+                    conn.close()
+                    return False
 
             #Rule 4: Reservation proximity after.
         for i in range(len(check)):

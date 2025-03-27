@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+  <link rel="stylesheet" href="{% static 'style.css' %}" />
+
+<div class="navbar">
+  <h1 class="app-name">A.C.E.D.</h1>
+  <nav class="nav">
+    <a href="scheduler.html" class="nav-elem">Court Scheduler</a>
+    <a href="billing.html" class="nav-elem">Billing</a>
+    <a href="directory.html" class="nav-elem">Member Directory</a>
+    <a href="account.html" class="nav-elem">My Account</a>
+    <a href="login.html" class="nav-elem">Log Out</a>
+  </nav>
+</div>
+
+<div class="acc-page">
+<center>
+<h2 id="acc-title">Your Account</h2>
+</center>
+<div class="acc-info">
+  <h4 class="acc-labels" id="fname-label">First Name: <span id="fname"></span></h4>
+  <h4 class="acc-labels" id="lname-label">Last Name: <span id="lname"></span></h4>
+  <h4 class="acc-labels" id="email-label">Email: <span id="email"></span></h4>
+  <h4 class="acc-labels" id="num-label">Phone Number: <span id="num"></span></h4>
+  <h4 class="acc-labels" id="optin-label">Member Directory Opt In: <span id="optin"></span></h4>
+  <h4 class="acc-labels" id="gpass-label">Remaining Guest Passes: <span id="gpass"></span></h4>
+</div>
+</div>
+</html>
+
+<!-- {% extends "scheduler.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+	<div class="content-section">
+      <div class="media">
+        <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+        <div class="media-body">
+          <h2 class="account-heading">{{ user.username }}</h2>
+          <p class="text-secondary">{{ user.email }}</p>
+        </div>
+      </div>
+      <form method = "POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			<fieldset class="form-group">
+				<legend class = "border-bottom mb-4">Profile Info</legend>
+				{{ u_form|crispy }}
+				{{ p_form|crispy }}
+			</fieldset>
+			<div class = "form-group">
+				<button class = "btn btn-outline-info" type = "submit">Update</button>
+			</div>
+	  </form>
+    </div>
+{% endblock content %} -->
