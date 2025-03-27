@@ -76,3 +76,44 @@ def billing_view(request):
             return render(request, 'myapp/billing.html', {'success': success})
 
     return render(request, 'myapp/billing.html')
+
+def scheduler_view(request):
+    if request.method == 'POST':
+        if request.POST.get('submittype') == 'Day':
+            request.session['day'] = request.POST.get('day')
+        elif request.POST.get('submittype') == 'Type':
+            request.session['type'] = request.POST.get('type')
+        elif request.POST.get('submittype') == 'Guests':
+            request.session['num_guests'] = request.POST.get('guests')
+        elif request.POST.get('submittype') == 'Reserve':
+            if request.session.get('type') == 'singles':
+                mem = Member(request.session.get('member_id'))
+                if request.session.get('num_guests') == '1':
+                    mem.createReservation(request.session.get('type'), request.session.get('day'), 
+                                      request.POST.get('start'), request.POST.get('end'), request.POST.get('court'),
+                                      [mem], [request.POST.get('guest1')])
+                else:
+                    mem.createReservation(request.session.get('type'), request.session.get('day'), 
+                                      request.POST.get('start'), request.POST.get('end'), request.POST.get('court'),
+                                      [mem, request.POST.get('member2')])
+            elif request.session.get('type') == 'doubles':
+                mem = Member(request.session.get('member_id'))
+                if request.session.get('num_guests') == '1': # 1 guest pass, 3 members
+                    mem.createReservation(request.session.get('type'), request.session.get('day'), 
+                                      request.POST.get('start'), request.POST.get('end'), request.POST.get('court'),
+                                      [mem, request.POST.get('member2'), request.POST.get('member3')], 
+                                      [request.POST.get('guest1')])
+                elif request.session.get('num_guests') == '2': # 2 guest passes, 2 members
+                    mem.createReservation(request.session.get('type'), request.session.get('day'), 
+                                      request.POST.get('start'), request.POST.get('end'), request.POST.get('court'),
+                                      [mem, request.POST.get('member2')], 
+                                      [request.POST.get('guest1'), request.POST.get('guest2')])
+                elif request.session.get('num_guests') == '3': # 3 guest passes, 1 member
+                    mem.createReservation(request.session.get('type'), request.session.get('day'), 
+                                      request.POST.get('start'), request.POST.get('end'), request.POST.get('court'),
+                                      [mem], 
+                                      [request.POST.get('guest1'), request.POST.get('guest2'), request.POST.get('guest3')])
+                else: # 0 guest passes, 4 members
+                    mem.createReservation(request.session.get('type'), request.session.get('day'), 
+                                      request.POST.get('start'), request.POST.get('end'), request.POST.get('court'),
+                                      [mem, request.POST.get('member2'), request.POST.get('member3'), request.POST.get('member4')])
