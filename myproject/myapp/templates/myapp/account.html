@@ -29,6 +29,11 @@
     {% if result %}
       {{ result.0.0 }}
     {% endif %}
+    <form method="post">
+      {% csrf_token %}
+      <input name = "value" type="searchbar" placeholder="Enter First Name">
+      <input name="submittype" type="submit" value="Change First Name">
+    </form>
     </span>
   </h4>
   <h4 class="acc-labels" id="lname-label">Last Name:
@@ -36,6 +41,11 @@
     {% if result %}
       {{ result.0.1 }}
     {% endif %}
+    <form method="post">
+      {% csrf_token %}
+      <input name = "value" type="searchbar" placeholder="Enter Last Name">
+      <input name="submittype" type="submit" value="Change Last Name">
+    </form>
     </span>
   </h4>
   <h4 class="acc-labels" id="email-label">Email:
@@ -43,6 +53,11 @@
     {% if result %}
       {{ result.0.2 }}
     {% endif %}
+    <form method="post">
+      {% csrf_token %}
+      <input name = "value" type="searchbar" placeholder="Enter Email">
+      <input name="submittype" type="submit" value="Change Email">
+    </form>
     </span>
   </h4>
   <h4 class="acc-labels" id="num-label">Phone Number:
@@ -50,6 +65,11 @@
     {% if result %}
       {{ result.0.3 }}
     {% endif %}
+    <form method="post">
+      {% csrf_token %}
+      <input name = "value" type="searchbar" placeholder="Enter Phone Number">
+      <input name="submittype" type="submit" value="Change Phone Number">
+    </form>
     </span>
   </h4>
   <h4 class="acc-labels" id="optin-label">Member Directory Opt In:
@@ -57,6 +77,14 @@
     {% if result %}
       {{ result.0.4 }}
     {% endif %}
+    <form method="post">
+      {% csrf_token %}
+      <select name = "optin">
+        <option value="True">True</option>
+        <option value="False">False</option>
+      </select>
+      <input name="submittype" type="submit" value="Change Opt-In">
+    </form>
     </span>
   </h4>
   <h4 class="acc-labels" id="gpass-label">Remaining Guest Passes:

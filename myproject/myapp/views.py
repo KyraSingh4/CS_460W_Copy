@@ -124,6 +124,34 @@ def account_view(request):
             mem = Member(request.session.get('member_id'))
             result = mem.getInformation()
             return render(request, 'myapp/account.html', {'result': result})
+        if request.POST.get('submittype') == 'Change First Name':
+            mem = Member(request.session.get('member_id'))
+            mem.updateInformation('firstname', request.POST.get('value'))
+            result = mem.getInformation()
+            return render(request, 'myapp/account.html', {'result': result})
+        if request.POST.get('submittype') == 'Change Last Name':
+            mem = Member(request.session.get('member_id'))
+            mem.updateInformation('lastname', request.POST.get('value'))
+            result = mem.getInformation()
+            return render(request, 'myapp/account.html', {'result': result})
+        if request.POST.get('submittype') == 'Change Email':
+            mem = Member(request.session.get('member_id'))
+            mem.updateInformation('email', request.POST.get('value'))
+            result = mem.getInformation()
+            return render(request, 'myapp/account.html', {'result': result})
+        if request.POST.get('submittype') == 'Change Phone Number':
+            mem = Member(request.session.get('member_id'))
+            mem.updateInformation('phonenum', request.POST.get('value'))
+            result = mem.getInformation()
+            return render(request, 'myapp/account.html', {'result': result})
+        if request.POST.get('submittype') == 'Change Opt-In':
+            mem = Member(request.session.get('member_id'))
+            mem.updateInformation('optin', request.POST.get('optin'))
+            result = mem.getInformation()
+            return render(request, 'myapp/account.html', {'result': result})
+
+
+
 
 
     return render(request, 'myapp/account.html')
