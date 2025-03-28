@@ -95,16 +95,14 @@ def billing_view(request):
 def scheduler_view(request):
     if request.method == 'POST':
         if request.POST.get('submittype') == 'Day':
-            request.session['day_stage'] = True
             request.session['day'] = request.POST.get('day')
+            request.session['scheduler_stage'] = 'Type' # Move to the next stage
         elif request.POST.get('submittype') == 'Type':
-            request.session['day_stage'] = False
-            request.session['type_stage'] = True
             request.session['type'] = request.POST.get('type')
+            request.session['scheduler_stage'] = 'Guests' # Move to the next stage
         elif request.POST.get('submittype') == 'Guests':
-            request.session['type_stage'] = False
-            request.session['guests_stage'] = True
             request.session['num_guests'] = request.POST.get('guests')
+            request.session['scheduler_stage'] = 'Reserve' # Move to the next stage
         elif request.POST.get('submittype') == 'Reserve':
             request.session['guests_stage'] = False
             request.session['reserve_stage'] = True
@@ -138,7 +136,7 @@ def scheduler_view(request):
                         guests = []
                 mem.createReservation(request.session.get('type'), request.session.get('day'), 
                                       start, end, court, members, guests)
-            request.session['reserve_stage'] = False
+            request.session['scheduler_stage'] = 'Day' # Reset to starting "pick a day" stage
             return render(request, 'myapp/scheduler.html', {'success': True})
     return render(request, 'myapp/scheduler.html')
 
