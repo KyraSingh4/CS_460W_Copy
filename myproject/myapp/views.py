@@ -108,10 +108,10 @@ def scheduler_view(request):
             court = request.POST.get('court')
             if request.session.get('type') == 'singles':
                 mem = Member(request.session.get('member_id'))
-                if request.session.get('num_guests') == '1':
+                if request.session.get('num_guests') == '1': # 1 guest pass, 1 member
                     members = [mem]
                     guests = [request.POST.get('guest1')]
-                else:
+                else: # 0 guest passes, 2 members
                     members = [mem, request.POST.get('member2')]
                     guests = []
                 mem.createReservation(request.session.get('type'), request.session.get('day'), 
