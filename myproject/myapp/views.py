@@ -27,6 +27,11 @@ def directory_view(request):
             mem.deactivateMember(request.POST.get('memid'))
             success = True
             return render(request, 'myapp/directory.html', {'success': success})
+        elif request.POST.get('submittype') == 'Update Member':
+            mem = President()
+            mem.updateInformation(request.POST.get('member_id'), request.POST.get('attribute'), request.POST.get('value'))
+            success = True
+            return render(request, 'myapp/directory.html', {'success': success})
 
     return render(request, 'myapp/directory.html')
 

@@ -65,12 +65,28 @@
 {% if success %}
       <b>Member Created!</b>
 {% endif %}
+<h2>Update a Member</h2>
+      <form method="post">
+          {% csrf_token %}
+          <input name="member_id" class="searchbar" placeholder="Member ID">
+          <select name="attribute">
+            <option class="attribute" value="firstname">First Name</option>
+            <option class="attribute" value="lastname">Last Name</option>
+            <option class="attribute" value="email">Email</option>
+            <option class="attribute" value="phonenum">Phone Number</option>
+            <option class="attribute" value="optIN">Opt-In Status</option>
+            <option class="attribute" value="active">Active Status</option>
+            <option class="attribute" value="password">Password</option>
+          </select>
+          <input name="value" class="searchbar" placeholder="Value to Change">
+          <input name="submittype" type="submit" value="Update Member">
+      </form>
 <h2>Deactivate a Member</h2>
-<form method="post">
-    {% csrf_token %}
-    <input name="memid" class="searchbar" placeholder="Member ID">
-    <input name="submittype" type="submit" value="Deactivate Member">
-</form>
+    <form method="post">
+        {% csrf_token %}
+        <input name="memid" class="searchbar" placeholder="Member ID">
+        <input name="submittype" type="submit" value="Deactivate Member">
+    </form>
 {% if success %}
       <b>Member Deactivated!</b>
 {% endif %}
