@@ -26,6 +26,9 @@ class Member:
     def getBill(self):
         return self.my_bill.getBill()
 
+    def payBill(self):
+        return self.my_bill.resetBill()
+
     def updateInformation(self, attribute: str, value: str):
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
             with conn.cursor() as cur:
@@ -192,11 +195,16 @@ class BillingStaff(Member):
         bill = Bill(memberid)
         return bill.isPaid()
 
-    def modifyBill(self, memberid: int, search: str, svalue: str, attribute: str, value: str):
+    def modifyBill(self, charge_id: int, attribute: str, value: str):
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
             with conn.cursor() as cur:
-                cur.execute(sql.SQL("UPDATE charges SET {attr} = %s WHERE {sear} = %s AND member_id = (%s)").format(attr = sql.Identifier(attribute), sear = sql.Identifier(search)),
-                            (value, svalue, memberid))
+                cur.execute(sql.SQL("UPDATE charges SET {attr} = %s WHERE charge_id = (%s)").format(attr = sql.Identifier(attribute)),
+                            (value, charge_id))
+
+    def deleteCharge(self, charge_id:int):
+        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+            with conn.cursor() as cur:
+                cur.execute("DELETE FROM charges WHERE charge_id = %s", (charge_id,))
 
     def getBill(self,memberid: int):
         bill = Bill(memberid)

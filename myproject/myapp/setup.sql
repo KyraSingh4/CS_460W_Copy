@@ -18,12 +18,14 @@ CREATE TABLE IF NOT EXISTS member (
 );
 
 CREATE TABLE IF NOT EXISTS charges (
+    charge_id   SERIAL              NOT NULL,
     member_id   INT                 NOT NULL,
     amount      DOUBLE PRECISION    NOT NULL,
     date        DATE                NOT NULL DEFAULT CURRENT_DATE,
     description VARCHAR(128)        NOT NULL,
     type        VARCHAR(6)          NOT NULL,
 
+    PRIMARY KEY(charge_id),
     FOREIGN KEY(member_id) REFERENCES member(member_ID)
                                    ON DELETE CASCADE
 );
@@ -59,6 +61,7 @@ GRANT ALL PRIVILEGES ON TABLE reservation TO aceduser;
 GRANT ALL PRIVILEGES ON TABLE attendees TO aceduser;
 GRANT ALL PRIVILEGES ON SEQUENCE member_member_id_seq to aceduser;
 GRANT ALL PRIVILEGES ON SEQUENCE reservation_reservation_id_seq to aceduser;
+GRANT ALL PRIVILEGES ON SEQUENCE charges_charge_id_seq to aceduser;
 
 INSERT INTO member (firstname, lastname, email, phonenum, optin, active, password) VALUES (
     'President',

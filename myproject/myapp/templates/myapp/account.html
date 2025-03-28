@@ -17,6 +17,13 @@
 <div class="acc-page">
 <center>
 <h2 id="acc-title">Your Account</h2>
+<center>
+<h3>Pay Your Bill</h3>
+<form method="post">
+  {% csrf_token %}
+  <input name="submittype" type="submit" value="Pay Bill">
+</form>
+</center>
 
 <form method="post">
   {% csrf_token %}

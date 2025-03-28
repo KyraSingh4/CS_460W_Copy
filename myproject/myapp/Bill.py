@@ -40,11 +40,11 @@ class Bill:
 
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
             with conn.cursor() as cur:
-                cur.execute("SELECT amount, date, description, type  FROM charges where member_id = (%s)",
+                cur.execute("SELECT charge_id, amount, date, description, type  FROM charges where member_id = (%s)",
                             (self.memberID,))
                 bill = cur.fetchall()
 
-        bill.append((self.getTotal(),"","Total Bill",""))
+        bill.append(("",self.getTotal(),"","Total Bill",""))
 
         return bill
         

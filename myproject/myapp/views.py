@@ -74,6 +74,16 @@ def billing_view(request):
             mem.addEventFee(request.POST.get('amount'), request.POST.get('desc'), request.POST.get('mem_id'))
             success = True
             return render(request, 'myapp/billing.html', {'success': success})
+        if request.POST.get('submittype') == 'Modify Charge':
+            mem = BillingStaff()
+            mem.modifyBill(request.POST.get('charge_id'), request.POST.get('attribute'), request.POST.get('value'))
+            success = True
+            return render(request, 'myapp/billing.html', {'success': success})
+        if request.POST.get('submittype') == 'Delete Charge':
+            mem = BillingStaff()
+            mem.deleteCharge(request.POST.get('charge_id'))
+            success = True
+            return render(request, 'myapp/billing.html', {'success': success})
 
     return render(request, 'myapp/billing.html')
 
@@ -148,6 +158,10 @@ def account_view(request):
             mem = Member(request.session.get('member_id'))
             mem.updateInformation('optin', request.POST.get('optin'))
             result = mem.getInformation()
+            return render(request, 'myapp/account.html', {'result': result})
+        if request.POST.get('submittype') == 'Pay Bill':
+            mem = Member(request.session.get('member_id'))
+            mem.payBill()
             return render(request, 'myapp/account.html', {'result': result})
 
 

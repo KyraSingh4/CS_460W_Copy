@@ -41,11 +41,32 @@
       <b>Charge Created!</b>
     {% endif %}
 
+    {% if request.session.member_id == 2 %}
+    <h3>Modify a Charge</h3>
+    <form method = "post">
+      {% csrf_token %}
+      <input name="charge_id" type="searchbar" placeholder="Enter Charge ID">
+      <select name="attribute">
+        <option class="attribute" value="amount">Amount</option>
+        <option class="attribute" value="Description">Description</option>
+        <option class="attribute" value="Type">Type</option>
+      </select>
+      <input name="value" type="searchbar" placeholder="Enter Value">
+      <input name="submittype" type="submit" value="Modify Charge">
+    </form>
+  <h3>Delete a Charge</h3>
+  <form method = "post">
+    {% csrf_token %}
+    <input name="charge_id" type="searchbar" placeholder="Enter Charge ID">
+    <input name="submittype" type="submit" value="Delete Charge">
+  </form>
+    {% endif %}
 
     {% if bill %}
         <h2>Bill</h2>
         <table border = "1">
           <tr>
+            <th>Charge ID</th>
            <th>Amount</th>
             <th>Date</th>
             <th>Description</th>
@@ -57,6 +78,7 @@
             <td>{{ charge.1 }}</td>
             <td>{{ charge.2 }}</td>
             <td>{{ charge.3 }}</td>
+            <td>{{ charge.4 }}</td>
           </tr>
         {% endfor %}
         </table>
