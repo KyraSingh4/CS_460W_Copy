@@ -90,12 +90,22 @@ def billing_view(request):
 def scheduler_view(request):
     if request.method == 'POST':
         if request.POST.get('submittype') == 'Day':
+            request.session['day_stage'] = True
             request.session['day'] = request.POST.get('day')
         elif request.POST.get('submittype') == 'Type':
+            request.session['day_stage'] = False
+            request.session['type_stage'] = True
             request.session['type'] = request.POST.get('type')
         elif request.POST.get('submittype') == 'Guests':
+            request.session['type_stage'] = False
+            request.session['guests_stage'] = True
             request.session['num_guests'] = request.POST.get('guests')
         elif request.POST.get('submittype') == 'Reserve':
+            request.session['guests_stage'] = False
+            request.session['reserve_stage'] = True
+            start = request.POST.get('start')
+            end = request.POST.get('end')
+            court = request.POST.get('court')
             if request.session.get('type') == 'singles':
                 mem = Member(request.session.get('member_id'))
                 if request.session.get('num_guests') == '1':
@@ -105,8 +115,7 @@ def scheduler_view(request):
                     members = [mem, request.POST.get('member2')]
                     guests = []
                 mem.createReservation(request.session.get('type'), request.session.get('day'), 
-                                      request.POST.get('start'), request.POST.get('end'), request.POST.get('court'),
-                                      members, guests)
+                                      start, end, court, members, guests)
             elif request.session.get('type') == 'doubles':
                 mem = Member(request.session.get('member_id'))
                 match request.session.get('num_guests'):
@@ -123,8 +132,9 @@ def scheduler_view(request):
                         members = [mem, request.POST.get('member2'), request.POST.get('member3'), request.POST.get('member4')]
                         guests = []
                 mem.createReservation(request.session.get('type'), request.session.get('day'), 
-                                      request.POST.get('start'), request.POST.get('end'), request.POST.get('court'),
-                                      members, guests)
+                                      start, end, court, members, guests)
+            request.session['reserve_stage'] = False
+            return render(request, 'myapp/scheduler.html', {'success': True})
     return render(request, 'myapp/scheduler.html')
 
 def account_view(request):
