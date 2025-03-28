@@ -134,7 +134,7 @@ def scheduler_view(request):
                         guests = []
                 mem.createReservation(request.session.get('type'), request.session.get('day'), 
                                       start, end, court, members, guests)
-            request.session['scheduler_stage'] = 'Day' # Reset to starting "pick a day" stage
+            request.session['scheduler_stage'] = None # Reset stage
             return render(request, 'myapp/scheduler.html', {'success': True})
     return render(request, 'myapp/scheduler.html')
 
