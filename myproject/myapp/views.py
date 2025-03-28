@@ -104,8 +104,6 @@ def scheduler_view(request):
             request.session['num_guests'] = request.POST.get('guests')
             request.session['scheduler_stage'] = 'Reserve' # Move to the next stage
         elif request.POST.get('submittype') == 'Reserve':
-            request.session['guests_stage'] = False
-            request.session['reserve_stage'] = True
             start = request.POST.get('start')
             end = request.POST.get('end')
             court = request.POST.get('court')
