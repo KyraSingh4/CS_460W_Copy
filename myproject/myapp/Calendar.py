@@ -9,10 +9,10 @@ class Calendar:
     def __init__(self):
         pass
 
-    def RetrieveCourt(self,courtnum):
+    def RetrieveDay(self,day):
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
             with conn.cursor() as cur:
-                cur.execute("SELECT * FROM reservation WHERE court_num = %s", (courtnum,))
+                cur.execute("SELECT * FROM reservation WHERE res_day = %s", (day,))
                 return cur.fetchall()
 
 
