@@ -18,4 +18,4 @@ mem = Member(1)
 
 #print(dir.nameLookup('Ryder', 'Gover'))
 
-mem.deleteReservation(22)
+mem.deleteReservation(29)

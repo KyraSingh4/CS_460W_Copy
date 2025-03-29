@@ -82,6 +82,24 @@ class Member:
                     check_ids.append(result[i][0])
             if res_id in check_ids:
                 with conn.cursor() as cur:
+                    # Checking Guestpasses
+                    cur.execute("SELECT member_id FROM attendees WHERE reservation_id = (%s)", (res_id,))
+                    attendees = cur.fetchall()
+                    print(attendees)
+                    cur.execute("SELECT guestpass FROM member WHERE member_id = (%s)", (self.memberid,))
+                    guestpass = cur.fetchone()[0]
+                    cur.execute("SELECT charge_id FROM charges WHERE member_id = (%s) AND description = 'Guest Fee'", (self.memberid,))
+                    charges = cur.fetchall()
+                    print(charges[0][0])
+                    for i in range(len(attendees)):
+                        if attendees[i][0] == None:
+                            guestpass = guestpass+1
+                            cur.execute("DELETE FROM charges WHERE charge_id = %s", (charges[i][0],))
+
+                    print(guestpass)
+                    cur.execute("UPDATE member SET guestpass = %s WHERE member_id = %s", (guestpass, self.memberid))
+
+
                     cur.execute("DELETE FROM reservation WHERE reservation_id = %s", (res_id,))
 
     def checkReservationRules(self, restype: str, day:int, start: time, end: time, court: int, members: list[int], guests: list[str]):
