@@ -214,6 +214,8 @@ def account_view(request):
             mem = Member(request.session.get('member_id'))
             mem.payBill()
             return render(request, 'myapp/account.html', {'result': result})
+        if request.POST.get('submittype') == 'Send Email':
+            return render(request, 'myapp/account.html', {'email_success': True})
 
 
 

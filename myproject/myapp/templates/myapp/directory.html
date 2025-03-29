@@ -9,7 +9,13 @@
     <a href="../scheduler/" class="nav-elem">Court Scheduler</a>
     <a href="../billing/" class="nav-elem">Billing</a>
     <a href="../directory/" class="nav-elem">Member Directory</a>
-    <a href="../account/" class="nav-elem">My Account</a>
+    <a href="../account/" class="nav-elem">
+        {% if request.session.member_id == 1 or request.session.member_id == 2 %}
+            Admin Dashboard
+        {% else %}
+        My Account
+        {% endif %}
+    </a>
     <a href="../logout/" class="nav-elem">Log Out</a>
   </nav>
 </div>

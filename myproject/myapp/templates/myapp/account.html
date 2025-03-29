@@ -9,13 +9,34 @@
     <a href="../scheduler/" class="nav-elem">Court Scheduler</a>
     <a href="../billing/" class="nav-elem">Billing</a>
     <a href="../directory/" class="nav-elem">Member Directory</a>
-    <a href="../account/" class="nav-elem">My Account</a>
+    <a href="../account/" class="nav-elem">
+      {% if request.session.member_id == 1 or request.session.member_id == 2 %}
+        Admin Dashboard
+      {% else %}
+        My Account
+      {% endif %}
+    </a>
     <a href="../logout/" class="nav-elem">Log Out</a>
   </nav>
 </div>
   {% if request.session.member_id != none %}
 <div class="acc-page">
 <center>
+  {% if request.session.member_id == 1 or requeset.session.member_id == 2 %}
+<h2 id="acc-title">Admin Dashboard</h2>
+<h3>Send an Email Announcement</h3>
+  <form method="post">
+    {% csrf_token %}
+    <input name="subject" type="searchbar" placeholder="Enter Email Subject">
+    <br>
+    <textarea placeholder="Enter Email Body" rows="5" cols="35"></textarea>
+    <br>
+    <input name="submittype" type="submit" value="Send Email">
+  </form>
+  {% if email_success %}
+    <h3>Email Sent!</h3>
+  {% endif %}
+  {% else %}
 <h2 id="acc-title">Your Account</h2>
 <center>
 <h3>Pay Your Bill</h3>
@@ -103,6 +124,7 @@
   </h4>
 </div>
 </div>
+  {% endif %}
 {% else %}
 <b>Please log in.</b>
 <a href="../login.html" class="nav-elem">Log In</a>
