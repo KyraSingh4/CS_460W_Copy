@@ -38,7 +38,6 @@ class Member:
 
     def createReservation(self, restype: str, day: int, start: time, end: time, court: int, members: list[int], guests: list[str]):
         check = self.checkReservationRules(restype, day, start, end, court, members, guests)
-        print(check)
         if check != 0:
             return check
         else:
@@ -73,6 +72,17 @@ class Member:
                     self.my_bill.createCharge(5, "Guest Fee", "Other")
             return True
 
+    def deleteReservation(self, res_id: int):
+        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT reservation_id FROM reservation WHERE member_id = %s ", (self.memberid,))
+                result = cur.fetchall()
+                check_ids = []
+                for i in range(len(result)):
+                    check_ids.append(result[i][0])
+            if res_id in check_ids:
+                with conn.cursor() as cur:
+                    cur.execute("DELETE FROM reservation WHERE reservation_id = %s", (res_id,))
 
     def checkReservationRules(self, restype: str, day:int, start: time, end: time, court: int, members: list[int], guests: list[str]):
         conn = psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432")

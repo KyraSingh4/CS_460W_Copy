@@ -171,6 +171,10 @@ def scheduler_view(request):
             res_results = cal.lookupReservation(request.POST.get('res_id'))
             attendees = cal.getAttendees(request.POST.get('res_id'))
             return render(request, 'myapp/scheduler.html', {'res_results': res_results, 'attendees' : attendees})
+        elif request.POST.get('submittype') == 'Delete Reservation':
+            mem = Member(request.session.get('member_id'))
+            mem.deleteReservation(int(request.POST.get('res_id')))
+            return render(request, 'myapp/scheduler.html', {'success': True})
 
     return render(request, 'myapp/scheduler.html')
 

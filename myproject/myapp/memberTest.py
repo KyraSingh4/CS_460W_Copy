@@ -18,5 +18,4 @@ mem = Member(1)
 
 #print(dir.nameLookup('Ryder', 'Gover'))
 
-cal = Calendar()
-print(cal.getAttendees(21))
+mem.deleteReservation(22)
