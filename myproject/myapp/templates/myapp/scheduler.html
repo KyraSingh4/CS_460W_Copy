@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <link href="style.css" rel="stylesheet"/>
+
+<div class="navbar">
+  <h1 class="app-name">A.C.E.D.</h1>
+  <nav class="nav">
+    <a href="scheduler.html" class="nav-elem">Court Scheduler</a>
+    <a href="billing.html" class="nav-elem">Billing</a>
+    <a href="directory.html" class="nav-elem">Member Directory</a>
+    <a href="account.html" class="nav-elem">My Account</a>
+    <a href="login.html" class="nav-elem">Log Out</a>
+  </nav>
+</div>
+
+<center>
+<div class="scheduler-bg">
+  <h2 class="res-title">Make Reservation</h2>
+  <form method="post">
+    {% csrf_token %}
+    <input name="submittype" type="submit" value="Reset Process">
+  </form>
+   Guest Num
+      {{ request.session.num_guests }}
+  <h3>Select Day:</h3>
+  <form method = "post">
+    {% csrf_token %}
+    <select name="day">
+      <option class="day" value="0">Sunday</option>
+      <option class="day" value="1">Monday</option>
+      <option class="day" value="2">Tuesday</option>
+      <option class="day" value="3">Wednesday</option>
+      <option class="day" value="4">Thursday</option>
+      <option class="day" value="5">Friday</option>
+      <option class="day" value="6">Saturday</option>
+    </select>
+    <input name="submittype" type="submit" value="Select Day">
+  </form>
+  {% if request.session.scheduler_stage == 'Type' %}
+    <h3>Select Reservation Type:</h3>
+    <form method = "post">
+    {% csrf_token %}
+    <select name="type">
+      <option class="type" value="singles">Singles</option>
+      <option class="type" value="doubles">Doubles</option>
+    </select>
+    <input name="submittype" type="submit" value="Select Type">
+  </form>
+  {% endif %}
+  {% if request.session.scheduler_stage == 'Guests' %}
+  <h3>Select Number of Non-Member Guests</h3>
+    {% if request.session.type == 'singles' %}
+      <form method="post">
+        {% csrf_token %}
+        <select name="guests">
+          <option class="guests" value="0">0</option>
+          <option class="guests" value="1">1</option>
+        </select>
+        <input name="submittype" type="submit" value="Designate Guests">
+      </form>
+    {% elif request.session.type == 'doubles' %}
+      <form method="post">
+        {% csrf_token %}
+        <select name="guests">
+          <option class="guests" value="0">0</option>
+          <option class="guests" value="1">1</option>
+          <option class="guests" value="2">2</option>
+          <option class="guests" value="3">3</option>
+        </select>
+        <input name="submittype" type="submit" value="Designate Guests">
+      </form>
+    {% endif %}
+  {% endif %}
+
+  {% if request.session.scheduler_stage == 'Reserve' %}
+    <h3>Enter Reservation Information</h3>
+    <form method="post">
+      Start Time
+      <input type="time" name="start">
+      End Time
+      <input type="time" name="end">
+      Court Number
+      <select name="court">
+        <option class="court" value="1">1</option>
+        <option class="court" value="2">2</option>
+        <option class="court" value="3">3</option>
+        <option class="court" value="4">4</option>
+        <option class="court" value="5">5</option>
+        <option class="court" value="6">6</option>
+        <option class="court" value="7">7</option>
+        <option class="court" value="8">8</option>
+        <option class="court" value="9">9</option>
+        <option class="court" value="10">10</option>
+        <option class="court" value="11">11</option>
+        <option class="court" value="12">12</option>
+      </select>
+
+      Break
+      {% if request.session.num_guests == 1 %}
+        <input name="guestname" type="searchbox" placeholder="Enter Guest Name">
+      {% else %}
+      <h2>You Suck</h2>
+      {% endif %}
+    </form>
+  {% endif %}
+
+  <table class="calendar">
+    <tr class="days"></tr>
+  </table>
+  {% if results %}
+    <h2>Reservations for the Day</h2>
+    <table border="1">
+      <tr>
+        <th>Reservation ID</th>
+        <th>Court Number</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Game Type</th>
+      </tr>
+    {% for result in results %}
+      <tr>
+        <td>{{ result.0 }}</td>
+        <td>{{ result.1 }}</td>
+        <td>{{ result.2 }}</td>
+        <td>{{ result.3 }}</td>
+        <td>{{ result.5 }}</td>
+      </tr>
+    {% endfor %}
+  {% endif %}
+    </table>
+</div>
+
+
+</center>
+
+</html>

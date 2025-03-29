@@ -12,7 +12,7 @@ class Calendar:
     def RetrieveDay(self,day):
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
             with conn.cursor() as cur:
-                cur.execute("SELECT * FROM reservation WHERE res_day = %s", (day,))
+                cur.execute("SELECT reservation_id, court_num, start_time, end_time, member_id, type FROM reservation WHERE res_day = %s", (day,))
                 return cur.fetchall()
 
 

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from Directory import Directory  # Use relative import
 from Authenticator import Authenticator  # Import the Authenticator class
 from Member import Member, President, BillingStaff
+from Calendar import Calendar
 
 def directory_view(request):
     results = None
@@ -93,16 +94,28 @@ def billing_view(request):
     return render(request, 'myapp/billing.html')
 
 def scheduler_view(request):
+    results = None
+    cal = Calendar()
     if request.method == 'POST':
-        if request.POST.get('submittype') == 'Day':
+        if request.POST.get('submittype') == 'Reset Process':
+            request.session['day'] = None
+            request.session['scheduler_stage'] = None
+            request.session['num_guests'] = None
+        elif request.POST.get('submittype') == 'Select Day':
             request.session['day'] = request.POST.get('day')
             request.session['scheduler_stage'] = 'Type' # Move to the next stage
-        elif request.POST.get('submittype') == 'Type':
+            results = cal.RetrieveDay(request.POST.get('day'))
+            return render(request, 'myapp/scheduler.html', {'results': results})
+        elif request.POST.get('submittype') == 'Select Type':
             request.session['type'] = request.POST.get('type')
             request.session['scheduler_stage'] = 'Guests' # Move to the next stage
-        elif request.POST.get('submittype') == 'Guests':
+            results = cal.RetrieveDay(request.session['day'])
+            return render(request, 'myapp/scheduler.html', {'results': results})
+        elif request.POST.get('submittype') == 'Designate Guests':
             request.session['num_guests'] = request.POST.get('guests')
             request.session['scheduler_stage'] = 'Reserve' # Move to the next stage
+            results = cal.RetrieveDay(request.session['day'])
+            return render(request, 'myapp/scheduler.html', {'results': results})
         elif request.POST.get('submittype') == 'Reserve':
             start = request.POST.get('start')
             end = request.POST.get('end')
