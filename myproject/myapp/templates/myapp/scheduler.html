@@ -5,11 +5,11 @@
 <div class="navbar">
   <h1 class="app-name">A.C.E.D.</h1>
   <nav class="nav">
-    <a href="scheduler.html" class="nav-elem">Court Scheduler</a>
-    <a href="billing.html" class="nav-elem">Billing</a>
-    <a href="directory.html" class="nav-elem">Member Directory</a>
-    <a href="account.html" class="nav-elem">My Account</a>
-    <a href="login.html" class="nav-elem">Log Out</a>
+    <a href="../scheduler/" class="nav-elem">Court Scheduler</a>
+    <a href="../billing/" class="nav-elem">Billing</a>
+    <a href="../directory/" class="nav-elem">Member Directory</a>
+    <a href="../account/" class="nav-elem">My Account</a>
+    <a href="../login/" class="nav-elem">Log Out</a>
   </nav>
 </div>
 
@@ -20,8 +20,8 @@
     {% csrf_token %}
     <input name="submittype" type="submit" value="Reset Process">
   </form>
-   Guest Num
-      {{ request.session.num_guests }}
+   Time
+      {{ request.session.start }}
   <h3>Select Day:</h3>
   <form method = "post">
     {% csrf_token %}
@@ -75,8 +75,9 @@
   {% if request.session.scheduler_stage == 'Reserve' %}
     <h3>Enter Reservation Information</h3>
     <form method="post">
+      {% csrf_token %}
       Start Time
-      <input type="time" name="start">
+      <input type="time" name="start" min="06:00" max="20:00" step="900">
       End Time
       <input type="time" name="end">
       Court Number
@@ -95,12 +96,34 @@
         <option class="court" value="12">12</option>
       </select>
 
-      Break
-      {% if request.session.num_guests == 1 %}
-        <input name="guestname" type="searchbox" placeholder="Enter Guest Name">
-      {% else %}
-      <h2>You Suck</h2>
+      <br>
+      {% if request.session.type == 'singles' %}
+        {% if request.session.num_guests == '1' %}
+          <input name="guest1" type="searchbox" placeholder="Enter Guest Name">
+        {% elif request.session.num_guests == '0' %}
+          <input name="member2" type="searchbox" placeholder="Enter Member Name">
+        {% endif %}
       {% endif %}
+      {% if request.session.type == 'doubles' %}
+        {% if request.session.num_guests == '0' %}
+          <input name="member2" type="searchbox" placeholder="Enter Member Name">
+          <input name="member3" type="searchbox" placeholder="Enter Member Name">
+          <input name="member4" type="searchbox" placeholder="Enter Member Name">
+        {% elif request.session.num_guests == '1' %}
+          <input name="member2" type="searchbox" placeholder="Enter Member Name">
+          <input name="member3" type="searchbox" placeholder="Enter Member Name">
+          <input name="guest1" type="searchbox" placeholder="Enter Guest Name">
+        {% elif request.session.num_guests == '2' %}
+          <input name="member2" type="searchbox" placeholder="Enter Member Name">
+          <input name="guest1" type="searchbox" placeholder="Enter Guest Name">
+          <input name="guest2" type="searchbox" placeholder="Enter Guest Name">
+        {% elif request.session.num_guests == '3' %}
+          <input name="guest1" type="searchbox" placeholder="Enter Guest Name">
+          <input name="guest2" type="searchbox" placeholder="Enter Guest Name">
+          <input name="guest3" type="searchbox" placeholder="Enter Guest Name">
+        {% endif %}
+      {% endif %}
+      <input name="submittype" type="submit" value="Reserve">
     </form>
   {% endif %}
 

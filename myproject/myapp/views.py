@@ -3,6 +3,7 @@ from Directory import Directory  # Use relative import
 from Authenticator import Authenticator  # Import the Authenticator class
 from Member import Member, President, BillingStaff
 from Calendar import Calendar
+import datetime
 
 def directory_view(request):
     results = None
@@ -118,35 +119,37 @@ def scheduler_view(request):
             return render(request, 'myapp/scheduler.html', {'results': results})
         elif request.POST.get('submittype') == 'Reserve':
             start = request.POST.get('start')
+            start = start.split(":")
             end = request.POST.get('end')
+            end = end.split(":")
             court = request.POST.get('court')
             if request.session.get('type') == 'singles':
                 mem = Member(request.session.get('member_id'))
                 if request.session.get('num_guests') == '1': # 1 guest pass, 1 member
-                    members = [mem]
+                    members = []
                     guests = [request.POST.get('guest1')]
                 else: # 0 guest passes, 2 members
-                    members = [mem, request.POST.get('member2')]
+                    members = [request.POST.get('member2')]
                     guests = []
                 mem.createReservation(request.session.get('type'), request.session.get('day'), 
-                                      start, end, court, members, guests)
+                                      datetime.time(int(start[0]),int(start[1])), datetime.time(int(end[0]),int(end[1])), court, members, guests)
             elif request.session.get('type') == 'doubles':
                 mem = Member(request.session.get('member_id'))
                 match request.session.get('num_guests'):
                     case '1':  # 1 guest pass, 3 members
-                        members = [mem, request.POST.get('member2'), request.POST.get('member3')]
+                        members = [request.POST.get('member2'), request.POST.get('member3')]
                         guests = [request.POST.get('guest1')]
                     case '2':  # 2 guest passes, 2 members
-                        members = [mem, request.POST.get('member2')]
+                        members = [request.POST.get('member2')]
                         guests = [request.POST.get('guest1'), request.POST.get('guest2')]
                     case '3':  # 3 guest passes, 1 member
-                        members = [mem]
+                        members = []
                         guests = [request.POST.get('guest1'), request.POST.get('guest2'), request.POST.get('guest3')]
-                    case _:  # 0 guest passes, 4 members
-                        members = [mem, request.POST.get('member2'), request.POST.get('member3'), request.POST.get('member4')]
+                    case '0':  # 0 guest passes, 4 members
+                        members = [request.POST.get('member2'), request.POST.get('member3'), request.POST.get('member4')]
                         guests = []
                 mem.createReservation(request.session.get('type'), request.session.get('day'), 
-                                      start, end, court, members, guests)
+                                      datetime.time(int(start[0]),int(start[1])), datetime.time(int(end[0]),int(end[1])), court, members, guests)
             request.session['scheduler_stage'] = None # Reset stage
             return render(request, 'myapp/scheduler.html', {'success': True})
     return render(request, 'myapp/scheduler.html')
