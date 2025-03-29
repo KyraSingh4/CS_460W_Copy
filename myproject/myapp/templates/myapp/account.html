@@ -13,7 +13,7 @@
     <a href="../logout/" class="nav-elem">Log Out</a>
   </nav>
 </div>
-
+  {% if request.session.member_id != none %}
 <div class="acc-page">
 <center>
 <h2 id="acc-title">Your Account</h2>
@@ -103,5 +103,9 @@
   </h4>
 </div>
 </div>
+{% else %}
+<b>Please log in.</b>
+<a href="../login.html" class="nav-elem">Log In</a>
+{% endif %}
 </html>
 

@@ -4,18 +4,19 @@ import psycopg2
 from psycopg2 import sql
 from Member import Member
 import datetime
-
+from Directory import Directory
+from Calendar import Calendar
 #p = President()
 
 #p.createMember("test", "test", "test@test.com", "111-111-1113", True, 'test')
 
 mem = Member(1)
 
-print(mem.createReservation('singles', 0, datetime.time(10,00,00), datetime.time(11,15,00),7, [], ['Guesterino Test']))
+#print(mem.createReservation('singles', 0, datetime.time(10,0), datetime.time(11,00),10, [], ['Guesterino Test']))
 
-tim = '10:15'
+#dir = Directory()
 
-test = tim.split(":")
-print(test)
+#print(dir.nameLookup('Ryder', 'Gover'))
 
-print(datetime.time(int(test[0]),int(test[1])))
+cal = Calendar()
+print(cal.getAttendees(21))

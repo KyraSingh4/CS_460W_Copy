@@ -15,7 +15,29 @@ class Calendar:
                 cur.execute("SELECT reservation_id, court_num, start_time, end_time, member_id, type FROM reservation WHERE res_day = %s", (day,))
                 return cur.fetchall()
 
+    def lookupReservation(self, res_id: int):
+        result = None
+        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT res_day, court_num, start_time, end_time, type, member_id FROM reservation WHERE reservation_id = %s", (res_id,))
+                result = cur.fetchall()
+        return result
 
+    def getAttendees(self, res_id: int):
+        result = None
+        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT member_id FROM reservation WHERE reservation_id = %s", (res_id,))
+                mem_id = cur.fetchall()[0]
+            with conn.cursor() as cur:
+                cur.execute("SELECT firstname, lastname FROM member WHERE member_id = %s",(mem_id,))
+                result = cur.fetchall()
+            with conn.cursor() as cur:
+                cur.execute("SELECT firstname, lastname FROM ATTENDEES where reservation_id = %s", (res_id,))
+                others = cur.fetchall()
+                for other in others:
+                    result.append(other)
+        return result
 
 class Calender2:
     def __init__(self):

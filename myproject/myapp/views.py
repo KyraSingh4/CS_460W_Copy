@@ -97,6 +97,7 @@ def billing_view(request):
 def scheduler_view(request):
     results = None
     cal = Calendar()
+    dir = Directory()
     if request.method == 'POST':
         if request.POST.get('submittype') == 'Reset Process':
             request.session['day'] = None
@@ -129,7 +130,9 @@ def scheduler_view(request):
                     members = []
                     guests = [request.POST.get('guest1')]
                 else: # 0 guest passes, 2 members
-                    members = [request.POST.get('member2')]
+                    mem2 = request.POST.get('member2')
+                    mem2 = mem2.split(" ")
+                    members = [dir.nameLookup(mem2[0], mem2[1])]
                     guests = []
                 mem.createReservation(request.session.get('type'), request.session.get('day'), 
                                       datetime.time(int(start[0]),int(start[1])), datetime.time(int(end[0]),int(end[1])), court, members, guests)
@@ -137,21 +140,38 @@ def scheduler_view(request):
                 mem = Member(request.session.get('member_id'))
                 match request.session.get('num_guests'):
                     case '1':  # 1 guest pass, 3 members
-                        members = [request.POST.get('member2'), request.POST.get('member3')]
+                        mem2 = request.post.get('member2')
+                        mem2 = mem2.split(" ")
+                        mem3 = request.post.get('member3')
+                        mem3 = mem3.split(" ")
+                        members = [dir.nameLookup(mem2[0],mem2[1]), dir.nameLookup(mem3[0],mem3[1])]
                         guests = [request.POST.get('guest1')]
                     case '2':  # 2 guest passes, 2 members
-                        members = [request.POST.get('member2')]
+                        mem2 = request.post.get('member2')
+                        mem2 = mem2.split(" ")
+                        members = [dir.nameLookup(mem2[0],mem2[1])]
                         guests = [request.POST.get('guest1'), request.POST.get('guest2')]
                     case '3':  # 3 guest passes, 1 member
                         members = []
                         guests = [request.POST.get('guest1'), request.POST.get('guest2'), request.POST.get('guest3')]
                     case '0':  # 0 guest passes, 4 members
-                        members = [request.POST.get('member2'), request.POST.get('member3'), request.POST.get('member4')]
+                        mem2 = request.post.get('member2')
+                        mem2 = mem2.split(" ")
+                        mem3 = request.post.get('member3')
+                        mem3 = mem3.split(" ")
+                        mem4 = request.POST.get('member4')
+                        mem4 = mem4.split(" ")
+                        members = [dir.nameLookup(mem2[0],mem2[1]), dir.nameLookup(mem3[0],mem3[1]), dir.nameLookup(mem4[0],mem4[1])]
                         guests = []
                 mem.createReservation(request.session.get('type'), request.session.get('day'), 
                                       datetime.time(int(start[0]),int(start[1])), datetime.time(int(end[0]),int(end[1])), court, members, guests)
             request.session['scheduler_stage'] = None # Reset stage
             return render(request, 'myapp/scheduler.html', {'success': True})
+        elif request.POST.get('submittype') == 'Lookup Reservation':
+            res_results = cal.lookupReservation(request.POST.get('res_id'))
+            attendees = cal.getAttendees(request.POST.get('res_id'))
+            return render(request, 'myapp/scheduler.html', {'res_results': res_results, 'attendees' : attendees})
+
     return render(request, 'myapp/scheduler.html')
 
 def account_view(request):

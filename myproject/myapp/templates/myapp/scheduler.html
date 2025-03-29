@@ -12,7 +12,7 @@
     <a href="../login/" class="nav-elem">Log Out</a>
   </nav>
 </div>
-
+  {% if request.session.member_id != none %}
 <center>
 <div class="scheduler-bg">
   <h2 class="res-title">Make Reservation</h2>
@@ -20,8 +20,6 @@
     {% csrf_token %}
     <input name="submittype" type="submit" value="Reset Process">
   </form>
-   Time
-      {{ request.session.start }}
   <h3>Select Day:</h3>
   <form method = "post">
     {% csrf_token %}
@@ -151,9 +149,51 @@
     {% endfor %}
   {% endif %}
     </table>
+  <h3>Lookup a Reservation</h3>
+  <form method="post">
+    {% csrf_token %}
+    <input name="res_id" type="searchbox" placeholder="Enter Reservation ID">
+    <input name="submittype" type="submit" value="Lookup Reservation">
+  </form>
+  {% if res_results %}
+    <h2>Reservation:</h2>
+    <table border="1">
+      <tr>
+        <th>Day</th>
+        <th>Court Number</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Reservation Type</th>
+      </tr>
+      <tr>
+        <td>{{ res_results.0.0 }}</td>
+        <td>{{ res_results.0.1 }}</td>
+        <td>{{ res_results.0.2 }}</td>
+        <td>{{ res_results.0.3 }}</td>
+        <td>{{ res_results.0.4 }}</td>
+      </tr>
+    </table>
+    <h3>Players:</h3>
+    <table border="1">
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+      </tr>
+      {% for attendee in attendees %}
+      <tr>
+        <td>{{ attendee.0 }} </td>
+        <td>{{ attendee.1 }} </td>
+      </tr>
+      {% endfor %}
+    </table>
+
+  {% endif %}
 </div>
 
 
 </center>
-
+{% else %}
+<b>Please log in.</b>
+<a href="../login.html" class="nav-elem">Log In</a>
+{% endif %}
 </html>

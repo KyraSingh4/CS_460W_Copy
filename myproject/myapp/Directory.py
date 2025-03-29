@@ -49,3 +49,9 @@ class Directory():
                                 "member_id = %s OR firstname = %s OR lastname = %s OR email = %s OR phonenum = %s"
                                 "OR guestpasses = %s OR optin = %s OR active = %s",
                                 (value, value, value, value, value, value, value, value))
+
+    def nameLookup(self, firstname: str, lastname: str):
+        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT member_id FROM member WHERE firstname = %s AND lastname = %s",(firstname, lastname))
+                return cur.fetchone()[0]
