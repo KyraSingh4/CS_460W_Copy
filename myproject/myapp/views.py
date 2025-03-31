@@ -189,6 +189,15 @@ def scheduler_view(request):
             mem.deleteReservation(int(request.POST.get('res_id')))
             success = True
 
+    processed_results = []
+    if results:
+        for res in results:
+            processed_results.append({
+                'court': res[1],
+                'time': f"{res[2].hour:02}:{res[2].minute:02}",  # Format time as HH:MM
+                'reservation_id': res[0],
+            })
+
     # Consolidate context and render the template
     context = {
         'results': results,
@@ -198,8 +207,20 @@ def scheduler_view(request):
         'courts': courts,
         'hours': hours,
         'minutes': minutes,
+        'processed_results': processed_results,  # Pass preprocessed results
     }
     return render(request, 'myapp/scheduler.html', context)
+
+def sort_results_by_court(results):
+    if results is None:
+        return {}
+    sorted_results = {}
+    for res in results:
+        court_num = res[1]
+        if court_num not in sorted_results:
+            sorted_results[court_num] = []
+        sorted_results[court_num].append(res)
+    return sorted_results
 
 def account_view(request):
     result = None

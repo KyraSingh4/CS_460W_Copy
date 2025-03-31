@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <link href="style.css" rel="stylesheet"/>
-
+  {% load custom_filters %}
 <div class="navbar">
   <h1 class="app-name">A.C.E.D.</h1>
   <nav class="nav">
@@ -180,7 +180,13 @@
               {% endif %}
             </td>
             {% for court in courts %}
-              <td></td>
+              <td>
+                {% for court_data in processed_results %}
+                  {% if court_data.court == court and court_data.time == hour|format_time:minute %}
+                    <a href="../scheduler/?res_id={{ court_data.reservation_id }}">{{ court_data.reservation_id }}</a>
+                  {% endif %}
+                {% endfor %}
+              </td>
             {% endfor %}
           </tr>
         {% endfor %}
