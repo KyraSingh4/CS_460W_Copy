@@ -192,13 +192,35 @@ def scheduler_view(request):
     processed_results = []
     if results:
         for res in results:
+            start_hour, start_minute = map(int, res[2].strftime("%H:%M").split(":"))
+            end_hour, end_minute = map(int, res[3].strftime("%H:%M").split(":"))
             processed_results.append({
                 'court': res[1],
-                'time': f"{res[2].hour:02}:{res[2].minute:02}",  # Format time as HH:MM
+                'start_hour': start_hour,
+                'start_minute': start_minute,
+                'end_hour': end_hour,
+                'end_minute': end_minute,
                 'reservation_id': res[0],
             })
 
-    # Consolidate context and render the template
+    # Create a time grid with reservation IDs for each court and time slot
+    time_grid = []
+    for hour in hours:
+        for minute in minutes:
+            row = {'time': f"{hour:02}:{minute}", 'courts': []}
+            for court in courts:
+                reservation_id = None
+                for court_data in processed_results:
+                    if court_data['court'] == court:
+                        current_time = hour * 60 + int(minute)
+                        start_time = court_data['start_hour'] * 60 + court_data['start_minute']
+                        end_time = court_data['end_hour'] * 60 + court_data['end_minute']
+                        if start_time <= current_time <= end_time:
+                            reservation_id = court_data['reservation_id']
+                            break
+                row['courts'].append({'court': court, 'reservation_id': reservation_id})
+            time_grid.append(row)
+
     context = {
         'results': results,
         'res_results': res_results,
@@ -207,7 +229,7 @@ def scheduler_view(request):
         'courts': courts,
         'hours': hours,
         'minutes': minutes,
-        'processed_results': processed_results,  # Pass preprocessed results
+        'time_grid': time_grid,
     }
     return render(request, 'myapp/scheduler.html', context)
 
