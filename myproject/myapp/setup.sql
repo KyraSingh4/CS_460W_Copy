@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS charges (
     date        DATE                NOT NULL DEFAULT CURRENT_DATE,
     description VARCHAR(128)        NOT NULL,
     type        VARCHAR(6)          NOT NULL,
+    isPaid      BOOLEAN             NOT NULL DEFAULT FALSE,
 
     PRIMARY KEY(charge_id),
     FOREIGN KEY(member_id) REFERENCES member(member_ID)
