@@ -1,6 +1,6 @@
 import datetime
 from Calendar import Calender
-from Reservation import Reservation
+from CS_460W.myproject.myapp.Reservation import Reservation
 
 # Create a Calender object
 calender = Calender()
