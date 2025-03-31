@@ -1,6 +1,5 @@
 import datetime
 import csv
-from Reservation import Reservation
 
 import psycopg2
 
