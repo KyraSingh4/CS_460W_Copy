@@ -96,87 +96,110 @@ def billing_view(request):
 
 def scheduler_view(request):
     results = None
+    res_results = None
+    attendees = None
+    success = None
     cal = Calendar()
     dir = Directory()
+    courts = list(range(1, 13))  # Courts 1 to 12
+    hours = list(range(6, 21))  # Hours 6 AM to 8 PM
+    minutes = ["00", "15", "30", "45"]  # 15-minute intervals
+
     if request.method == 'POST':
-        if request.POST.get('submittype') == 'Reset Process':
+        submittype = request.POST.get('submittype')
+        if submittype == 'Reset Process':
             request.session['day'] = None
             request.session['scheduler_stage'] = None
             request.session['num_guests'] = None
-        elif request.POST.get('submittype') == 'Select Day':
+        elif submittype == 'Select Day':
             request.session['day'] = request.POST.get('day')
-            request.session['scheduler_stage'] = 'Type' # Move to the next stage
+            request.session['scheduler_stage'] = 'Type'  # Move to the next stage
             results = cal.RetrieveDay(request.POST.get('day'))
-            return render(request, 'myapp/scheduler.html', {'results': results})
-        elif request.POST.get('submittype') == 'Select Type':
+        elif submittype == 'Select Type':
             request.session['type'] = request.POST.get('type')
-            request.session['scheduler_stage'] = 'Guests' # Move to the next stage
+            request.session['scheduler_stage'] = 'Guests'  # Move to the next stage
             results = cal.RetrieveDay(request.session['day'])
-            return render(request, 'myapp/scheduler.html', {'results': results})
-        elif request.POST.get('submittype') == 'Designate Guests':
+        elif submittype == 'Designate Guests':
             request.session['num_guests'] = request.POST.get('guests')
-            request.session['scheduler_stage'] = 'Reserve' # Move to the next stage
+            request.session['scheduler_stage'] = 'Reserve'  # Move to the next stage
             results = cal.RetrieveDay(request.session['day'])
-            return render(request, 'myapp/scheduler.html', {'results': results})
-        elif request.POST.get('submittype') == 'Reserve':
-            start = request.POST.get('start')
-            start = start.split(":")
-            end = request.POST.get('end')
-            end = end.split(":")
+        elif submittype == 'Reserve':
+            start = request.POST.get('start').split(":")
+            end = request.POST.get('end').split(":")
             court = request.POST.get('court')
             if request.session.get('type') == 'singles':
                 mem = Member(request.session.get('member_id'))
-                if request.session.get('num_guests') == '1': # 1 guest pass, 1 member
+                if request.session.get('num_guests') == '1':  # 1 guest pass, 1 member
                     members = []
                     guests = [request.POST.get('guest1')]
-                else: # 0 guest passes, 2 members
-                    mem2 = request.POST.get('member2')
-                    mem2 = mem2.split(" ")
+                else:  # 0 guest passes, 2 members
+                    mem2 = request.POST.get('member2').split(" ")
                     members = [dir.nameLookup(mem2[0], mem2[1])]
                     guests = []
-                mem.createReservation(request.session.get('type'), request.session.get('day'), 
-                                      datetime.time(int(start[0]),int(start[1])), datetime.time(int(end[0]),int(end[1])), court, members, guests)
+                mem.createReservation(
+                    request.session.get('type'),
+                    request.session.get('day'),
+                    datetime.time(int(start[0]), int(start[1])),
+                    datetime.time(int(end[0]), int(end[1])),
+                    court,
+                    members,
+                    guests,
+                )
             elif request.session.get('type') == 'doubles':
                 mem = Member(request.session.get('member_id'))
                 match request.session.get('num_guests'):
                     case '1':  # 1 guest pass, 3 members
-                        mem2 = request.post.get('member2')
-                        mem2 = mem2.split(" ")
-                        mem3 = request.post.get('member3')
-                        mem3 = mem3.split(" ")
-                        members = [dir.nameLookup(mem2[0],mem2[1]), dir.nameLookup(mem3[0],mem3[1])]
+                        mem2 = request.POST.get('member2').split(" ")
+                        mem3 = request.POST.get('member3').split(" ")
+                        members = [dir.nameLookup(mem2[0], mem2[1]), dir.nameLookup(mem3[0], mem3[1])]
                         guests = [request.POST.get('guest1')]
                     case '2':  # 2 guest passes, 2 members
-                        mem2 = request.post.get('member2')
-                        mem2 = mem2.split(" ")
-                        members = [dir.nameLookup(mem2[0],mem2[1])]
+                        mem2 = request.POST.get('member2').split(" ")
+                        members = [dir.nameLookup(mem2[0], mem2[1])]
                         guests = [request.POST.get('guest1'), request.POST.get('guest2')]
                     case '3':  # 3 guest passes, 1 member
                         members = []
                         guests = [request.POST.get('guest1'), request.POST.get('guest2'), request.POST.get('guest3')]
                     case '0':  # 0 guest passes, 4 members
-                        mem2 = request.post.get('member2')
-                        mem2 = mem2.split(" ")
-                        mem3 = request.post.get('member3')
-                        mem3 = mem3.split(" ")
-                        mem4 = request.POST.get('member4')
-                        mem4 = mem4.split(" ")
-                        members = [dir.nameLookup(mem2[0],mem2[1]), dir.nameLookup(mem3[0],mem3[1]), dir.nameLookup(mem4[0],mem4[1])]
+                        mem2 = request.POST.get('member2').split(" ")
+                        mem3 = request.POST.get('member3').split(" ")
+                        mem4 = request.POST.get('member4').split(" ")
+                        members = [
+                            dir.nameLookup(mem2[0], mem2[1]),
+                            dir.nameLookup(mem3[0], mem3[1]),
+                            dir.nameLookup(mem4[0], mem4[1]),
+                        ]
                         guests = []
-                mem.createReservation(request.session.get('type'), request.session.get('day'), 
-                                      datetime.time(int(start[0]),int(start[1])), datetime.time(int(end[0]),int(end[1])), court, members, guests)
-            request.session['scheduler_stage'] = None # Reset stage
-            return render(request, 'myapp/scheduler.html', {'success': True})
-        elif request.POST.get('submittype') == 'Lookup Reservation':
+                mem.createReservation(
+                    request.session.get('type'),
+                    request.session.get('day'),
+                    datetime.time(int(start[0]), int(start[1])),
+                    datetime.time(int(end[0]), int(end[1])),
+                    court,
+                    members,
+                    guests,
+                )
+            request.session['scheduler_stage'] = None  # Reset stage
+            success = True
+        elif submittype == 'Lookup Reservation':
             res_results = cal.lookupReservation(request.POST.get('res_id'))
             attendees = cal.getAttendees(request.POST.get('res_id'))
-            return render(request, 'myapp/scheduler.html', {'res_results': res_results, 'attendees' : attendees})
-        elif request.POST.get('submittype') == 'Delete Reservation':
+        elif submittype == 'Delete Reservation':
             mem = Member(request.session.get('member_id'))
             mem.deleteReservation(int(request.POST.get('res_id')))
-            return render(request, 'myapp/scheduler.html', {'success': True})
+            success = True
 
-    return render(request, 'myapp/scheduler.html')
+    # Consolidate context and render the template
+    context = {
+        'results': results,
+        'res_results': res_results,
+        'attendees': attendees,
+        'success': success,
+        'courts': courts,
+        'hours': hours,
+        'minutes': minutes,
+    }
+    return render(request, 'myapp/scheduler.html', context)
 
 def account_view(request):
     result = None

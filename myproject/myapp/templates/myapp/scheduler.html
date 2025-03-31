@@ -83,7 +83,7 @@
       Start Time
       <input type="time" name="start" min="06:00" max="20:00" step="900">
       End Time
-      <input type="time" name="end">
+      <input type="time" name="end" min="06:00" max="20:00" step="900">
       Court Number
       <select name="court">
         <option class="court" value="1">1</option>
@@ -154,6 +154,41 @@
       </tr>
     {% endfor %}
   {% endif %}
+
+  {% if results %}
+  <h2>Reservations for the Day</h2>
+  <table border="1" class="calendar">
+    <thead>
+      <tr>
+        <th>Time</th>
+        {% for court in courts %}
+          <th>Court #{{ court }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for hour in hours %}
+        {% for minute in minutes %}
+          <tr>
+            <td>
+              {% if hour < 12 %}
+                {{ hour }}:{{ minute }} AM
+              {% elif hour == 12 %}
+                12:{{ minute }} PM
+              {% else %}
+                {{ hour|add:"-12" }}:{{ minute }} PM
+              {% endif %}
+            </td>
+            {% for court in courts %}
+              <td></td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
     </table>
   <h3>Lookup a Reservation</h3>
   <form method="post">
