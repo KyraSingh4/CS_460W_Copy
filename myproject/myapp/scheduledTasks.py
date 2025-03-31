@@ -2,20 +2,39 @@ import schedule
 import threading
 import psycopg2
 import datetime
+import time
 from Bill import Bill
 
 
-def addYearlyFee():
-    year = datetime.datetime.now().year - 1
+def run_continouously(interval=1):
+    cease_continuous_run = threading.Event()
 
-    with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-        with conn.cursor() as cur:
-            cur.execute("SELECT member_id FROM member")
-            members = cur.fetchall()
-        for member in members:
-            if member[0] != 1 and member[0] != 2:
-                with conn.cursor() as cur:
-                    cur.execute("INSERT INTO charges (member_id, amount, date, description, type) VALUES (%s, %s, %s, %s, %s)",
+    class ScheduleThread(threading.Thread):
+        @classmethod
+        def run(cls):
+            while not cease_continuous_run.is_set():
+                schedule.run_pending()
+                time.sleep(interval)
+
+    continuous_thread = ScheduleThread()
+    continuous_thread.start()
+
+    return cease_continuous_run
+
+
+
+def addYearlyFee():
+    if datetime.datetime.now().day == 1 and datetime.datetime.now().month == 1:
+        year = datetime.datetime.now().year - 1
+
+        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT member_id FROM member")
+                members = cur.fetchall()
+            for member in members:
+                if member[0] != 1 and member[0] != 2:
+                    with conn.cursor() as cur:
+                        cur.execute("INSERT INTO charges (member_id, amount, date, description, type) VALUES (%s, %s, %s, %s, %s)",
                                 (member[0], 400, datetime.date(year, 1, 1),'Annual Dues', 'Annual'))
 
 def getUnpaid():
@@ -29,18 +48,19 @@ def getUnpaid():
 
 
 def addLateFee():
-    month = datetime.datetime.now().month
-    year = datetime.datetime.now().year - 1
-    unpaid = getUnpaid()
-    with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-        if month == 2:
-            for i in range(len(unpaid)):
-                with conn.cursor() as cur:
-                    cur.execute("UPDATE charges SET amount = %s WHERE charge_id = %s", (440, unpaid[i][0]))
-        if month == 3:
-            for i in range(len(unpaid)):
-                with conn.cursor() as cur:
-                    cur.execute("UPDATE charges SET amount = %s WHERE charge_id = %s", (480, unpaid[i][0]))
+    if datetime.datetime.now().day == 1:
+        month = datetime.datetime.now().month
+        year = datetime.datetime.now().year - 1
+        unpaid = getUnpaid()
+        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+            if month == 2:
+                for i in range(len(unpaid)):
+                    with conn.cursor() as cur:
+                        cur.execute("UPDATE charges SET amount = %s WHERE charge_id = %s", (440, unpaid[i][0]))
+            if month == 3:
+                for i in range(len(unpaid)):
+                    with conn.cursor() as cur:
+                        cur.execute("UPDATE charges SET amount = %s WHERE charge_id = %s", (480, unpaid[i][0]))
 
 
 
@@ -49,3 +69,13 @@ def refreshReservation():
     with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
         with conn.cursor() as cur:
             cur.execute("DELETE FROM reservation WHERE res_day = %s", (day,))
+
+
+
+schedule.every().day.at("5:30").do(addYearlyFee())
+schedule.every().day.at("5:30").do(addLateFee())
+schedule.every().day.at("5:30").do(refreshReservation())
+
+stop_run_continuously = run_continouously(86400)
+
+
