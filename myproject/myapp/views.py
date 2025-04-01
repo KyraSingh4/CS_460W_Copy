@@ -220,6 +220,8 @@ def scheduler_view(request):
     time_grid = []
     for hour in hours:
         for minute in minutes:
+            if hour == 20 and minute != "00":
+                break
             row = {'time': f"{hour:02}:{minute}", 'courts': []}
             for court in courts:
                 reservation_id = None
