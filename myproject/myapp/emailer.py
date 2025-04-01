@@ -1,9 +1,10 @@
 from email.mime.text import MIMEText 
 from email.mime.image import MIMEImage 
 from email.mime.application import MIMEApplication 
-from email.mime.multipart import MIMEMultipart 
+from email.mime.multipart import MIMEMultipart
 import smtplib 
 import os
+from Bill import Bill
 
 class Emailer:
     def __init__(self):
@@ -27,6 +28,27 @@ class Emailer:
         text = ("You scheduled a reservation!" + '\n'
                 + "Reservation ID: " + str(res_id) +'\n'
                 + "Please use the scheduler if you need to delete or change your reservation!")
+        self.connect()
+        self.sendEmail(text, subject, email)
+
+    def sendBillEmail(self, bill, email):
+        subject = "ACED Bill"
+        billstr = 'Amount   Date    Description     Type'
+        for i in range(len(bill)):
+            billstr = billstr + "\n"
+            billstr = billstr + str(bill[i][1]) + "     " + str(bill[i][2]) + "     " + bill[i][3] + "      " + bill[i][4]
+
+        text = ("Your bill is due! Please pay via the Billing page before January 31st. Your bill is below:" +
+                "\n" + billstr +
+                "\n" + "Thank You!" + "\n" + "ACED Billing Staff")
+
+        self.connect()
+        self.sendEmail(text, subject, email)
+
+    def lateBillEmail(self, email):
+        subject = "Late Bill"
+        text = "NOTICE: Your bill is late and a late fee has been added to your account. Please pay your bill by March 31st to avoid deactivation!"
+
         self.connect()
         self.sendEmail(text, subject, email)
         

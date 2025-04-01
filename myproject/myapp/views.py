@@ -4,6 +4,7 @@ from Authenticator import Authenticator  # Import the Authenticator class
 from Member import Member, President, BillingStaff
 from Calendar import Calendar
 import datetime
+from emailer import Emailer
 
 def directory_view(request):
     results = None
@@ -294,7 +295,18 @@ def account_view(request):
             mem.payBill()
             return render(request, 'myapp/account.html', {'result': result})
         if request.POST.get('submittype') == 'Send Email':
-            return render(request, 'myapp/account.html', {'email_success': True})
+            dir = Directory()
+            emails = dir.getEmails()
+            email_success = []
+            em = Emailer()
+            for email in emails:
+                try:
+                    em.connect()
+                    em.sendEmail(request.POST.get('emailbody'), request.POST.get('subject'), email[0])
+                    email_success.append(email[0])
+                except:
+                    pass
+            return render(request, 'myapp/account.html', {'email_success': email_success})
 
 
 

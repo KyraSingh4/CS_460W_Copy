@@ -55,3 +55,9 @@ class Directory():
             with conn.cursor() as cur:
                 cur.execute("SELECT member_id FROM member WHERE firstname = %s AND lastname = %s",(firstname, lastname))
                 return cur.fetchone()[0]
+
+    def getEmails(self):
+        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT email FROM member")
+                return cur.fetchall()
