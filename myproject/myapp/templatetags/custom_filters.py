@@ -9,14 +9,6 @@ def format_time(hour, minute):
 
 @register.simple_tag
 def is_within_time_range(hour, minute, start_time, end_time):
-    """
-    Checks if the given hour and minute fall within the time range (inclusive).
-    :param hour: Current hour (int).
-    :param minute: Current minute (int).
-    :param start_time: Start time in "HH:MM" format.
-    :param end_time: End time in "HH:MM" format.
-    :return: True if the time is within the range, False otherwise.
-    """
     # Convert current time to minutes
     current_time = hour * 60 + minute
 

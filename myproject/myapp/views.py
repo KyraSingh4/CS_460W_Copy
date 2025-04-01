@@ -49,14 +49,14 @@ def login_view(request):
             return redirect('directory')  # Redirect to the search page on successful login
         else:
             return render(request, 'myapp/login.html', {'error': 'Invalid credentials'})
-
+    request.session['scheduler_stage'] = None
     return render(request, 'myapp/login.html')
 
 def logout_view(request):
     if request.method == 'POST':
         request.session['member_id'] = None
         return redirect('login')
-
+    request.session['scheduler_stage'] = None
     return render(request, 'myapp/logout.html')
 
 def billing_view(request):
@@ -221,6 +221,8 @@ def scheduler_view(request):
     time_grid = []
     for hour in hours:
         for minute in minutes:
+            if hour == 20 and minute != "00":
+                break
             row = {'time': f"{hour:02}:{minute}", 'courts': []}
             for court in courts:
                 reservation_id = None
