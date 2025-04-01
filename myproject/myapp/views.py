@@ -91,6 +91,19 @@ def billing_view(request):
             mem.deleteCharge(request.POST.get('charge_id'))
             success = True
             return render(request, 'myapp/billing.html', {'success': success})
+        if request.POST.get('submittype') == 'Retrieve Current Billing Scheme':
+            mem = BillingStaff()
+            billing_scheme = mem.getBillingScheme()
+            return render(request, 'myapp/billing.html', {'billing_scheme': billing_scheme})
+        if request.POST.get('submittype') == 'Modify Billing Scheme':
+            mem = BillingStaff()
+            if request.POST.get('chargetype') == 'guestfee':
+                mem.modifyGuestFee(request.POST.get('value'))
+            elif request.POST.get('chargetype') == 'annualfee':
+                mem.modifyAnnualFee(request.POST.get('value'))
+            billing_scheme = mem.getBillingScheme()
+            return render(request, 'myapp/billing.html', {'billing_scheme': billing_scheme})
+
 
     return render(request, 'myapp/billing.html')
 

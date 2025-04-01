@@ -60,6 +60,10 @@ class Member:
                         cur.execute("INSERT INTO attendees VALUES ((%s), (%s), (%s), (%s))",
                             (res_id[0], memname[0][0], memname[0][1],members[i]))
 
+                with conn.cursor() as cur:
+                    cur.execute("SELECT guestfee FROM billing_constants")
+                    guestfee = cur.fetchall()[0][0]
+
                 for i in range(len(guests)):
                     guest = guests[i].split()
                     with conn.cursor() as cur:
@@ -69,7 +73,7 @@ class Member:
                         rem_passes = cur.fetchall()
                         cur.execute("UPDATE member SET guestpass = (%s) WHERE member_id = (%s)",
                             (rem_passes[0][0]-1, self.memberid))
-                    self.my_bill.createCharge(5, "Guest Fee", "Other")
+                    self.my_bill.createCharge(guestfee, "Guest Fee", "Other")
             return True
 
     def deleteReservation(self, res_id: int):
@@ -238,3 +242,19 @@ class BillingStaff(Member):
     def getBill(self,memberid: int):
         bill = Bill(memberid)
         return bill.getBill()
+
+    def modifyGuestFee(self, guestfee: int):
+        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+            with conn.cursor() as cur:
+                cur.execute("UPDATE billing_constants SET guestfee = %s", (guestfee,))
+
+    def modifyAnnualFee(self, annualfee: int):
+        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+            with conn.cursor() as cur:
+                cur.execute("UPDATE billing_constants SET annualfee = %s", (annualfee,))
+
+    def getBillingScheme(self):
+        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT * FROM billing_constants")
+                return cur.fetchall()

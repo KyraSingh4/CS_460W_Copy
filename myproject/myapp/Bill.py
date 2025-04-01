@@ -2,14 +2,7 @@ import psycopg2
 
 class Bill:
     def __init__(self, memberID):
-        self.isPaid = False
         self.memberID = memberID
-
-    def isPaid(self):
-        return self.isPaid
-
-    def setPaid(self, paid: bool):
-        self.isPaid = paid
 
     def getTotal(self):
         total = 0
