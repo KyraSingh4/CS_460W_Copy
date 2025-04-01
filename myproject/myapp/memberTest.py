@@ -10,7 +10,7 @@ from Calendar import Calendar
 
 #p.createMember("test", "test", "test@test.com", "111-111-1113", True, 'test')
 
-mem = Member(1)
+mem = Member(5)
 
 #print(mem.createReservation('singles', 0, datetime.time(10,0), datetime.time(11,00),10, [], ['Guesterino Test']))
 
@@ -18,4 +18,4 @@ mem = Member(1)
 
 #print(dir.nameLookup('Ryder', 'Gover'))
 
-mem.deleteReservation(29)
+mem.createReservation()

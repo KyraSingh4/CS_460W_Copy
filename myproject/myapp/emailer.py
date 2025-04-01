@@ -21,8 +21,16 @@ class Emailer:
         msg.attach(MIMEText(text)) 
         self.smtp.sendmail(from_addr="Your Login Email", to_addrs=email, msg=msg.as_string()) 
         self.smtp.quit()
+
+    def sendReservationConfirmation(self,res_id, email):
+        subject = "ACED Reservation Confirmation"
+        text = ("You scheduled a reservation!" + '\n'
+                + "Reservation ID: " + str(res_id) +'\n'
+                + "Please use the scheduler if you need to delete or change your reservation!")
+        self.connect()
+        self.sendEmail(text, subject, email)
         
 #emailer testing (must have SMPTP server set up)
 emailer = Emailer()
-emailer.connect()
-emailer.sendEmail("Hello World", "Test", "jhart@hartford.edu")
+#emailer.connect()
+#emailer.sendEmail("Hello World", "Test", "cookepoli@hartford.edu")

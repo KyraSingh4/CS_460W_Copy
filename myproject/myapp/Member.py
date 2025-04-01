@@ -2,7 +2,7 @@ from Bill import Bill
 import psycopg2
 from psycopg2 import sql
 from datetime import time, datetime, timedelta
-
+from emailer import Emailer
 
 class Member:
     def __init__(self, memberid):
@@ -74,6 +74,15 @@ class Member:
                         cur.execute("UPDATE member SET guestpass = (%s) WHERE member_id = (%s)",
                             (rem_passes[0][0]-1, self.memberid))
                     self.my_bill.createCharge(guestfee, "Guest Fee", "Other")
+                with conn.cursor() as cur:
+                    cur.execute("SELECT email FROM member WHERE member_id = (%s)", (self.memberid,))
+                    email = cur.fetchone()[0]
+            try:
+                em = Emailer()
+                em.sendReservationConfirmation(res_id[0], email)
+            except:
+               print('yikes')
+
             return True
 
     def deleteReservation(self, res_id: int):
