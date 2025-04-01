@@ -16,8 +16,6 @@ mem = Member(5)
 
 #print(mem.createReservation('singles', 0, datetime.time(10,0), datetime.time(11,00),10, [], ['Guesterino Test']))
 
-em = Emailer()
-
-em.lateBillEmail('ngrover@hartford.edu')
+mem.updateReservation(32, ['Gavin VanNest'])
 
 #print(dir.nameLookup('Ryder', 'Gover'))

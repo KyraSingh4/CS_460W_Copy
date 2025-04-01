@@ -98,14 +98,12 @@ class Member:
                     # Checking Guestpasses
                     cur.execute("SELECT member_id FROM attendees WHERE reservation_id = (%s)", (res_id,))
                     attendees = cur.fetchall()
-                    print(attendees)
                     cur.execute("SELECT guestpass FROM member WHERE member_id = (%s)", (self.memberid,))
                     guestpass = cur.fetchone()[0]
                     cur.execute("SELECT charge_id FROM charges WHERE member_id = (%s) AND description = 'Guest Fee'", (self.memberid,))
                     charges = cur.fetchall()
-                    print(charges[0][0])
                     for i in range(len(attendees)):
-                        if attendees[i][0] == None:
+                        if attendees[i][0] is None:
                             guestpass = guestpass+1
                             cur.execute("DELETE FROM charges WHERE charge_id = %s", (charges[i][0],))
 
@@ -114,6 +112,60 @@ class Member:
 
 
                     cur.execute("DELETE FROM reservation WHERE reservation_id = %s", (res_id,))
+
+    def updateReservation(self, res_id, players: list[str]):
+
+        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT reservation_id FROM reservation WHERE member_id = %s ", (self.memberid,))
+                result = cur.fetchall()
+                check_ids = []
+                for i in range(len(result)):
+                    check_ids.append(result[i][0])
+            if res_id in check_ids:
+
+                with conn.cursor() as cur:
+                    cur.execute("SELECT member_id FROM attendees WHERE reservation_id = (%s)", (res_id,))
+                    attendees = cur.fetchall()
+                    cur.execute("SELECT guestpass FROM member WHERE member_id = (%s)", (self.memberid,))
+                    guestpass = cur.fetchone()[0]
+                    cur.execute("SELECT charge_id FROM charges WHERE member_id = (%s) AND description = 'Guest Fee'",
+                            (self.memberid,))
+                    charges = cur.fetchall()
+                for i in range(len(attendees)):
+                    if attendees[i][0] is None:
+                        guestpass = guestpass + 1
+                    with conn.cursor() as cur:
+                        cur.execute("DELETE FROM charges WHERE charge_id = %s", (charges[i][0],))
+                with conn.cursor() as cur:
+                    cur.execute("DELETE FROM attendees WHERE reservation_id = (%s)", (res_id,))
+                    cur.execute("UPDATE member SET guestpass = %s WHERE member_id = %s", (guestpass, self.memberid))
+
+                with conn.cursor() as cur:
+                    cur.execute("SELECT guestfee FROM billing_constants")
+                    guestfee = cur.fetchall()[0][0]
+
+                for player in players:
+                    with conn.cursor() as cur:
+                        try:
+                            cur.execute("SELECT member_id FROM member WHERE firstname = %s AND lastname = %s",(player.split(" ")[0],player.split(" ")[1]))
+                            member_id = cur.fetchone()[0]
+                        except:
+                            member_id = None
+                    with conn.cursor() as cur:
+                        cur.execute("INSERT INTO attendees VALUES (%s, %s, %s, %s)", (res_id,player.split(" ")[0],player.split(" ")[1],member_id))
+                    if member_id is None:
+                        with conn.cursor() as cur:
+                            cur.execute("SELECT guestpass FROM member WHERE member_id = (%s)", (self.memberid,))
+                            guestpass = cur.fetchone()[0]
+                            cur.execute("UPDATE member SET guestpass = %s WHERE member_id = (%s)", (guestpass-1,self.memberid,))
+                            self.my_bill.createCharge(guestfee, "Guest Fee", "Other")
+
+
+
+
+
+
 
     def checkReservationRules(self, restype: str, day:int, start: time, end: time, court: int, members: list[int], guests: list[str]):
         conn = psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432")
