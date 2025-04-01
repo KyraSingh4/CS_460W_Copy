@@ -66,6 +66,33 @@
     <input name="charge_id" type="searchbar" placeholder="Enter Charge ID">
     <input name="submittype" type="submit" value="Delete Charge">
   </form>
+  <h3>Modify Billing Policy</h3>
+  <form method="post">
+    {% csrf_token %}
+    <input name="submittype" type="submit" value="Retrieve Current Billing Scheme">
+  </form>
+  {% if billing_scheme %}
+  <table border="1">
+    <tr>
+      <th>Guest Fee</th>
+      <th>Annual Fee</th>
+    </tr>
+    <tr>
+      <td>{{billing_scheme.0.0}}</td>
+      <td>{{billing_scheme.0.1}}</td>
+    </tr>
+  </table>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    <select name="chargetype">
+      <option class="chargetype" value="guestfee">Guest Fee</option>
+      <option class="chargetype" value="annualfee">Annual Fee</option>
+    </select>
+    <input name="value" type="searchbar" placeholder="Enter Modified Value">
+    <input name="submittype" type="submit" value="Modify Billing Scheme">
+  </form>
+
     {% endif %}
 
     {% if bill %}

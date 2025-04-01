@@ -56,14 +56,21 @@ CREATE TABLE IF NOT EXISTS attendees (
                                     ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS billing_constants (
+    guestfee    INT             NOT NULL,
+    annualfee   INT             NOT NULL
+);
+
 GRANT ALL PRIVILEGES ON DATABASE aced TO aceduser;
 GRANT ALL PRIVILEGES ON TABLE member TO aceduser;
 GRANT ALL PRIVILEGES ON TABLE charges TO aceduser;
 GRANT ALL PRIVILEGES ON TABLE reservation TO aceduser;
 GRANT ALL PRIVILEGES ON TABLE attendees TO aceduser;
+GRANT ALL PRIVILEGES ON TABLE billing_constants to aceduser;
 GRANT ALL PRIVILEGES ON SEQUENCE member_member_id_seq to aceduser;
 GRANT ALL PRIVILEGES ON SEQUENCE reservation_reservation_id_seq to aceduser;
 GRANT ALL PRIVILEGES ON SEQUENCE charges_charge_id_seq to aceduser;
+
 
 INSERT INTO member (firstname, lastname, email, phonenum, optin, active, password) VALUES (
     'President',
@@ -83,4 +90,9 @@ INSERT INTO member (firstname, lastname, email, phonenum, optin, active, passwor
     FALSE,
     TRUE,
     crypt('ilovemoney', gen_salt('md5'))
+    );
+
+INSERT INTO billing_constants VALUES (
+    5,
+    400
     );
