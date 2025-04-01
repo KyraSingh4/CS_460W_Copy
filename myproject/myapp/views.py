@@ -48,14 +48,14 @@ def login_view(request):
             return redirect('directory')  # Redirect to the search page on successful login
         else:
             return render(request, 'myapp/login.html', {'error': 'Invalid credentials'})
-
+    request.session['scheduler_stage'] = None
     return render(request, 'myapp/login.html')
 
 def logout_view(request):
     if request.method == 'POST':
         request.session['member_id'] = None
         return redirect('login')
-
+    request.session['scheduler_stage'] = None
     return render(request, 'myapp/logout.html')
 
 def billing_view(request):
