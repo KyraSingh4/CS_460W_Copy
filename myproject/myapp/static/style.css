@@ -22,10 +22,6 @@ a {
   stroke-width: 4px;
 }
 
-/* #login-email {
-  margin-top:
-} */
-
 #email-text {
   display: inline;
 }
@@ -36,10 +32,6 @@ a {
   border-radius: 10px;
   border-style: solid;
 }
-
-/* #email-login {
-  margin-left: 722px;
-} */
 
 #pwd-text {
   display: inline;
@@ -166,7 +158,6 @@ a {
 
 .acc-info {
   width: 800px;
-  margin-left: 550px;
   border: solid;
   background-color: white;
   border-color: #2da722
@@ -194,7 +185,7 @@ a {
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
-/*   height: 730px; */
+  height: 730px;
 }
 
 .res-title {
@@ -226,4 +217,12 @@ a {
 
 .calendar {
   background-color: rgba(255,255,255,0.5);
+}
+
+#delete-res {
+  padding: 20px;
+}
+
+.login-msg {
+  margin-top: 200px;
 }

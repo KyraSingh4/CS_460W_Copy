@@ -212,18 +212,24 @@
 
     </form>
   {% endif %}
+  <div id="delete-res">
   <h3>Delete a Reservation</h3>
   <form method="post">
     {% csrf_token %}
     <input name="res_id" type="searchbox" placeholder="Enter Reservation ID">
     <input name="submittype" type="submit" value="Delete Reservation">
   </form>
+  </div>
 </div>
 
 
 </center>
 {% else %}
+<center>
+<div class="login-msg">
 <b>Please log in.</b>
 <a href="../login/" class="nav-elem">Log In</a>
+</div>
+</center>
 {% endif %}
 </html>
