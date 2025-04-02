@@ -190,11 +190,11 @@ a {
 
 .scheduler-bg {
   margin-top: -20px;
-  background-image: url('court.png');
+  background-image: url('reservation-bg.png');
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
-  height: 730px;
+/*   height: 730px; */
 }
 
 .res-title {
