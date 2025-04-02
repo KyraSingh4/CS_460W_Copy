@@ -148,6 +148,23 @@
     {% endif %}
   {% endif %}
 
+  <h2>Pay Your Bill</h2>
+  <form method="post">
+    {% csrf_token %}
+    <input name="year" type="number" min="1900" max="3000" step="1" placeholder="Year">
+    <br>
+    <h3>Cardholder Name</h3>
+    <input name="fname" type="searchbox" placeholder="First Name">
+    <input name="lname" type="searchbox" placeholder="Last Name">
+    <h3>Credit Card Information</h3>
+    <input name="cardnum" type="password" placeholder="Credit Card Number">
+    <input name="cvc" type="password" placeholder="CVC">
+    <input name="expir" type="month" placeholder="month">
+    <br>
+    <br>
+    <input name="submittype" type="submit" value="Pay Your Bill">
+  </form>
+
 </center>
 </div>
 

@@ -8,7 +8,7 @@ class Bill:
         total = 0
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
             with conn.cursor() as cur:
-                cur.execute("SELECT amount FROM charges WHERE member_id = (%s)",(self.memberID,))
+                cur.execute("SELECT amount FROM charges WHERE member_id = (%s) AND isPaid = False",(self.memberID,))
                 bill = cur.fetchall()
 
         for i in range(len(bill)):
@@ -44,4 +44,15 @@ class Bill:
         bill.append(("",self.getTotal(),"","Total Bill",""))
 
         return bill
-        
+
+    def getFullBill(self):
+        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                "SELECT charge_id, amount, date, description, type  FROM charges where member_id = (%s)",
+                (self.memberID,))
+                bill = cur.fetchall()
+
+        bill.append(("", self.getTotal(), "", "Total Bill", ""))
+
+        return bill
