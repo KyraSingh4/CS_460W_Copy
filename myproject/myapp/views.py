@@ -223,7 +223,6 @@ def scheduler_view(request):
             res_results = cal.lookupReservation(request.session.get('res_id'))
             attendees = cal.getAttendees(request.session.get('res_id'))
 
-
     processed_results = []
     if results:
         for res in results:
