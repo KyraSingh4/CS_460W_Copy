@@ -233,6 +233,7 @@ def scheduler_view(request):
                 'end_hour': end_hour,
                 'end_minute': end_minute,
                 'reservation_id': res[0],
+                'type': res[5],
             })
 
     # Create a time grid with reservation IDs for each court and time slot
