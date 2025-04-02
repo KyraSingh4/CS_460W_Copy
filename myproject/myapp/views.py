@@ -327,8 +327,4 @@ def account_view(request):
                     pass
             return render(request, 'myapp/account.html', {'email_success': email_success})
 
-
-
-
-
     return render(request, 'myapp/account.html')
