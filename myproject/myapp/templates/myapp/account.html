@@ -23,7 +23,7 @@
 <div class="acc-page">
 <center>
   {% if request.session.member_id == 1 or request.session.member_id == 2 %}
-<h2 id="acc-title">Admin Dashboard</h2>
+<h2 class="acc-title">Admin Dashboard</h2>
 <h3>Send an Email Announcement</h3>
   <form method="post">
     {% csrf_token %}
@@ -37,7 +37,7 @@
     <h3>{{email_success}}</h3>
   {% endif %}
   {% else %}
-<h2 id="acc-title">Your Account</h2>
+<h2 class="acc-title">Your Account</h2>
 <center>
 <h3>Pay Your Bill</h3>
 <form method="post">
