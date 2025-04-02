@@ -22,10 +22,6 @@ a {
   stroke-width: 4px;
 }
 
-/* #login-email {
-  margin-top:
-} */
-
 #email-text {
   display: inline;
 }
@@ -36,10 +32,6 @@ a {
   border-radius: 10px;
   border-style: solid;
 }
-
-/* #email-login {
-  margin-left: 722px;
-} */
 
 #pwd-text {
   display: inline;
