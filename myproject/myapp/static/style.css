@@ -213,11 +213,11 @@ a {
 }
 
 .table-style {
-  background-color: rgba(255,255,255,0.5);
+  background-color: rgba(255,255,255,0.7);
 }
 
 .calendar {
-  background-color: rgba(255,255,255,0.5);
+  background-color: rgba(255,255,255,0.7);
 }
 
 #delete-res {
@@ -229,7 +229,7 @@ a {
 }
 
 #dir-view {
-  width: 800px;
+  width: 1350px;
 }
 
 .dir-elem {
