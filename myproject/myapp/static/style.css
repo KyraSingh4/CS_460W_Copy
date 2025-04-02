@@ -226,3 +226,7 @@ a {
 .login-msg {
   margin-top: 200px;
 }
+
+#dir-view {
+  width: 600px;
+}
