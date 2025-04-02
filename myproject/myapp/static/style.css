@@ -203,3 +203,12 @@ a {
   width: 300px;
   padding: 30px;
 }
+
+#billing-pg {
+  margin-top: -20px;
+  background-image: url('tennis-bg.png');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  height: 730px;
+}
