@@ -148,6 +148,7 @@ a {
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
+  padding-bottom: 30px;
   /* height: 550px; */
 }
 
