@@ -172,7 +172,7 @@ a {
   border-color: #2da722
 }
 
-#acc-title {
+.acc-title {
   padding: 30px;
 }
 
@@ -202,4 +202,13 @@ a {
   margin-top: 20px;
   width: 300px;
   padding: 30px;
+}
+
+#billing-pg {
+  margin-top: -20px;
+  background-image: url('tennis-bg.png');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  height: 730px;
 }

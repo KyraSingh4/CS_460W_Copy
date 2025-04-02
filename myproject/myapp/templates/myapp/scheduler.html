@@ -221,6 +221,19 @@
       </tr>
       {% endfor %}
     </table>
+    <h3>Update This Reservation</h3>
+    <form method="post">
+      {% csrf_token %}
+      {% if request.session.update_type == 'singles' %}
+        <input name="player1" type="searchbox" placeholder="Enter Player Name">
+      {% elif request.session.update_type == 'doubles' %}
+        <input name="player1" type="searchbox" placeholder="Enter Player Name">
+        <input name="player2" type="searchbox" placeholder="Enter Player Name">
+        <input name="player3" type="searchbox" placeholder="Enter Player Name">
+      {% endif %}
+      <input name="submittype" type="submit" value="Update Reservation">
+
+    </form>
   {% endif %}
   <h3>Delete a Reservation</h3>
   <form method="post">

@@ -4,6 +4,7 @@ from Authenticator import Authenticator  # Import the Authenticator class
 from Member import Member, President, BillingStaff
 from Calendar import Calendar
 import datetime
+from emailer import Emailer
 
 def directory_view(request):
     results = None
@@ -124,6 +125,8 @@ def scheduler_view(request):
             request.session['day'] = None
             request.session['scheduler_stage'] = None
             request.session['num_guests'] = None
+            request.session['update_type'] = None
+            request.session['res_id'] = None
         elif submittype == 'Select Day':
             request.session['day'] = request.POST.get('day')
             request.session['scheduler_stage'] = 'Type'  # Move to the next stage
@@ -196,11 +199,27 @@ def scheduler_view(request):
             success = True
         elif submittype == 'Lookup Reservation':
             res_results = cal.lookupReservation(request.POST.get('res_id'))
+            request.session['res_id'] = request.POST.get('res_id')
+            request.session['update_type'] = res_results[0][4]
             attendees = cal.getAttendees(request.POST.get('res_id'))
         elif submittype == 'Delete Reservation':
             mem = Member(request.session.get('member_id'))
             mem.deleteReservation(int(request.POST.get('res_id')))
             success = True
+        elif submittype == 'Update Reservation':
+            mem = Member(request.session.get('member_id'))
+            if request.session.get('update_type') == 'singles':
+                players = []
+                players.append(request.POST.get('player1'))
+            elif request.session.get('update_type') == 'doubles':
+                players = []
+                players.append(request.POST.get('player1'))
+                players.append(request.POST.get('player2'))
+                players.append(request.POST.get('player3'))
+            mem.updateReservation(int(request.session.get('res_id')),players)
+            res_results = cal.lookupReservation(request.session.get('res_id'))
+            attendees = cal.getAttendees(request.session.get('res_id'))
+
 
     processed_results = []
     if results:
@@ -296,6 +315,17 @@ def account_view(request):
             mem.payBill()
             return render(request, 'myapp/account.html', {'result': result})
         if request.POST.get('submittype') == 'Send Email':
-            return render(request, 'myapp/account.html', {'email_success': True})
+            dir = Directory()
+            emails = dir.getEmails()
+            email_success = []
+            em = Emailer()
+            for email in emails:
+                try:
+                    em.connect()
+                    em.sendEmail(request.POST.get('emailbody'), request.POST.get('subject'), email[0])
+                    email_success.append(email[0])
+                except:
+                    pass
+            return render(request, 'myapp/account.html', {'email_success': email_success})
 
     return render(request, 'myapp/account.html')
