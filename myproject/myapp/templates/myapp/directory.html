@@ -101,7 +101,7 @@
 
 {% if results %}
     <h2>Search Results</h2>
-    <table border="1">
+    <table border="1" class="table-style" id="dir-view">
         {% if request.session.member_id != 1 and request.session.member_id != 2 %}
             <tr>
                 <th>First Name</th>
