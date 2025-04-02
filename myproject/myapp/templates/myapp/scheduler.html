@@ -132,31 +132,8 @@
     </form>
   {% endif %}
 
-  <table class="calendar">
-    <tr class="days"></tr>
-  </table>
   {% if results %}
     <h2>Reservations for the Day</h2>
-    <table border="1">
-      <tr>
-        <th>Reservation ID</th>
-        <th>Court Number</th>
-        <th>Start Time</th>
-        <th>End Time</th>
-        <th>Game Type</th>
-      </tr>
-    {% for result in results %}
-      <tr>
-        <td>{{ result.0 }}</td>
-        <td>{{ result.1 }}</td>
-        <td>{{ result.2 }}</td>
-        <td>{{ result.3 }}</td>
-        <td>{{ result.5 }}</td>
-      </tr>
-    {% endfor %}
-  {% endif %}
-
-  {% if results %}
     <table border="1" class="calendar">
       <thead>
           <tr>
@@ -171,11 +148,11 @@
              <tr>
                  <td>{{ row.time }}</td>
                  {% for court_data in row.courts %}
-                      <td>
-                          {% if court_data.reservation_id %}
-                              {{ court_data.reservation_id }}
-                          {% endif %}
-                      </td>
+                    <td style="text-align: center; {% if court_data.reservation_id %} background-color: #f0f0f0; {% endif %}">
+                      {% if court_data.reservation_id %}
+                        {{ court_data.reservation_id }}
+                      {% endif %}
+                    </td>
                   {% endfor %}
               </tr>
           {% endfor %}
