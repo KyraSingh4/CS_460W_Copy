@@ -13,7 +13,6 @@
 
 <center>
   <h2 id="login-text">Login</h2>
-</center>
   <div id="login">
     <form method="post">
       {% csrf_token %}
@@ -32,6 +31,7 @@
     {% if error %}
         <p style="color: red;">{{ error }}</p>
     {% endif %}
+    </center>
   </div>
 </body>
 </html>
