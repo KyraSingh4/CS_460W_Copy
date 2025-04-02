@@ -194,7 +194,7 @@ a {
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
-/*   height: 730px; */
+  height: 730px;
 }
 
 .res-title {
