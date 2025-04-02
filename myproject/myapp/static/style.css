@@ -212,3 +212,10 @@ a {
   background-size: cover;
   height: 730px;
 }
+
+#billing-body {
+  background-color: white;
+  border: solid;
+  border-color: black;
+  border-radius: 7px;
+}
