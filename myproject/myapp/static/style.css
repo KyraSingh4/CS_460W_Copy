@@ -148,7 +148,7 @@ a {
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
-  height: 550px;
+  /* height: 550px; */
 }
 
 .acc-labels {
