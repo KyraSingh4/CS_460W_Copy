@@ -8,10 +8,6 @@ class Member:
     def __init__(self, memberid):
         self.memberid = memberid
         self.my_bill = Bill(self.memberid)
-        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-            with conn.cursor() as cur:
-                cur.execute("SELECT reservation_id FROM reservation WHERE member_ID = (%s)", (self.memberid,))
-                self.reservations = cur.fetchall()
 
     def getInformation(self):
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
@@ -19,9 +15,6 @@ class Member:
                 cur.execute("SELECT firstname, lastname, email, phonenum, OptIn, guestpass FROM member WHERE member_ID = (%s) ", (self.memberid,))
                 information = cur.fetchall()
         return information
-
-    def getReservations(self):
-        return self.reservations
 
     def getBill(self):
         return self.my_bill.getBill()
@@ -261,10 +254,6 @@ class President(Member):
         bill = Bill(memberid)
         bill.createCharge(fee, memo, "Other")
 
-    def checkBillStatus(self, memberid: int):
-        bill = Bill(memberid)
-        return bill.isPaid()
-
     def createMember(self, firstname: str, lastname: str, email: str, phonenum: str, optin: bool, pw: str):
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
             with conn.cursor() as cur:
@@ -280,10 +269,10 @@ class President(Member):
                 else:
                     cur.execute(sql.SQL("UPDATE member SET {attr} = %s WHERE member_id = %s").format(attr = sql.Identifier(attribute)),(value,member_id))
 
-    def deactivateMember(self, value: str):
+    def deactivateMember(self, memberid: str):
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
             with conn.cursor() as cur:
-                cur.execute("UPDATE member SET active = FALSE WHERE member_id = %s", (value,))
+                cur.execute("UPDATE member SET active = FALSE WHERE member_id = %s", (memberid,))
 
     def getBill(self,memberid: int):
         bill = Bill(memberid)
@@ -300,10 +289,6 @@ class BillingStaff(Member):
     def addEventFee(self, fee: float, memo: str, memberid: int):
         bill = Bill(memberid)
         bill.createCharge(fee, memo, "Other")
-
-    def checkBillStatus(self, memberid: int):
-        bill = Bill(memberid)
-        return bill.isPaid()
 
     def modifyBill(self, charge_id: int, attribute: str, value: str):
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:

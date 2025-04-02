@@ -22,11 +22,6 @@ class Bill:
                 cur.execute("INSERT INTO charges (member_id, amount, description, type) "
                     "VALUES (%s, %s, %s, %s)", (self.memberID, value, memo, type))
 
-    def resetBill(self):
-        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-            with conn.cursor() as cur:
-                cur.execute("DELETE FROM charges where member_id = (%s)", (self.memberID,))
-
     def payBill(self, year: int):
         ystring = str(year)+'%'
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:

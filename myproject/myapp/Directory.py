@@ -35,21 +35,6 @@ class Directory():
                                 (value,))
                     return cur.fetchall()
 
-    def searchAll(self, memberid: str, value: str):
-        if memberid != 1 and memberid !=2:
-            with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-                with conn.cursor() as cur:
-                    cur.execute("SELECT firstname, lastname, email, phonenum FROM member WHERE firstname = (%s) OR lastname = (%s) OR email = (%s) OR phonenum = (%s)",
-                                (value, value, value, value))
-                    return cur.fetchall()
-        else:
-            with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-                with conn.cursor() as cur:
-                    cur.execute("SELECT * FROM member WHERE"
-                                "member_id = %s OR firstname = %s OR lastname = %s OR email = %s OR phonenum = %s"
-                                "OR guestpasses = %s OR optin = %s OR active = %s",
-                                (value, value, value, value, value, value, value, value))
-
     def nameLookup(self, firstname: str, lastname: str):
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
             with conn.cursor() as cur:
