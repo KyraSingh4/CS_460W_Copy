@@ -34,7 +34,6 @@ class Bill:
                 cur.execute("UPDATE charges SET isPaid = True WHERE date::varchar(10) LIKE %s AND member_id = %s", (ystring,self.memberID))
 
     def getBill(self):
-
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
             with conn.cursor() as cur:
                 cur.execute("SELECT charge_id, amount, date, description, type  FROM charges where member_id = (%s) AND isPaid = FALSE",

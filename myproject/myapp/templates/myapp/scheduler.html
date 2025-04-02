@@ -16,7 +16,7 @@
         My Account
       {% endif %}
     </a>
-    <a href="../login/" class="nav-elem">Log Out</a>
+    <a href="../logout/" class="nav-elem">Log Out</a>
   </nav>
 </div>
   {% if request.session.member_id != none %}
@@ -247,6 +247,6 @@
 </center>
 {% else %}
 <b>Please log in.</b>
-<a href="../login.html" class="nav-elem">Log In</a>
+<a href="../login/" class="nav-elem">Log In</a>
 {% endif %}
 </html>

@@ -69,7 +69,7 @@ def billing_view(request):
                     mem = President()
                 else:
                     mem = BillingStaff()
-                bill = mem.getBill(request.POST.get('mem_id'))
+                bill = mem.getFullBill(request.POST.get('mem_id'))
             else:
                 mem = Member(request.session.get('member_id'))
                 bill = mem.getBill()

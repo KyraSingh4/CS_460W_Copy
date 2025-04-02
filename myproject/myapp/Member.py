@@ -289,6 +289,10 @@ class President(Member):
         bill = Bill(memberid)
         return bill.getBill()
 
+    def getFullBill(self, memberid: int):
+        bill = Bill(memberid)
+        return bill.getFullBill()
+
 class BillingStaff(Member):
     def __init__(self):
         super().__init__(2)
@@ -331,3 +335,7 @@ class BillingStaff(Member):
             with conn.cursor() as cur:
                 cur.execute("SELECT * FROM billing_constants")
                 return cur.fetchall()
+
+    def getFullBill(self, memberid: int):
+        bill = Bill(memberid)
+        return bill.getFullBill()
