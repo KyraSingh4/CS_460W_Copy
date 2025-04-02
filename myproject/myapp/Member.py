@@ -26,8 +26,8 @@ class Member:
     def getBill(self):
         return self.my_bill.getBill()
 
-    def payBill(self):
-        return self.my_bill.resetBill()
+    def payBill(self,year: int):
+        return self.my_bill.payBill(year)
 
     def updateInformation(self, attribute: str, value: str):
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
@@ -236,6 +236,18 @@ class Member:
         else:
             conn.close()
             return 8
+
+        #Reservation Length
+        if restype == "doubles":
+            length = datetime.combine(datetime.today(),end) - datetime.combine(datetime.today(),start)
+            if length < timedelta(minutes=90) or length > timedelta(minutes=120):
+                conn.close()
+                return 9
+        elif restype == "singles":
+            length = datetime.combine(datetime.today(),end) - datetime.combine(datetime.today(),start)
+            if length < timedelta(minutes=60) or length > timedelta(minutes=90):
+                conn.close()
+                return 9
 
         conn.close()
         return 0

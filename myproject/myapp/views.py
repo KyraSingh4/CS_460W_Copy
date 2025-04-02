@@ -104,6 +104,9 @@ def billing_view(request):
                 mem.modifyAnnualFee(request.POST.get('value'))
             billing_scheme = mem.getBillingScheme()
             return render(request, 'myapp/billing.html', {'billing_scheme': billing_scheme})
+        if request.POST.get('submittype') == 'Pay Your Bill':
+            mem = Member(request.session.get('member_id'))
+            mem.payBill(request.POST.get('year'))
 
 
     return render(request, 'myapp/billing.html')
@@ -309,10 +312,6 @@ def account_view(request):
             mem = Member(request.session.get('member_id'))
             mem.updateInformation('optin', request.POST.get('optin'))
             result = mem.getInformation()
-            return render(request, 'myapp/account.html', {'result': result})
-        if request.POST.get('submittype') == 'Pay Bill':
-            mem = Member(request.session.get('member_id'))
-            mem.payBill()
             return render(request, 'myapp/account.html', {'result': result})
         if request.POST.get('submittype') == 'Send Email':
             dir = Directory()
