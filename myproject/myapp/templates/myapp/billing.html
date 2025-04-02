@@ -28,7 +28,7 @@
   <b>Please log in.</b>
   <a href="../login/" class="nav-elem">Log In</a>
 
-
+<div class="billing-body">
   {% elif request.session.member_id == 1 or request.session.member_id == 2 %}
     <h3>Search for a Bill</h3>
     <form method = "post">
@@ -164,7 +164,7 @@
     <br>
     <input name="submittype" type="submit" value="Pay Your Bill">
   </form>
-
+</div>
 </center>
 </div>
 
