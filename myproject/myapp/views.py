@@ -298,8 +298,4 @@ def account_view(request):
         if request.POST.get('submittype') == 'Send Email':
             return render(request, 'myapp/account.html', {'email_success': True})
 
-
-
-
-
     return render(request, 'myapp/account.html')
