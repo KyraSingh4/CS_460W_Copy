@@ -38,7 +38,7 @@ class Calendar:
                     result.append(other)
         return result
 
-class Calender2:
+class Calender2: #unused
     def __init__(self):
         reservations_sunday = []
         reservations_monday = []
