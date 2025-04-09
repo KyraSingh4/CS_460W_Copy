@@ -11,14 +11,14 @@ a {
 }
 
 .app-name-login {
-  background-color: #2da722;
+  background-color: #5F935A;
   text-align: center;
   color: white;
   padding: 20px;
 }
 
 #login-text {
-  color: #2da722;
+  color: #5F935A;
   stroke-width: 4px;
 }
 
@@ -50,18 +50,18 @@ a {
 
 #login-btn {
   width: 100px;
-  background-color: #2da722;
+  background-color: #5F935A;
   color: white;
   border-radius: 10px;
   border-style: solid;
-  border-color: #2da722;
+  border-color: #5F935A;
   text-align: center;
   padding: 10px;
 }
 
 #login-btn:hover {
   background-color: white;
-  color: #2da722;
+  color: #5F935A;
 }
 
 .navbar {
@@ -69,26 +69,26 @@ a {
 }
 
 .app-name {
-  color: #2da722;
+  color: #5F935A;
 }
 
 .nav-elem {
   padding: 30px;
-  color: #2da722;
+  color: #5F935A;
   margin-left: 60px;
   margin-right: 60px;
 }
 
 .nav {
   border: solid;
-  border-color: #2da722;
+  border-color: #5F935A;
   padding: 30px;
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
 }
 
 .nav-elem:hover {
-  background-color: #2da722;
+  background-color: #5F935A;
   color: white;
 }
 
@@ -120,7 +120,7 @@ a {
   padding: 18px;
   border-radius: 10px;
   background-color: white;
-  color: #2da722;
+  color: #5F935A;
   margin-left: 20px;
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
@@ -132,7 +132,7 @@ a {
   padding: 18px;
   border-radius: 10px;
   background-color: white;
-  color: #2da722;
+  color: #5F935A;
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
 }
@@ -161,7 +161,7 @@ a {
   width: 800px;
   border: solid;
   background-color: white;
-  border-color: #2da722
+  border-color: #5F935A
 }
 
 .acc-title {
