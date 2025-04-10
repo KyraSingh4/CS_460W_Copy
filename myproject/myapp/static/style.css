@@ -239,11 +239,13 @@ a {
 
 .error-msg {
   border: solid;
-  border-color: red;
+  border-color: black;
 }
 
 .title-container {
   background-color: red;
+  border: solid;
+  border-color: red;
 }
 
 .error-title {
@@ -252,5 +254,8 @@ a {
 }
 
 .desc-container{
+  background-color: white;
   color: black;
+  text-align: center;
+  padding: 20px;
 }
