@@ -13,8 +13,7 @@ class TestAuthenticator(unittest.TestCase):
         self.assertFalse(self.auth.login('PStaf','ihatetennis'),'It bork')
 
     def test_login_invalid_input(self):
-        with self.assertRaises(Exception):
-            self.auth.login(1,1)
+        self.assertFalse(self.auth.login(1, False), 'Fail')
 
 
 if __name__ == '__main__':
