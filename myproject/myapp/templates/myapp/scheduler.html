@@ -23,9 +23,13 @@
 <center>
 <div class="scheduler-bg">
   <div class="error-msg">
-    <h2 class="error-title">Error</h2>
-    <span class="error-desc"></span>
-  </div>
+      <div class="title-container">
+        <h2 class="error-title">Error</h2>
+      </div>
+      <div class="desc-container">
+        <span class="error-desc"></span>
+      </div>
+    </div>
   <h2 class="res-title">Make Reservation</h2>
   <form method="post">
     {% csrf_token %}
