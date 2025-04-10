@@ -22,6 +22,14 @@
   {% if request.session.member_id != none %}
 <div class="acc-page">
 <center>
+  <div class="error-msg">
+    <div class="title-container">
+      <h2 class="error-title">Error</h2>
+    </div>
+    <div class="desc-container">
+      <span class="error-desc"></span>
+    </div>
+  </div>
   {% if request.session.member_id == 1 or request.session.member_id == 2 %}
 <h2 class="acc-title">Admin Dashboard</h2>
 <h3>Send an Email Announcement</h3>
