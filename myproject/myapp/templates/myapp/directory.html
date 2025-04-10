@@ -19,9 +19,14 @@
     <a href="../logout/" class="nav-elem">Log Out</a>
   </nav>
 </div>
+
   {% if request.session.member_id != none %}
 <center>
   <div class="dir-page">
+    <div class="error-msg">
+      <h2 class="error-title">Error</h2>
+      <span class="error-desc"></span>
+    </div>
   <h2 id="dir-title">Search Directory</h2>
 <form class="dropdown" method="post">
     {% csrf_token %}

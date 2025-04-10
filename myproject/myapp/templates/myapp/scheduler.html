@@ -22,6 +22,10 @@
   {% if request.session.member_id != none %}
 <center>
 <div class="scheduler-bg">
+  <div class="error-msg">
+    <h2 class="error-title">Error</h2>
+    <span class="error-desc"></span>
+  </div>
   <h2 class="res-title">Make Reservation</h2>
   <form method="post">
     {% csrf_token %}

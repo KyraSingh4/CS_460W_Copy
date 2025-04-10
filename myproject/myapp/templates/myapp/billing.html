@@ -22,6 +22,10 @@
 
 <div id="billing-pg">
 <center>
+  <div class="error-msg">
+    <h2 class="error-title">Error</h2>
+    <span class="error-desc"></span>
+  </div>
 <h2 id="charges-title">Billing Menu</h2>
 <ul id="charges-list"></ul>
   {% if request.session.member_id == None %}
