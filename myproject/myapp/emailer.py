@@ -4,7 +4,6 @@ from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 import smtplib 
 import os
-from Bill import Bill
 
 class Emailer:
     def __init__(self):
