@@ -236,3 +236,21 @@ a {
   padding: 15px;
   border-radius: 7px;
 }
+
+.error-msg {
+  border: solid;
+  border-color: red;
+}
+
+.title-container {
+  background-color: red;
+}
+
+.error-title {
+  color: white;
+  text-align: center;
+}
+
+.desc-container{
+  color: black;
+}
