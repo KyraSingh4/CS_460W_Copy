@@ -1,5 +1,5 @@
 import unittest
-from ..Authenticator import Authenticator
+from CS_460W.myproject.myapp.Authenticator import Authenticator
 
 class TestAuthenticator(unittest.TestCase):
 

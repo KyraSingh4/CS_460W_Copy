@@ -23,11 +23,17 @@ class Member:
         return self.my_bill.payBill(year)
 
     def updateInformation(self, attribute: str, value: str):
-        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-            with conn.cursor() as cur:
-                 cur.execute(
-                    sql.SQL("UPDATE member SET {} = %s WHERE member_id = %s",).format(sql.Identifier(attribute)),
-                (value, self.memberid))
+        try:
+            with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+                with conn.cursor() as cur:
+                    cur.execute(
+                        sql.SQL("UPDATE member SET {} = %s WHERE member_id = %s",).format(sql.Identifier(attribute)),
+                    (value, self.memberid))
+        except psycopg2.Error as e:
+            return False
+        except TypeError as e:
+            return False
+
 
     def createReservation(self, restype: str, day: int, start: time, end: time, court: int, members: list[int], guests: list[str]):
         check = self.checkReservationRules(restype, day, start, end, court, members, guests)
@@ -153,6 +159,8 @@ class Member:
                             guestpass = cur.fetchone()[0]
                             cur.execute("UPDATE member SET guestpass = %s WHERE member_id = (%s)", (guestpass-1,self.memberid,))
                             self.my_bill.createCharge(guestfee, "Guest Fee", "Other")
+            else:
+                return False
 
 
 
@@ -162,6 +170,7 @@ class Member:
 
     def checkReservationRules(self, restype: str, day:int, start: time, end: time, court: int, members: list[int], guests: list[str]):
         conn = psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432")
+
             #Rule 1: Overlapping reservation
         with conn.cursor() as cur:
             cur.execute("SELECT start_time, end_time FROM reservation WHERE res_day = (%s) AND court_num = (%s)",
@@ -324,3 +333,6 @@ class BillingStaff(Member):
     def getFullBill(self, memberid: int):
         bill = Bill(memberid)
         return bill.getFullBill()
+
+
+

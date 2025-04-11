@@ -1,5 +1,5 @@
 import unittest
-from ..Directory import Directory
+from CS_460W.myproject.myapp.Directory import Directory
 
 class testDirectory(unittest.Testcase):
     def setup(self):
