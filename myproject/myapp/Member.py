@@ -210,6 +210,9 @@ class Member:
                     return 4
 
             #Rule 5: Checked on front-end.
+            if day < 0 or day > 6:
+                return 5
+
             #Rule 6: Member has enough guest passes.
         with conn.cursor() as cur:
             cur.execute("SELECT guestpass FROM member WHERE member_id = (%s)", (self.memberid,))
@@ -222,7 +225,7 @@ class Member:
         with conn.cursor() as cur:
             cur.execute("SELECT reservation_id FROM reservation WHERE member_ID = (%s)", (self.memberid,))
             check = cur.fetchall()
-        if len(check) > 3:
+        if len(check) >= 3:
             conn.close()
             return 7
 
