@@ -18,7 +18,8 @@ class Authenticator:
                     return members[i][0]
 
             return False
-        except:
+
+        except psycopg2.Error as e:
            return False
 
 

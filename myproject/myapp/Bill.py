@@ -17,10 +17,13 @@ class Bill:
         return total
 
     def createCharge(self, value: float, memo: str, type: str):
-        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-            with conn.cursor() as cur:
-                cur.execute("INSERT INTO charges (member_id, amount, description, type) "
-                    "VALUES (%s, %s, %s, %s)", (self.memberID, value, memo, type))
+        try:
+            with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+                with conn.cursor() as cur:
+                    cur.execute("INSERT INTO charges (member_id, amount, description, type) "
+                        "VALUES (%s, %s, %s, %s)", (self.memberID, value, memo, type))
+        except psycopg2.Error as e:
+            return False
 
     def payBill(self, year: int):
         ystring = str(year)+'%'
