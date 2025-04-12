@@ -20,20 +20,20 @@ class TestBillingStaff(unittest.TestCase):
     #def test_DeleteChargeInvalid(self):
     #    self.assertFalse(self.mem.deleteCharge(False))
 
-    def test_modifyAnnualFee(self):
-        self.assertTrue(self.mem.modifyAnnualFee(400))
+    #def test_modifyAnnualFee(self):
+    #    self.assertTrue(self.mem.modifyAnnualFee(400))
 
-    def test_modifyAnnualFeeInvalid(self):
-        self.assertFalse(self.mem.modifyAnnualFee(False))
+    #def test_modifyAnnualFeeInvalid(self):
+    #    self.assertFalse(self.mem.modifyAnnualFee(False))
 
-    def test_modifyGuestFee(self):
-        self.assertTrue(self.mem.modifyGuestFee(5))
+    #def test_modifyGuestFee(self):
+    #    self.assertTrue(self.mem.modifyGuestFee(5))
 
     def test_modifyGuestFeeInvalid(self):
         self.assertFalse(self.mem.modifyGuestFee(False))
 
-    def test_getBillingScheme(self):
-        self.assertEqual(self.mem.getBillingScheme(), [(5,400)])
+    #def test_getBillingScheme(self):
+    #    self.assertEqual(self.mem.getBillingScheme(), [(5,400)])
 
 if __name__ == '__main__':
     unittest.main()

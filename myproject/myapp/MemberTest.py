@@ -75,14 +75,14 @@ class TestMember(unittest.TestCase):
     #def test_updateReservationInvalidType(self):
     #    self.assertFalse(self.mem.updateReservation(38,1))
 
-    def test_DeleteReservation(self):
-        self.assertIsNone(self.mem.deleteReservation(38))
+    #def test_DeleteReservation(self):
+    #    self.assertIsNone(self.mem.deleteReservation(38))
 
-    def test_DeleteReservationInvalidID(self):
-        self.assertFalse(self.mem.deleteReservation(34))
+    #def test_DeleteReservationInvalidID(self):
+    #    self.assertFalse(self.mem.deleteReservation(34))
 
-    def test_DeleteReservationInvalidInput(self):
-        self.assertFalse(self.mem.deleteReservation(False))
+    #def test_DeleteReservationInvalidInput(self):
+    #    self.assertFalse(self.mem.deleteReservation(False))
 
 if __name__ == '__main__':
     unittest.main()

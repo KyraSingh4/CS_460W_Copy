@@ -88,17 +88,21 @@ def billing_view(request):
             if ret == False:
                 return render(request, 'myapp/billing.html', {'Error': 'Invalid Input. Try Again.'})
             else:
-                return render(request, 'myapp/billing.html', {'CreateSuccess': 'Charge Added'})
+                return render(request, 'myapp/billing.html', {'Success': 'Charge Added'})
         if request.POST.get('submittype') == 'Modify Charge':
             mem = BillingStaff()
-            mem.modifyBill(request.POST.get('charge_id'), request.POST.get('attribute'), request.POST.get('value'))
-            success = True
-            return render(request, 'myapp/billing.html', {'success': success})
+            ret = mem.modifyBill(request.POST.get('charge_id'), request.POST.get('attribute'), request.POST.get('value'))
+            if ret == False:
+                return render(request, 'myapp/billing.html', {'Error': 'Invalid Input. Try Again.'})
+            else:
+                return render(request, 'myapp/billing.html', {'Success': 'Charge Modified!'})
         if request.POST.get('submittype') == 'Delete Charge':
             mem = BillingStaff()
-            mem.deleteCharge(request.POST.get('charge_id'))
-            success = True
-            return render(request, 'myapp/billing.html', {'success': success})
+            ret = mem.deleteCharge(request.POST.get('charge_id'))
+            if ret == False:
+                return render(request, 'myapp/billing.html', {'Error': 'Invalid Input. Try Again.'})
+            else:
+                return render(request, 'myapp/billing.html', {'Success': 'Charge Deleted!'})
         if request.POST.get('submittype') == 'Retrieve Current Billing Scheme':
             mem = BillingStaff()
             billing_scheme = mem.getBillingScheme()
@@ -106,14 +110,21 @@ def billing_view(request):
         if request.POST.get('submittype') == 'Modify Billing Scheme':
             mem = BillingStaff()
             if request.POST.get('chargetype') == 'guestfee':
-                mem.modifyGuestFee(request.POST.get('value'))
+                ret = mem.modifyGuestFee(request.POST.get('value'))
             elif request.POST.get('chargetype') == 'annualfee':
-                mem.modifyAnnualFee(request.POST.get('value'))
+                ret = mem.modifyAnnualFee(request.POST.get('value'))
             billing_scheme = mem.getBillingScheme()
-            return render(request, 'myapp/billing.html', {'billing_scheme': billing_scheme})
+            if ret == False:
+                return render(request, 'myapp/billing.html', {'Error': 'Invalid Input. Try Again.'})
+            else:
+                return render(request, 'myapp/billing.html', {'Success': 'Billing Scheme Modified!', 'billing_scheme': billing_scheme})
         if request.POST.get('submittype') == 'Pay Your Bill':
             mem = Member(request.session.get('member_id'))
-            mem.payBill(request.POST.get('year'))
+            ret = mem.payBill(request.POST.get('year'))
+            if ret == False:
+                return render(request, 'myapp/billing.html', {'Error': 'Invalid Year. Try Again.'})
+            else:
+                return render(request, 'myapp/billing.html', {'Success': 'Bill Paid'})
 
 
     return render(request, 'myapp/billing.html')

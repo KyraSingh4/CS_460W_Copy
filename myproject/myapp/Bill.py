@@ -1,4 +1,5 @@
 import psycopg2
+from datetime import datetime
 
 class Bill:
     def __init__(self, memberID):
@@ -28,10 +29,14 @@ class Bill:
             return False
 
     def payBill(self, year: int):
-        ystring = str(year)+'%'
-        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-            with conn.cursor() as cur:
-                cur.execute("UPDATE charges SET isPaid = True WHERE date::varchar(10) LIKE %s AND member_id = %s", (ystring,self.memberID))
+        if int(year) == int(datetime.now().year):
+            return False
+        else:
+            ystring = str(year)+'%'
+            with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+                with conn.cursor() as cur:
+                    cur.execute("UPDATE charges SET isPaid = True WHERE date::varchar(10) LIKE %s AND member_id = %s", (ystring,self.memberID))
+            return True
 
     def getBill(self):
         try:

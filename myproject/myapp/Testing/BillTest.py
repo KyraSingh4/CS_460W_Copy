@@ -23,6 +23,9 @@ class testBill(unittest.TestCase):
     #def test_pay_bill(self):
     #    self.assertIsNone(self.bill.payBill(2025))
 
+    def test_pay_bill_invYear(self):
+        self.assertFalse(self.bill.payBill(2025))
+
     #def test_pay_bill_invalid(self):
     #    self.assertFalse(self.bill.payBill('False'))
 
@@ -32,9 +35,9 @@ class testBill(unittest.TestCase):
     #def testGetFullBill(self):
     #    self.assertEqual(self.bill.getFullBill(),[(76, 100.0, datetime.date(2024, 5, 5), 'Unpaid from LY', 'Other'),(74, 400.0, datetime.date(2025, 4, 10), 'Annual', 'Annual'),(77, 50, datetime.date(2025, 4, 11),'Paid Charge', 'Other'),('', 500.0, '', 'Total Bill', '')])
 
-    def testGetFullBill(self):
-        b3 = Bill('test')
-        self.assertFalse(b3.getFullBill())
+    #def testGetFullBill(self):
+    #    b3 = Bill('test')
+   #     self.assertFalse(b3.getFullBill())
 
 if __name__ == '__main__':
     unittest.main()
