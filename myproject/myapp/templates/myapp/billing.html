@@ -20,7 +20,7 @@
   </nav>
 </div>
 
-<div id="billing-pg">
+<div class="billing-pg">
 <center>
   <div class="error-msg">
     <div class="title-container">
@@ -60,19 +60,19 @@
     <h3>Modify a Charge</h3>
     <form method = "post">
       {% csrf_token %}
-      <input name="charge_id" type="searchbar" placeholder="Enter Charge ID">
+      <input name="charge_id" type="searchbar" class="searchbar" placeholder="Enter Charge ID">
       <select name="attribute">
         <option class="attribute" value="amount">Amount</option>
         <option class="attribute" value="Description">Description</option>
         <option class="attribute" value="Type">Type</option>
       </select>
-      <input name="value" type="searchbar" placeholder="Enter Value">
+      <input name="value" type="searchbar" class="searchbar" placeholder="Enter Value">
       <input name="submittype" type="submit" value="Modify Charge">
     </form>
   <h3>Delete a Charge</h3>
   <form method = "post">
     {% csrf_token %}
-    <input name="charge_id" type="searchbar" placeholder="Enter Charge ID">
+    <input name="charge_id" class="searchbar" type="searchbar" placeholder="Enter Charge ID">
     <input name="submittype" type="submit" value="Delete Charge">
   </form>
   <h3>Modify Billing Policy</h3>
@@ -98,7 +98,7 @@
       <option class="chargetype" value="guestfee">Guest Fee</option>
       <option class="chargetype" value="annualfee">Annual Fee</option>
     </select>
-    <input name="value" type="searchbar" placeholder="Enter Modified Value">
+    <input name="value" class="searchbar" type="searchbar" placeholder="Enter Modified Value">
     <input name="submittype" type="submit" value="Modify Billing Scheme">
   </form>
 

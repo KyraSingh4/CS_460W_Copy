@@ -15,12 +15,14 @@ class testDirectory(unittest.TestCase):
     def test_searchAttr_invalid(self):
         self.assertFalse(self.directory.searchAttr(4, 'email', 'invalidinput'))
 
+    # def test_searchAttr_invalidattr(self):
+    #     self.assertFalse(self.directory.searchAttr(4, 'invalid', 'Kyra'))
+
     def test_nameLookup_pos(self):
         self.assertEqual(self.directory.nameLookup('Kyra', 'Singh'), 5, "error")
 
     def test_nameLookup_negative(self):
-        # self.assertFalse(self.directory.nameLookup('', ''))
-        pass
+        self.assertFalse(self.directory.nameLookup(4, 5))
 
     # def test_getEmails_pos(self):
     #     pass
