@@ -338,31 +338,48 @@ class BillingStaff(Member):
         valid = bill.createCharge(fee, memo, "Other")
         return valid
 
-    def modifyBill(self, charge_id: int, attribute: str, value: str):
-        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-            with conn.cursor() as cur:
-                cur.execute(sql.SQL("UPDATE charges SET {attr} = %s WHERE charge_id = (%s)").format(attr = sql.Identifier(attribute)),
-                            (value, charge_id))
-        return True
+    def modifyBill(self, charge_id: int, attribute: str, value: float):
+        try:
+            with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+                with conn.cursor() as cur:
+                    cur.execute(sql.SQL("UPDATE charges SET {attr} = %s WHERE charge_id = (%s)").format(attr = sql.Identifier(attribute)),
+                                (value, charge_id))
+            return True
+        except psycopg2.Error as e:
+            return False
+        except TypeError as e:
+            return False
 
     def deleteCharge(self, charge_id:int):
-        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-            with conn.cursor() as cur:
-                cur.execute("DELETE FROM charges WHERE charge_id = %s", (charge_id,))
+        try:
+            with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+                with conn.cursor() as cur:
+                    cur.execute("DELETE FROM charges WHERE charge_id = %s", (charge_id,))
+            return True
+        except psycopg2.Error as e:
+            return False
 
     def getBill(self,memberid: int):
         bill = Bill(memberid)
         return bill.getBill()
 
     def modifyGuestFee(self, guestfee: int):
-        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-            with conn.cursor() as cur:
-                cur.execute("UPDATE billing_constants SET guestfee = %s", (guestfee,))
+        try:
+            with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+                with conn.cursor() as cur:
+                    cur.execute("UPDATE billing_constants SET guestfee = %s", (guestfee,))
+            return True
+        except psycopg2.Error as e:
+            return False
 
     def modifyAnnualFee(self, annualfee: int):
-        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-            with conn.cursor() as cur:
-                cur.execute("UPDATE billing_constants SET annualfee = %s", (annualfee,))
+        try:
+            with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+                with conn.cursor() as cur:
+                    cur.execute("UPDATE billing_constants SET annualfee = %s", (annualfee,))
+            return True
+        except psycopg2.Error as e:
+            return False
 
     def getBillingScheme(self):
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
