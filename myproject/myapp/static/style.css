@@ -259,3 +259,26 @@ a {
   text-align: center;
   padding: 20px;
 }
+
+.succ-msg {
+  border: solid;
+  border-color: black;
+}
+
+.title-container-succ {
+  background-color: green;
+  border: solid;
+  border-color: green;
+}
+
+.succ-title {
+  color: white;
+  text-align: center;
+}
+
+.desc-container{
+  background-color: white;
+  color: black;
+  text-align: center;
+  padding: 20px;
+}

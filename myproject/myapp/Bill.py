@@ -44,7 +44,7 @@ class Bill:
             bill.append(("",self.getTotal(),"","Total Bill",""))
 
             return bill
-        except psycopg2.errors as e:
+        except:
             return False
 
     def getFullBill(self):

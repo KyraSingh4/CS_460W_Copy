@@ -74,7 +74,7 @@ def billing_view(request):
                 mem = Member(request.session.get('member_id'))
                 bill = mem.getBill()
             if not bill:
-                return render(request, 'myapp/billing.html', {'BillError': 'Invalid Input. Try Again.'})
+                return render(request, 'myapp/billing.html', {'Error': 'Invalid Input. Try Again.'})
             else:
                 return render(request, 'myapp/billing.html', {'bill': bill})
         if request.POST.get('submittype') == 'Create Charge':
@@ -82,9 +82,13 @@ def billing_view(request):
                 mem = President()
             else:
                 mem = BillingStaff()
-            mem.addEventFee(request.POST.get('amount'), request.POST.get('desc'), request.POST.get('mem_id'))
-
-            return render(request, 'myapp/billing.html', {'CreateSuccess': 'Charge Added'})
+            ret = mem.addEventFee(request.POST.get('amount'), request.POST.get('desc'), request.POST.get('mem_id'))
+            if ret == -1:
+                return render(request, 'myapp/billing.html', {'Error': 'Invalid Member ID. Try Again.'})
+            if ret == False:
+                return render(request, 'myapp/billing.html', {'Error': 'Invalid Input. Try Again.'})
+            else:
+                return render(request, 'myapp/billing.html', {'CreateSuccess': 'Charge Added'})
         if request.POST.get('submittype') == 'Modify Charge':
             mem = BillingStaff()
             mem.modifyBill(request.POST.get('charge_id'), request.POST.get('attribute'), request.POST.get('value'))
