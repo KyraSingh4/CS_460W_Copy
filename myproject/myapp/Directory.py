@@ -21,19 +21,24 @@ class Directory():
 
     def searchAttr(self, memberid: str, attribute: str, value: str):
             #member View
-        if memberid != 1 and memberid !=2:
-            with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-                with conn.cursor() as cur:
-                    cur.execute(sql.SQL("SELECT firstname, lastname, email, phonenum FROM member WHERE optin = TRUE AND active = true AND {attr} = %s").format(attr=sql.Identifier(attribute)),
-                                (value,))
-                    return cur.fetchall()
-            #Admin View
-        else:
-            with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-                with conn.cursor() as cur:
-                    cur.execute(sql.SQL("SELECT * FROM member WHERE {attr} = %s").format(attr=sql.Identifier(attribute)),
-                                (value,))
-                    return cur.fetchall()
+        try:
+            if memberid != 1 and memberid !=2:
+                with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+                    with conn.cursor() as cur:
+                        cur.execute(sql.SQL("SELECT firstname, lastname, email, phonenum FROM member WHERE optin = TRUE AND active = true AND {attr} = %s").format(attr=sql.Identifier(attribute)),
+                                    (value,))
+                        return cur.fetchall()
+                #Admin View
+            else:
+                with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+                    with conn.cursor() as cur:
+                        cur.execute(sql.SQL("SELECT * FROM member WHERE {attr} = %s").format(attr=sql.Identifier(attribute)),
+                                    (value,))
+                        return cur.fetchall()
+        except psycopg2.Error as e:
+            return False
+        except TypeError as e:
+            return False
 
     def nameLookup(self, firstname: str, lastname: str):
         try:
