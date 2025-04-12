@@ -173,7 +173,7 @@ def scheduler_view(request):
                     mem2 = request.POST.get('member2').split(" ")
                     members = [dir.nameLookup(mem2[0], mem2[1])]
                     guests = []
-                mem.createReservation(
+                ret = mem.createReservation(
                     request.session.get('type'),
                     request.session.get('day'),
                     datetime.time(int(start[0]), int(start[1])),
@@ -207,7 +207,7 @@ def scheduler_view(request):
                             dir.nameLookup(mem4[0], mem4[1]),
                         ]
                         guests = []
-                mem.createReservation(
+                ret = mem.createReservation(
                     request.session.get('type'),
                     request.session.get('day'),
                     datetime.time(int(start[0]), int(start[1])),
@@ -218,6 +218,24 @@ def scheduler_view(request):
                 )
             request.session['scheduler_stage'] = None  # Reset stage
             success = True
+            if ret == 1:
+                return render(request, 'myapp/scheduler.html', {'Error':'Your reservation overlaps with a reservation on this court.'})
+            elif ret == 2:
+                return render(request, 'myapp/scheduler.html', {'Error':'Your reservation overlaps with another reservation you have scheduled.'})
+            elif ret == 3:
+                return render(request, 'myapp/scheduler.html', {'Error':'You have another scheduled reservation beginning less than 60 minutes following this one.'})
+            elif ret == 4:
+                return render(request, 'myapp/scheduler.html', {'Error':'You have another scheduled reservation ending less than 60 minutes before this one.'})
+            elif ret == 6:
+                return render(request, 'myapp/scheduler.html', {'Error':'You do not have enough guest passes.'})
+            elif ret == 7:
+                return render(request, 'myapp/scheduler.html', {'Error':'You have reached the maximum number of reservations in a 7 day period.'})
+            elif ret == 9:
+                return render(request, 'myapp/scheduler.html', {'Error':'Your reservation does not occupy a valid time slot.'})
+            elif ret == False:
+                return render(request, 'myapp/scheduler.html', {'Error':'Invalid input. Try again.'})
+            else:
+                return render(request, 'myapp/scheduler.html', {'Success': 'Reservation Created!'})
         elif submittype == 'Lookup Reservation':
             res_results = cal.lookupReservation(request.POST.get('res_id'))
             request.session['res_id'] = request.POST.get('res_id')

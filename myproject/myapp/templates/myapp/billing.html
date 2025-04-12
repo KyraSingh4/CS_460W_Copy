@@ -152,7 +152,7 @@
   <h2 id="charges-title">Billing Menu</h2>
     <form method = "post">
       {% csrf_token %}
-      <input name="submittype" type="submit" value="Get Bill">
+      <input name="submittype" class= "search-btn"type="submit" value="Get Bill">
     </form>
     {% if bill %}
       <h2>Your Bill</h2>
@@ -178,18 +178,18 @@
   <h2>Pay Your Bill</h2>
   <form method="post">
     {% csrf_token %}
-    <input name="year" type="number" min="2000" max="3000" step="1" placeholder="Year" required>
+    <input name="year" class ="searchbar" type="number" min="2000" max="3000" step="1" placeholder="Year" required>
     <br>
     <h3>Cardholder Name</h3>
-    <input name="fname" type="searchbox" placeholder="First Name" required>
-    <input name="lname" type="searchbox" placeholder="Last Name" required>
+    <input name="fname" class="searchbar" type="searchbox" placeholder="First Name" required>
+    <input name="lname" class="searchbar" type="searchbox" placeholder="Last Name" required>
     <h3>Credit Card Information</h3>
-    <input name="cardnum" type="password" placeholder="Credit Card Number" required>
-    <input name="cvc" type="password" placeholder="CVC" required>
-    <input name="expir" type="month" placeholder="month" required>
+    <input name="cardnum" class="searchbar" type="password" placeholder="Credit Card Number" required>
+    <input name="cvc" class="searchbar" type="password" placeholder="CVC" required>
+    <input name="expir" class="searchbar" type="month" placeholder="month" required>
     <br>
     <br>
-    <input name="submittype" type="submit" value="Pay Your Bill">
+    <input name="submittype" class= "search-btn" type="submit" value="Pay Your Bill">
   </form>
 </div>
 </center>

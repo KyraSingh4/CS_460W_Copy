@@ -36,10 +36,13 @@ class Directory():
                     return cur.fetchall()
 
     def nameLookup(self, firstname: str, lastname: str):
-        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-            with conn.cursor() as cur:
-                cur.execute("SELECT member_id FROM member WHERE firstname = %s AND lastname = %s",(firstname, lastname))
+        try:
+            with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+                with conn.cursor() as cur:
+                    cur.execute("SELECT member_id FROM member WHERE firstname = %s AND lastname = %s",(firstname, lastname))
                 return cur.fetchone()[0]
+        except:
+            return False
 
     def getEmails(self):
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:

@@ -83,7 +83,7 @@ class Member:
                 except:
                    print('yikes')
 
-                return True
+                return -1
         except psycopg2.Error as e:
             return False
 
@@ -227,7 +227,7 @@ class Member:
                         return 4
 
                 #Rule 5: Checked on front-end.
-                if day < 0 or day > 6:
+                if int(day) < 0 or int(day) > 6:
                     return 5
 
                 #Rule 6: Member has enough guest passes.
