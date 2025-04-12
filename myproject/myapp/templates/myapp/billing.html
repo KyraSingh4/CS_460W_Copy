@@ -20,59 +20,77 @@
   </nav>
 </div>
 
-<div id="billing-pg">
+<div class="billing-pg">
 <center>
+  {% if Error %}
   <div class="error-msg">
     <div class="title-container">
       <h2 class="error-title">Error</h2>
     </div>
     <div class="desc-container">
-      <span class="error-desc"></span>
+      <span class="error-desc">{{Error}}</span>
     </div>
   </div>
-<h2 id="charges-title">Billing Menu</h2>
+  {% endif %}
+
+  {% if Success %}
+  <div class="succ-msg">
+    <div class="title-container-succ">
+      <h2 class="succ-title">Success</h2>
+    </div>
+    <div class="desc-container">
+      <span class="succ-desc">{{Success}}</span>
+    </div>
+  </div>
+  {% endif %}
+
 <ul id="charges-list"></ul>
   {% if request.session.member_id == None %}
-  <b>Please log in.</b>
-  <a href="../login/" class="nav-elem">Log In</a>
+    <div class="error-msg">
+    <div class="title-container">
+      <h2 class="error-title">Please Log In</h2>
+    </div>
+    <div class="desc-container">
+      <a href="../login/" class="nav-elem">Go to Log In</a>
+    </div>
+  </div>
+
 
 <div class="billing-body">
   {% elif request.session.member_id == 1 or request.session.member_id == 2 %}
+  <h2 id="charges-title">Billing Menu</h2>
     <h3>Search for a Bill</h3>
     <form method = "post">
       {% csrf_token %}
-      <input name="mem_id" class="searchbar" placeholder="Enter Member ID">
+      <input name="mem_id" class="searchbar" placeholder="Enter Member ID" required>
       <input name="submittype" type="submit" value="Get Bill">
     </form>
     <h3>Add a Charge to a Bill</h3>
     <form method = "post">
       {% csrf_token %}
-      <input name="mem_id" class="searchbar" placeholder="Enter Member ID">
-      <input name="amount" class="searchbar" placeholder="Enter Amount">
-      <input name="desc" class="searchbar" placeholder="Enter Charge Description">
+      <input name="mem_id" class="searchbar" placeholder="Enter Member ID" required>
+      <input name="amount" class="searchbar" placeholder="Enter Amount" required>
+      <input name="desc" class="searchbar" placeholder="Enter Charge Description" required>
       <input name="submittype" type="submit" value="Create Charge">
     </form>
-    {% if success %}
-      <b>Charge Created!</b>
-    {% endif %}
 
     {% if request.session.member_id == 2 %}
     <h3>Modify a Charge</h3>
     <form method = "post">
       {% csrf_token %}
-      <input name="charge_id" type="searchbar" placeholder="Enter Charge ID">
-      <select name="attribute">
+      <input name="charge_id" type="searchbar" class="searchbar" placeholder="Enter Charge ID" required>
+      <select name="attribute" required>
         <option class="attribute" value="amount">Amount</option>
         <option class="attribute" value="Description">Description</option>
         <option class="attribute" value="Type">Type</option>
       </select>
-      <input name="value" type="searchbar" placeholder="Enter Value">
+      <input name="value" type="searchbar" class="searchbar" placeholder="Enter Value" required>
       <input name="submittype" type="submit" value="Modify Charge">
     </form>
   <h3>Delete a Charge</h3>
   <form method = "post">
     {% csrf_token %}
-    <input name="charge_id" type="searchbar" placeholder="Enter Charge ID">
+    <input name="charge_id" class="searchbar" type="searchbar" placeholder="Enter Charge ID" required>
     <input name="submittype" type="submit" value="Delete Charge">
   </form>
   <h3>Modify Billing Policy</h3>
@@ -98,7 +116,7 @@
       <option class="chargetype" value="guestfee">Guest Fee</option>
       <option class="chargetype" value="annualfee">Annual Fee</option>
     </select>
-    <input name="value" type="searchbar" placeholder="Enter Modified Value">
+    <input name="value" class="searchbar" type="searchbar" placeholder="Enter Modified Value" required>
     <input name="submittype" type="submit" value="Modify Billing Scheme">
   </form>
 
@@ -131,9 +149,10 @@
 
 
   {% else %}
+  <h2 id="charges-title">Billing Menu</h2>
     <form method = "post">
       {% csrf_token %}
-      <input name="submittype" type="submit" value="Get Bill">
+      <input name="submittype" class= "search-btn"type="submit" value="Get Bill">
     </form>
     {% if bill %}
       <h2>Your Bill</h2>
@@ -159,18 +178,18 @@
   <h2>Pay Your Bill</h2>
   <form method="post">
     {% csrf_token %}
-    <input name="year" type="number" min="1900" max="3000" step="1" placeholder="Year">
+    <input name="year" class ="searchbar" type="number" min="2000" max="3000" step="1" placeholder="Year" required>
     <br>
     <h3>Cardholder Name</h3>
-    <input name="fname" type="searchbox" placeholder="First Name">
-    <input name="lname" type="searchbox" placeholder="Last Name">
+    <input name="fname" class="searchbar" type="searchbox" placeholder="First Name" required>
+    <input name="lname" class="searchbar" type="searchbox" placeholder="Last Name" required>
     <h3>Credit Card Information</h3>
-    <input name="cardnum" type="password" placeholder="Credit Card Number">
-    <input name="cvc" type="password" placeholder="CVC">
-    <input name="expir" type="month" placeholder="month">
+    <input name="cardnum" class="searchbar" type="password" placeholder="Credit Card Number" required>
+    <input name="cvc" class="searchbar" type="password" placeholder="CVC" required>
+    <input name="expir" class="searchbar" type="month" placeholder="month" required>
     <br>
     <br>
-    <input name="submittype" type="submit" value="Pay Your Bill">
+    <input name="submittype" class= "search-btn" type="submit" value="Pay Your Bill">
   </form>
 </div>
 </center>

@@ -22,7 +22,9 @@
 
   {% if request.session.member_id != none %}
 <center>
+
   <div class="dir-page">
+      {% if error %}
     <div class="error-msg">
       <div class="title-container">
         <h2 class="error-title">Error</h2>
@@ -31,6 +33,7 @@
         <span class="error-desc"></span>
       </div>
     </div>
+      {% endif %}
   <h2 id="dir-title">Search Directory</h2>
 <form class="dropdown" method="post">
     {% csrf_token %}

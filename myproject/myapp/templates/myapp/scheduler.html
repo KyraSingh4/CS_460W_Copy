@@ -22,14 +22,29 @@
   {% if request.session.member_id != none %}
 <center>
 <div class="scheduler-bg">
+
+{% if Error %}
   <div class="error-msg">
-      <div class="title-container">
-        <h2 class="error-title">Error</h2>
-      </div>
-      <div class="desc-container">
-        <span class="error-desc"></span>
-      </div>
+    <div class="title-container">
+      <h2 class="error-title">Error</h2>
     </div>
+    <div class="desc-container">
+      <span class="error-desc">{{Error}}</span>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if Success %}
+  <div class="succ-msg">
+    <div class="title-container-succ">
+      <h2 class="succ-title">Success</h2>
+    </div>
+    <div class="desc-container">
+      <span class="succ-desc">{{Success}}</span>
+    </div>
+  </div>
+  {% endif %}
+
   <h2 class="res-title">Make Reservation</h2>
   <form method="post">
     {% csrf_token %}
@@ -90,9 +105,9 @@
     <form method="post">
       {% csrf_token %}
       Start Time
-      <input type="time" name="start" min="06:00" max="20:00" step="900">
+      <input type="time" name="start" min="06:00" max="20:00" step="900" required>
       End Time
-      <input type="time" name="end" min="06:00" max="20:00" step="900">
+      <input type="time" name="end" min="06:00" max="20:00" step="900" required>
       Court Number
       <select name="court">
         <option class="court" value="1">1</option>
@@ -112,28 +127,28 @@
       <br>
       {% if request.session.type == 'singles' %}
         {% if request.session.num_guests == '1' %}
-          <input name="guest1" type="searchbox" placeholder="Enter Guest Name">
+          <input name="guest1" type="searchbox" placeholder="Enter Guest Name" required>
         {% elif request.session.num_guests == '0' %}
-          <input name="member2" type="searchbox" placeholder="Enter Member Name">
+          <input name="member2" type="searchbox" placeholder="Enter Member Name" required>
         {% endif %}
       {% endif %}
       {% if request.session.type == 'doubles' %}
         {% if request.session.num_guests == '0' %}
-          <input name="member2" type="searchbox" placeholder="Enter Member Name">
-          <input name="member3" type="searchbox" placeholder="Enter Member Name">
-          <input name="member4" type="searchbox" placeholder="Enter Member Name">
+          <input name="member2" type="searchbox" placeholder="Enter Member Name" required>
+          <input name="member3" type="searchbox" placeholder="Enter Member Name" required>
+          <input name="member4" type="searchbox" placeholder="Enter Member Name" required>
         {% elif request.session.num_guests == '1' %}
-          <input name="member2" type="searchbox" placeholder="Enter Member Name">
-          <input name="member3" type="searchbox" placeholder="Enter Member Name">
-          <input name="guest1" type="searchbox" placeholder="Enter Guest Name">
+          <input name="member2" type="searchbox" placeholder="Enter Member Name" required>
+          <input name="member3" type="searchbox" placeholder="Enter Member Name" required>
+          <input name="guest1" type="searchbox" placeholder="Enter Guest Name" required>
         {% elif request.session.num_guests == '2' %}
-          <input name="member2" type="searchbox" placeholder="Enter Member Name">
-          <input name="guest1" type="searchbox" placeholder="Enter Guest Name">
-          <input name="guest2" type="searchbox" placeholder="Enter Guest Name">
+          <input name="member2" type="searchbox" placeholder="Enter Member Name" required>
+          <input name="guest1" type="searchbox" placeholder="Enter Guest Name" required>
+          <input name="guest2" type="searchbox" placeholder="Enter Guest Name" required>
         {% elif request.session.num_guests == '3' %}
-          <input name="guest1" type="searchbox" placeholder="Enter Guest Name">
-          <input name="guest2" type="searchbox" placeholder="Enter Guest Name">
-          <input name="guest3" type="searchbox" placeholder="Enter Guest Name">
+          <input name="guest1" type="searchbox" placeholder="Enter Guest Name" required>
+          <input name="guest2" type="searchbox" placeholder="Enter Guest Name" required>
+          <input name="guest3" type="searchbox" placeholder="Enter Guest Name" required>
         {% endif %}
       {% endif %}
       <input name="submittype" type="submit" value="Reserve">
@@ -172,7 +187,7 @@
   <h3>Lookup a Reservation</h3>
   <form method="post">
     {% csrf_token %}
-    <input name="res_id" type="searchbox" placeholder="Enter Reservation ID">
+    <input name="res_id" type="searchbox" placeholder="Enter Reservation ID" required>
     <input name="submittype" type="submit" value="Lookup Reservation">
   </form>
   {% if res_results %}
@@ -210,11 +225,11 @@
     <form method="post">
       {% csrf_token %}
       {% if request.session.update_type == 'singles' %}
-        <input name="player1" type="searchbox" placeholder="Enter Player Name">
+        <input name="player1" type="searchbox" placeholder="Enter Player Name" required>
       {% elif request.session.update_type == 'doubles' %}
-        <input name="player1" type="searchbox" placeholder="Enter Player Name">
-        <input name="player2" type="searchbox" placeholder="Enter Player Name">
-        <input name="player3" type="searchbox" placeholder="Enter Player Name">
+        <input name="player1" type="searchbox" placeholder="Enter Player Name" required>
+        <input name="player2" type="searchbox" placeholder="Enter Player Name" required>
+        <input name="player3" type="searchbox" placeholder="Enter Player Name" required>
       {% endif %}
       <input name="submittype" type="submit" value="Update Reservation">
 
@@ -233,11 +248,13 @@
 
 </center>
 {% else %}
-<center>
-<div class="login-msg">
-<b>Please log in.</b>
-<a href="../login/" class="nav-elem">Log In</a>
-</div>
-</center>
+    <div class="error-msg">
+    <div class="title-container">
+      <h2 class="error-title">Please Log In</h2>
+    </div>
+    <div class="desc-container">
+      <a href="../login/" class="nav-elem">Go to Log In</a>
+    </div>
+  </div>
 {% endif %}
 </html>

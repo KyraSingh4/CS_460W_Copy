@@ -12,14 +12,17 @@
 <body>
 
 <center>
+  {% if error %}
   <div class="error-msg">
     <div class="title-container">
       <h2 class="error-title">Error</h2>
     </div>
     <div class="desc-container">
-      <span class="error-desc"></span>
+      <span class="error-desc"> {{ error }}</span>
     </div>
   </div>
+  {% endif %}
+
   <h2 id="login-text">Login</h2>
   <div id="login">
     <form method="post">
@@ -36,9 +39,7 @@
         <input id="login-btn" type="submit" value="Login">
       </center>
     </form>
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
+
     </center>
   </div>
 </body>

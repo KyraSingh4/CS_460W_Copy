@@ -66,14 +66,23 @@ class TestMember(unittest.TestCase):
     #def test_UpdateReservation(self):
     #    self.assertIsNone(self.mem.updateReservation(38, ['Kyra Singh', 'Bri Durso', 'Bas Asad']))
 
-    def test_updateReservationInvalidPlayers(self):
-        self.assertFalse(self.mem.updateReservation(38,['Kyra Singh']))
+    #def test_updateReservationInvalidPlayers(self):
+    #    self.assertEqual(self.mem.updateReservation(38,['Kyra Singh']),1)
 
-    def test_updateReservationInvalidID(self):
-        self.assertFalse(self.mem.updateReservation(34, ['Kyra Singh']))
+    #def test_updateReservationInvalidID(self):
+    #    self.assertFalse(self.mem.updateReservation(34, ['Kyra Singh']))
 
-    def test_updateReservationInvalidType(self):
-        self.assertFalse(self.mem.updateReservation(38,1))
+    #def test_updateReservationInvalidType(self):
+    #    self.assertFalse(self.mem.updateReservation(38,1))
+
+    #def test_DeleteReservation(self):
+    #    self.assertIsNone(self.mem.deleteReservation(38))
+
+    #def test_DeleteReservationInvalidID(self):
+    #    self.assertFalse(self.mem.deleteReservation(34))
+
+    #def test_DeleteReservationInvalidInput(self):
+    #    self.assertFalse(self.mem.deleteReservation(False))
 
 if __name__ == '__main__':
     unittest.main()

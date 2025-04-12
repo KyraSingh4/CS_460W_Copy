@@ -48,7 +48,7 @@ def login_view(request):
             request.session['member_id'] = id
             return redirect('directory')  # Redirect to the search page on successful login
         else:
-            return render(request, 'myapp/login.html', {'error': 'Invalid credentials'})
+            return render(request, 'myapp/login.html', {'error': 'Invalid credentials. Please try again'})
     request.session['scheduler_stage'] = None
     return render(request, 'myapp/login.html')
 
@@ -73,25 +73,36 @@ def billing_view(request):
             else:
                 mem = Member(request.session.get('member_id'))
                 bill = mem.getBill()
-            return render(request, 'myapp/billing.html', {'bill': bill})
+            if not bill:
+                return render(request, 'myapp/billing.html', {'Error': 'Invalid Input. Try Again.'})
+            else:
+                return render(request, 'myapp/billing.html', {'bill': bill})
         if request.POST.get('submittype') == 'Create Charge':
             if request.session.get('member_id') == 1:
                 mem = President()
             else:
                 mem = BillingStaff()
-            mem.addEventFee(request.POST.get('amount'), request.POST.get('desc'), request.POST.get('mem_id'))
-            success = True
-            return render(request, 'myapp/billing.html', {'success': success})
+            ret = mem.addEventFee(request.POST.get('amount'), request.POST.get('desc'), request.POST.get('mem_id'))
+            if ret == -1:
+                return render(request, 'myapp/billing.html', {'Error': 'Invalid Member ID. Try Again.'})
+            if ret == False:
+                return render(request, 'myapp/billing.html', {'Error': 'Invalid Input. Try Again.'})
+            else:
+                return render(request, 'myapp/billing.html', {'Success': 'Charge Added'})
         if request.POST.get('submittype') == 'Modify Charge':
             mem = BillingStaff()
-            mem.modifyBill(request.POST.get('charge_id'), request.POST.get('attribute'), request.POST.get('value'))
-            success = True
-            return render(request, 'myapp/billing.html', {'success': success})
+            ret = mem.modifyBill(request.POST.get('charge_id'), request.POST.get('attribute'), request.POST.get('value'))
+            if ret == False:
+                return render(request, 'myapp/billing.html', {'Error': 'Invalid Input. Try Again.'})
+            else:
+                return render(request, 'myapp/billing.html', {'Success': 'Charge Modified!'})
         if request.POST.get('submittype') == 'Delete Charge':
             mem = BillingStaff()
-            mem.deleteCharge(request.POST.get('charge_id'))
-            success = True
-            return render(request, 'myapp/billing.html', {'success': success})
+            ret = mem.deleteCharge(request.POST.get('charge_id'))
+            if ret == False:
+                return render(request, 'myapp/billing.html', {'Error': 'Invalid Input. Try Again.'})
+            else:
+                return render(request, 'myapp/billing.html', {'Success': 'Charge Deleted!'})
         if request.POST.get('submittype') == 'Retrieve Current Billing Scheme':
             mem = BillingStaff()
             billing_scheme = mem.getBillingScheme()
@@ -99,14 +110,21 @@ def billing_view(request):
         if request.POST.get('submittype') == 'Modify Billing Scheme':
             mem = BillingStaff()
             if request.POST.get('chargetype') == 'guestfee':
-                mem.modifyGuestFee(request.POST.get('value'))
+                ret = mem.modifyGuestFee(request.POST.get('value'))
             elif request.POST.get('chargetype') == 'annualfee':
-                mem.modifyAnnualFee(request.POST.get('value'))
+                ret = mem.modifyAnnualFee(request.POST.get('value'))
             billing_scheme = mem.getBillingScheme()
-            return render(request, 'myapp/billing.html', {'billing_scheme': billing_scheme})
+            if ret == False:
+                return render(request, 'myapp/billing.html', {'Error': 'Invalid Input. Try Again.'})
+            else:
+                return render(request, 'myapp/billing.html', {'Success': 'Billing Scheme Modified!', 'billing_scheme': billing_scheme})
         if request.POST.get('submittype') == 'Pay Your Bill':
             mem = Member(request.session.get('member_id'))
-            mem.payBill(request.POST.get('year'))
+            ret = mem.payBill(request.POST.get('year'))
+            if ret == False:
+                return render(request, 'myapp/billing.html', {'Error': 'Invalid Year. Try Again.'})
+            else:
+                return render(request, 'myapp/billing.html', {'Success': 'Bill Paid'})
 
 
     return render(request, 'myapp/billing.html')
@@ -155,7 +173,7 @@ def scheduler_view(request):
                     mem2 = request.POST.get('member2').split(" ")
                     members = [dir.nameLookup(mem2[0], mem2[1])]
                     guests = []
-                mem.createReservation(
+                ret = mem.createReservation(
                     request.session.get('type'),
                     request.session.get('day'),
                     datetime.time(int(start[0]), int(start[1])),
@@ -189,7 +207,7 @@ def scheduler_view(request):
                             dir.nameLookup(mem4[0], mem4[1]),
                         ]
                         guests = []
-                mem.createReservation(
+                ret = mem.createReservation(
                     request.session.get('type'),
                     request.session.get('day'),
                     datetime.time(int(start[0]), int(start[1])),
@@ -200,6 +218,24 @@ def scheduler_view(request):
                 )
             request.session['scheduler_stage'] = None  # Reset stage
             success = True
+            if ret == 1:
+                return render(request, 'myapp/scheduler.html', {'Error':'Your reservation overlaps with a reservation on this court.'})
+            elif ret == 2:
+                return render(request, 'myapp/scheduler.html', {'Error':'Your reservation overlaps with another reservation you have scheduled.'})
+            elif ret == 3:
+                return render(request, 'myapp/scheduler.html', {'Error':'You have another scheduled reservation beginning less than 60 minutes following this one.'})
+            elif ret == 4:
+                return render(request, 'myapp/scheduler.html', {'Error':'You have another scheduled reservation ending less than 60 minutes before this one.'})
+            elif ret == 6:
+                return render(request, 'myapp/scheduler.html', {'Error':'You do not have enough guest passes.'})
+            elif ret == 7:
+                return render(request, 'myapp/scheduler.html', {'Error':'You have reached the maximum number of reservations in a 7 day period.'})
+            elif ret == 9:
+                return render(request, 'myapp/scheduler.html', {'Error':'Your reservation does not occupy a valid time slot.'})
+            elif ret == False:
+                return render(request, 'myapp/scheduler.html', {'Error':'Invalid input. Try again.'})
+            else:
+                return render(request, 'myapp/scheduler.html', {'Success': 'Reservation Created!'})
         elif submittype == 'Lookup Reservation':
             res_results = cal.lookupReservation(request.POST.get('res_id'))
             request.session['res_id'] = request.POST.get('res_id')
