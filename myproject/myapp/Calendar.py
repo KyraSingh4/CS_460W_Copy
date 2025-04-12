@@ -23,19 +23,27 @@ class Calendar:
         return result
 
     def getAttendees(self, res_id: int):
-        result = None
+        result = []
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
             with conn.cursor() as cur:
+                # Get the member_id of the reservation owner
                 cur.execute("SELECT member_id FROM reservation WHERE reservation_id = %s", (res_id,))
-                mem_id = cur.fetchall()[0]
+                mem_id_result = cur.fetchall()
+                if not mem_id_result:
+                    return None  # Return None if the reservation does not exist
+                mem_id = mem_id_result[0][0]
+
             with conn.cursor() as cur:
-                cur.execute("SELECT firstname, lastname FROM member WHERE member_id = %s",(mem_id,))
+                # Get the name of the reservation owner
+                cur.execute("SELECT firstname, lastname FROM member WHERE member_id = %s", (mem_id,))
                 result = cur.fetchall()
+
             with conn.cursor() as cur:
-                cur.execute("SELECT firstname, lastname FROM ATTENDEES where reservation_id = %s", (res_id,))
+                # Get the names of additional attendees
+                cur.execute("SELECT firstname, lastname FROM attendees WHERE reservation_id = %s", (res_id,))
                 others = cur.fetchall()
-                for other in others:
-                    result.append(other)
+                result.extend(others)  # Add additional attendees to the result
+
         return result
 
 class Calender2: #unused
