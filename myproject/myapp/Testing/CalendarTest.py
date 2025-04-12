@@ -48,6 +48,12 @@ class TestCalendar(unittest.TestCase):
         result = self.calendar.lookupReservation(res_id)
         self.assertIsInstance(result, list)  # Check if the result is a list
 
+    def test_lookup_reservation_invalid_reservation(self):
+        # Test with an invalid reservation ID
+        res_id = -1
+        result = self.calendar.lookupReservation(res_id)
+        self.assertIsNone(result, list)  # Check if the result is None
+
     def test_get_attendees(self):
         # Test with a valid reservation ID
         res_id = 1

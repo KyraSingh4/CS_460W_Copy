@@ -20,13 +20,14 @@ class Calendar:
             with conn.cursor() as cur:
                 cur.execute("SELECT res_day, court_num, start_time, end_time, type, member_id FROM reservation WHERE reservation_id = %s", (res_id,))
                 result = cur.fetchall()
+                if not result:  # If no rows are returned
+                    return None
         return result
 
     def getAttendees(self, res_id: int):
         result = []
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
             with conn.cursor() as cur:
-                # Get the member_id of the reservation owner
                 cur.execute("SELECT member_id FROM reservation WHERE reservation_id = %s", (res_id,))
                 mem_id_result = cur.fetchall()
                 if not mem_id_result:
@@ -34,15 +35,13 @@ class Calendar:
                 mem_id = mem_id_result[0][0]
 
             with conn.cursor() as cur:
-                # Get the name of the reservation owner
                 cur.execute("SELECT firstname, lastname FROM member WHERE member_id = %s", (mem_id,))
                 result = cur.fetchall()
 
             with conn.cursor() as cur:
-                # Get the names of additional attendees
                 cur.execute("SELECT firstname, lastname FROM attendees WHERE reservation_id = %s", (res_id,))
                 others = cur.fetchall()
-                result.extend(others)  # Add additional attendees to the result
+                result.extend(others)
 
         return result
 
