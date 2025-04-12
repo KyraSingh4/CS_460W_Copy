@@ -72,7 +72,8 @@ GRANT ALL PRIVILEGES ON SEQUENCE reservation_reservation_id_seq to aceduser;
 GRANT ALL PRIVILEGES ON SEQUENCE charges_charge_id_seq to aceduser;
 
 
-INSERT INTO member (firstname, lastname, email, phonenum, optin, active, password) VALUES (
+INSERT INTO member (member_id, firstname, lastname, email, phonenum, optin, active, password) VALUES (
+    1,
     'President',
     'Staff',
     'president@aced.com',

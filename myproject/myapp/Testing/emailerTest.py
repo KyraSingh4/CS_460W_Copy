@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
-from CS_460W.myproject.myapp.emailer import Emailer
+from ..emailer import Emailer
 
 class TestEmailer(unittest.TestCase):
 
