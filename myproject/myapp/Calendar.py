@@ -9,6 +9,8 @@ class Calendar:
         pass
 
     def RetrieveDay(self,day):
+        if day < 0 or day > 6:
+            return None
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
             with conn.cursor() as cur:
                 cur.execute("SELECT reservation_id, court_num, start_time, end_time, member_id, type FROM reservation WHERE res_day = %s", (day,))

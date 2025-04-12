@@ -42,6 +42,12 @@ class TestCalendar(unittest.TestCase):
         result = self.calendar.RetrieveDay(day)
         self.assertIsInstance(result, list)  # Check if the result is a list
 
+    def test_retrieve_day_invalid_day(self):
+        # Test with an invalid day
+        day = 9
+        result = self.calendar.RetrieveDay(day)
+        self.assertIsNone(result, list)  # Check if the result is None
+
     def test_lookup_reservation(self):
         # Test with a valid reservation ID
         res_id = 1
@@ -58,6 +64,7 @@ class TestCalendar(unittest.TestCase):
         # Test with a valid reservation ID
         res_id = 1
         result = self.calendar.getAttendees(res_id)
+        print(result)
         self.assertIsInstance(result, list)  # Check if the result is a list
 
     def test_get_attendees_invalid_reservation(self):
