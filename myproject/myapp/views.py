@@ -48,7 +48,7 @@ def login_view(request):
             request.session['member_id'] = id
             return redirect('directory')  # Redirect to the search page on successful login
         else:
-            return render(request, 'myapp/login.html', {'error': 'Invalid credentials'})
+            return render(request, 'myapp/login.html', {'error': 'Invalid credentials. Please try again'})
     request.session['scheduler_stage'] = None
     return render(request, 'myapp/login.html')
 
@@ -73,15 +73,18 @@ def billing_view(request):
             else:
                 mem = Member(request.session.get('member_id'))
                 bill = mem.getBill()
-            return render(request, 'myapp/billing.html', {'bill': bill})
+            if not bill:
+                return render(request, 'myapp/billing.html', {'BillError': 'Invalid Input. Try Again.'})
+            else:
+                return render(request, 'myapp/billing.html', {'bill': bill})
         if request.POST.get('submittype') == 'Create Charge':
             if request.session.get('member_id') == 1:
                 mem = President()
             else:
                 mem = BillingStaff()
             mem.addEventFee(request.POST.get('amount'), request.POST.get('desc'), request.POST.get('mem_id'))
-            success = True
-            return render(request, 'myapp/billing.html', {'success': success})
+
+            return render(request, 'myapp/billing.html', {'CreateSuccess': 'Charge Added'})
         if request.POST.get('submittype') == 'Modify Charge':
             mem = BillingStaff()
             mem.modifyBill(request.POST.get('charge_id'), request.POST.get('attribute'), request.POST.get('value'))
