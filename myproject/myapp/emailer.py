@@ -52,6 +52,6 @@ class Emailer:
         self.sendEmail(text, subject, email)
         
 #emailer testing (must have SMPTP server set up)
-emailer = Emailer()
+#emailer = Emailer()
 #emailer.connect()
 #emailer.sendEmail("Hello World", "Test", "cookepoli@hartford.edu")

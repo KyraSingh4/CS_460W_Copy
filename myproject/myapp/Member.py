@@ -36,53 +36,56 @@ class Member:
 
 
     def createReservation(self, restype: str, day: int, start: time, end: time, court: int, members: list[int], guests: list[str]):
-        check = self.checkReservationRules(restype, day, start, end, court, members, guests)
-        if check != 0:
-            return check
-        else:
-            with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+        try:
+            check = self.checkReservationRules(restype, day, start, end, court, members, guests)
+            if check != 0:
+                return check
+            else:
+                with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
 
-                with conn.cursor() as cur:
-                    cur.execute("INSERT INTO reservation (court_num, res_day, start_time, end_time, member_id, type) VALUES "
-                        "((%s), (%s), (%s), (%s), (%s), (%s))", (court, day, start, end, self.memberid, restype))
-
-
-                with conn.cursor() as cur:
-                    cur.execute("SELECT reservation_id FROM reservation WHERE member_ID = (%s) AND start_time = (%s) AND court_num = (%s)",
-                        (self.memberid, start, court))
-                    res_id = cur.fetchone()
-
-                for i in range(len(members)):
                     with conn.cursor() as cur:
-                        cur.execute("SELECT firstname, lastname FROM member WHERE member_ID = (%s)", (members[i],))
-                        memname = cur.fetchall()
-                        cur.execute("INSERT INTO attendees VALUES ((%s), (%s), (%s), (%s))",
-                            (res_id[0], memname[0][0], memname[0][1],members[i]))
+                        cur.execute("INSERT INTO reservation (court_num, res_day, start_time, end_time, member_id, type) VALUES "
+                            "((%s), (%s), (%s), (%s), (%s), (%s))", (court, day, start, end, self.memberid, restype))
 
-                with conn.cursor() as cur:
-                    cur.execute("SELECT guestfee FROM billing_constants")
-                    guestfee = cur.fetchall()[0][0]
 
-                for i in range(len(guests)):
-                    guest = guests[i].split()
                     with conn.cursor() as cur:
-                        cur.execute("INSERT INTO attendees (reservation_id, firstname, lastname) VALUES ((%s), (%s), (%s))",
-                            (res_id[0], guest[0], guest[1]))
-                        cur.execute("SELECT guestpass FROM member WHERE member_id = (%s)", (self.memberid,))
-                        rem_passes = cur.fetchall()
-                        cur.execute("UPDATE member SET guestpass = (%s) WHERE member_id = (%s)",
-                            (rem_passes[0][0]-1, self.memberid))
-                    self.my_bill.createCharge(guestfee, "Guest Fee", "Other")
-                with conn.cursor() as cur:
-                    cur.execute("SELECT email FROM member WHERE member_id = (%s)", (self.memberid,))
-                    email = cur.fetchone()[0]
-            try:
-                em = Emailer()
-                em.sendReservationConfirmation(res_id[0], email)
-            except:
-               print('yikes')
+                        cur.execute("SELECT reservation_id FROM reservation WHERE member_ID = (%s) AND start_time = (%s) AND court_num = (%s)",
+                            (self.memberid, start, court))
+                        res_id = cur.fetchone()
 
-            return True
+                    for i in range(len(members)):
+                        with conn.cursor() as cur:
+                            cur.execute("SELECT firstname, lastname FROM member WHERE member_ID = (%s)", (members[i],))
+                            memname = cur.fetchall()
+                            cur.execute("INSERT INTO attendees VALUES ((%s), (%s), (%s), (%s))",
+                                (res_id[0], memname[0][0], memname[0][1],members[i]))
+
+                    with conn.cursor() as cur:
+                        cur.execute("SELECT guestfee FROM billing_constants")
+                        guestfee = cur.fetchall()[0][0]
+
+                    for i in range(len(guests)):
+                        guest = guests[i].split()
+                        with conn.cursor() as cur:
+                            cur.execute("INSERT INTO attendees (reservation_id, firstname, lastname) VALUES ((%s), (%s), (%s))",
+                                (res_id[0], guest[0], guest[1]))
+                            cur.execute("SELECT guestpass FROM member WHERE member_id = (%s)", (self.memberid,))
+                            rem_passes = cur.fetchall()
+                            cur.execute("UPDATE member SET guestpass = (%s) WHERE member_id = (%s)",
+                                (rem_passes[0][0]-1, self.memberid))
+                        self.my_bill.createCharge(guestfee, "Guest Fee", "Other")
+                    with conn.cursor() as cur:
+                        cur.execute("SELECT email FROM member WHERE member_id = (%s)", (self.memberid,))
+                        email = cur.fetchone()[0]
+                try:
+                    em = Emailer()
+                    em.sendReservationConfirmation(res_id[0], email)
+                except:
+                   print('yikes')
+
+                return True
+        except psycopg2.Error as e:
+            return False
 
     def deleteReservation(self, res_id: int):
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
@@ -124,6 +127,16 @@ class Member:
             if res_id in check_ids:
 
                 with conn.cursor() as cur:
+                    cur.execute("SELECT type FROM reservation WHERE reservation_id = (%s)", (res_id,))
+                    typ = cur.fetchall()[0][0]
+                if typ == 'singles':
+                    if len(players) != 1:
+                        return 0
+                elif type == 'doubles':
+                    if len(players) != 3:
+                        return 0
+
+                with conn.cursor() as cur:
                     cur.execute("SELECT member_id FROM attendees WHERE reservation_id = (%s)", (res_id,))
                     attendees = cur.fetchall()
                     cur.execute("SELECT guestpass FROM member WHERE member_id = (%s)", (self.memberid,))
@@ -131,11 +144,13 @@ class Member:
                     cur.execute("SELECT charge_id FROM charges WHERE member_id = (%s) AND description = 'Guest Fee'",
                             (self.memberid,))
                     charges = cur.fetchall()
+                chr_inc = 0
                 for i in range(len(attendees)):
                     if attendees[i][0] is None:
                         guestpass = guestpass + 1
-                    with conn.cursor() as cur:
-                        cur.execute("DELETE FROM charges WHERE charge_id = %s", (charges[i][0],))
+                        with conn.cursor() as cur:
+                            cur.execute("DELETE FROM charges WHERE charge_id = %s", (charges[chr_inc][0],))
+                        chr_inc = chr_inc + 1
                 with conn.cursor() as cur:
                     cur.execute("DELETE FROM attendees WHERE reservation_id = (%s)", (res_id,))
                     cur.execute("UPDATE member SET guestpass = %s WHERE member_id = %s", (guestpass, self.memberid))
@@ -169,93 +184,97 @@ class Member:
 
 
     def checkReservationRules(self, restype: str, day:int, start: time, end: time, court: int, members: list[int], guests: list[str]):
-        conn = psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432")
+        try:
+            conn = psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432")
+
 
             #Rule 1: Overlapping reservation
-        with conn.cursor() as cur:
-            cur.execute("SELECT start_time, end_time FROM reservation WHERE res_day = (%s) AND court_num = (%s)",
+            with conn.cursor() as cur:
+                cur.execute("SELECT start_time, end_time FROM reservation WHERE res_day = (%s) AND court_num = (%s)",
                         (day, court))
-            check = cur.fetchall()
-        for i in range(len(check)):
-            if check[i][0] <= start <= check[i][1]:
-                conn.close()
-                return 1
-            if check[i][0] <= end <= check[i][1]:
-                conn.close()
-                return 1
-
-            #Rule 2: Overlapping reservation from same member.
-        with conn.cursor() as cur:
-            cur.execute("SELECT start_time, end_time FROM reservation WHERE member_ID = (%s) AND res_day = (%s)",
-                        (self.memberid,day))
-            check = cur.fetchall()
+                check = cur.fetchall()
             for i in range(len(check)):
                 if check[i][0] <= start <= check[i][1]:
                     conn.close()
-                    return 2
+                    return 1
                 if check[i][0] <= end <= check[i][1]:
                     conn.close()
-                    return 2
+                    return 1
 
-            #Rule 3: Reservation proximity before.
-            for i in range(len(check)):
-                if check[i][0] > end and datetime.combine(datetime.now(), check[i][0]) < (datetime.combine(datetime.now(), end) + timedelta(minutes=60)):
+                #Rule 2: Overlapping reservation from same member.
+            with conn.cursor() as cur:
+                cur.execute("SELECT start_time, end_time FROM reservation WHERE member_ID = (%s) AND res_day = (%s)",
+                        (self.memberid,day))
+                check = cur.fetchall()
+                for i in range(len(check)):
+                    if check[i][0] <= start <= check[i][1]:
+                        conn.close()
+                        return 2
+                    if check[i][0] <= end <= check[i][1]:
+                        conn.close()
+                        return 2
+
+                #Rule 3: Reservation proximity before.
+                for i in range(len(check)):
+                    if check[i][0] > end and datetime.combine(datetime.now(), check[i][0]) < (datetime.combine(datetime.now(), end) + timedelta(minutes=60)):
+                        conn.close()
+                        return 3
+
+                #Rule 4: Reservation proximity after.
+                for i in range(len(check)):
+                    if check[i][1] < start and datetime.combine(datetime.now(), check[i][1]) > (datetime.combine(datetime.now(), start) - timedelta(minutes=60)):
+                        conn.close()
+                        return 4
+
+                #Rule 5: Checked on front-end.
+                if day < 0 or day > 6:
+                    return 5
+
+                #Rule 6: Member has enough guest passes.
+            with conn.cursor() as cur:
+                cur.execute("SELECT guestpass FROM member WHERE member_id = (%s)", (self.memberid,))
+                check = cur.fetchall()
+            if len(guests) > check[0][0]:
+                conn.close()
+                return 6
+
+                #Rule 7: Member has no more than 2 other reservations.
+            with conn.cursor() as cur:
+                cur.execute("SELECT reservation_id FROM reservation WHERE member_ID = (%s)", (self.memberid,))
+                check = cur.fetchall()
+            if len(check) >= 3:
+                conn.close()
+                return 7
+
+                #Rule 8: Check count of accompanying members.
+            if restype == "doubles":
+                if len(guests) + len(members) != 3:
                     conn.close()
-                    return 3
-
-            #Rule 4: Reservation proximity after.
-            for i in range(len(check)):
-                if check[i][1] < start and datetime.combine(datetime.now(), check[i][1]) > (datetime.combine(datetime.now(), start) - timedelta(minutes=60)):
+                    return 8
+            elif restype == "singles":
+                if len(guests) + len(members) != 1:
                     conn.close()
-                    return 4
-
-            #Rule 5: Checked on front-end.
-            if day < 0 or day > 6:
-                return 5
-
-            #Rule 6: Member has enough guest passes.
-        with conn.cursor() as cur:
-            cur.execute("SELECT guestpass FROM member WHERE member_id = (%s)", (self.memberid,))
-            check = cur.fetchall()
-        if len(guests) > check[0][0]:
-            conn.close()
-            return 6
-
-            #Rule 7: Member has no more than 2 other reservations.
-        with conn.cursor() as cur:
-            cur.execute("SELECT reservation_id FROM reservation WHERE member_ID = (%s)", (self.memberid,))
-            check = cur.fetchall()
-        if len(check) >= 3:
-            conn.close()
-            return 7
-
-            #Rule 8: Check count of accompanying members.
-        if restype == "doubles":
-            if len(guests) + len(members) != 3:
+                    return 8
+            else:
                 conn.close()
                 return 8
-        elif restype == "singles":
-            if len(guests) + len(members) != 1:
-                conn.close()
-                return 8
-        else:
+
+            #Reservation Length
+            if restype == "doubles":
+                length = datetime.combine(datetime.today(),end) - datetime.combine(datetime.today(),start)
+                if length < timedelta(minutes=90) or length > timedelta(minutes=120):
+                    conn.close()
+                    return 9
+            elif restype == "singles":
+                length = datetime.combine(datetime.today(),end) - datetime.combine(datetime.today(),start)
+                if length < timedelta(minutes=60) or length > timedelta(minutes=90):
+                    conn.close()
+                    return 9
+
             conn.close()
-            return 8
-
-        #Reservation Length
-        if restype == "doubles":
-            length = datetime.combine(datetime.today(),end) - datetime.combine(datetime.today(),start)
-            if length < timedelta(minutes=90) or length > timedelta(minutes=120):
-                conn.close()
-                return 9
-        elif restype == "singles":
-            length = datetime.combine(datetime.today(),end) - datetime.combine(datetime.today(),start)
-            if length < timedelta(minutes=60) or length > timedelta(minutes=90):
-                conn.close()
-                return 9
-
-        conn.close()
-        return 0
+            return 0
+        except psycopg2.Error:
+            return False
 
 
 class President(Member):
