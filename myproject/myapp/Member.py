@@ -104,16 +104,20 @@ class Member:
                     guestpass = cur.fetchone()[0]
                     cur.execute("SELECT charge_id FROM charges WHERE member_id = (%s) AND description = 'Guest Fee'", (self.memberid,))
                     charges = cur.fetchall()
+                    chr_inc = 0
                     for i in range(len(attendees)):
                         if attendees[i][0] is None:
                             guestpass = guestpass+1
-                            cur.execute("DELETE FROM charges WHERE charge_id = %s", (charges[i][0],))
+                            cur.execute("DELETE FROM charges WHERE charge_id = %s", (charges[chr_inc][0],))
+                            chr_inc=chr_inc+1
 
                     print(guestpass)
                     cur.execute("UPDATE member SET guestpass = %s WHERE member_id = %s", (guestpass, self.memberid))
 
 
                     cur.execute("DELETE FROM reservation WHERE reservation_id = %s", (res_id,))
+            else:
+                return False
 
     def updateReservation(self, res_id, players: list[str]):
 
@@ -124,17 +128,17 @@ class Member:
                 check_ids = []
                 for i in range(len(result)):
                     check_ids.append(result[i][0])
-            if res_id in check_ids:
 
+            if res_id in check_ids:
                 with conn.cursor() as cur:
                     cur.execute("SELECT type FROM reservation WHERE reservation_id = (%s)", (res_id,))
-                    typ = cur.fetchall()[0][0]
+                    typ = cur.fetchone()[0]
                 if typ == 'singles':
                     if len(players) != 1:
-                        return 0
-                elif type == 'doubles':
+                        return 1
+                elif typ == 'doubles':
                     if len(players) != 3:
-                        return 0
+                        return 1
 
                 with conn.cursor() as cur:
                     cur.execute("SELECT member_id FROM attendees WHERE reservation_id = (%s)", (res_id,))
@@ -176,10 +180,6 @@ class Member:
                             self.my_bill.createCharge(guestfee, "Guest Fee", "Other")
             else:
                 return False
-
-
-
-
 
 
 
@@ -283,27 +283,43 @@ class President(Member):
 
     def addEventFee(self, fee: float, memo: str, memberid: int):
         bill = Bill(memberid)
-        bill.createCharge(fee, memo, "Other")
+        valid = bill.createCharge(fee, memo, "Other")
+        return valid
 
     def createMember(self, firstname: str, lastname: str, email: str, phonenum: str, optin: bool, pw: str):
-        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-            with conn.cursor() as cur:
-                cur.execute("INSERT INTO member (firstname, lastname, email, phonenum, optin, password) "
-                            "VALUES (%s, %s, %s, %s, %s, crypt(%s, gen_salt('md5')))",
-                            (firstname, lastname, email, phonenum, optin, pw))
+        try:
+            with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+                with conn.cursor() as cur:
+                    cur.execute("INSERT INTO member (firstname, lastname, email, phonenum, optin, password) "
+                                "VALUES (%s, %s, %s, %s, %s, crypt(%s, gen_salt('md5')))",
+                                (firstname, lastname, email, phonenum, optin, pw))
+        except psycopg2.Error:
+            return False
 
     def updateInformation(self, member_id: int, attribute: str, value: str):
-        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-            with conn.cursor() as cur:
-                if attribute == 'password':
-                    cur.execute("UPDATE member SET password = crypt(%s, gen_salt('md5')) WHERE member_id = (%s)", (value,))
-                else:
-                    cur.execute(sql.SQL("UPDATE member SET {attr} = %s WHERE member_id = %s").format(attr = sql.Identifier(attribute)),(value,member_id))
+        try:
+            with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+                with conn.cursor() as cur:
+                    if attribute == 'password':
+                        cur.execute("UPDATE member SET password = crypt(%s, gen_salt('md5')) WHERE member_id = (%s)", (value,))
+                    else:
+                        cur.execute(sql.SQL("UPDATE member SET {attr} = %s WHERE member_id = %s").format(attr = sql.Identifier(attribute)),(value,member_id))
+        except psycopg2.Error as e:
+            return False
+        except TypeError as e:
+            return False
 
-    def deactivateMember(self, memberid: str):
-        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-            with conn.cursor() as cur:
-                cur.execute("UPDATE member SET active = FALSE WHERE member_id = %s", (memberid,))
+    def deactivateMember(self, memberid: int):
+        if memberid == 1 or memberid == 2:
+            return False
+        else:
+            try:
+                with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+                    with conn.cursor() as cur:
+                        cur.execute("UPDATE member SET active = FALSE WHERE member_id = %s", (memberid,))
+                return True
+            except psycopg2.Error as e:
+                return False
 
     def getBill(self,memberid: int):
         bill = Bill(memberid)
@@ -319,13 +335,15 @@ class BillingStaff(Member):
 
     def addEventFee(self, fee: float, memo: str, memberid: int):
         bill = Bill(memberid)
-        bill.createCharge(fee, memo, "Other")
+        valid = bill.createCharge(fee, memo, "Other")
+        return valid
 
     def modifyBill(self, charge_id: int, attribute: str, value: str):
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
             with conn.cursor() as cur:
                 cur.execute(sql.SQL("UPDATE charges SET {attr} = %s WHERE charge_id = (%s)").format(attr = sql.Identifier(attribute)),
                             (value, charge_id))
+        return True
 
     def deleteCharge(self, charge_id:int):
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
