@@ -25,12 +25,12 @@ def run_continouously(interval=1):
 
 
 def addYearlyFee():
-    #if datetime.datetime.now().day == 1 and datetime.datetime.now().month == 1:
+    if datetime.datetime.now().day == 1 and datetime.datetime.now().month == 1:
         year = datetime.datetime.now().year - 1
 
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
             with conn.cursor() as cur:
-                cur.execute("SELECT member_id FROM member")
+                cur.execute("SELECT member_id FROM member WHERE active = True")
                 members = cur.fetchall()
             with conn.cursor() as cur:
                 cur.execute("SELECT annualfee FROM billing_constants")
@@ -70,7 +70,7 @@ def getUnpaid():
 
 
 def addLateFee():
-   if datetime.datetime.now().day == 1:
+   #if datetime.datetime.now().day == 1:
         month = datetime.datetime.now().month
         year = datetime.datetime.now().year - 1
         unpaid = getUnpaid()
@@ -98,7 +98,7 @@ def addLateFee():
                         annualfee = cur.fetchall()[0]
                         annualfee = annualfee[0]/1.1
                     with conn.cursor() as cur:
-                        cur.execute("UPDATE charges SET amount = %s WHERE charge_id = %s", (annualfee+annualfee*0.2, unpaid[i][0]))
+                        cur.execute("UPDATE charges SET amount = %s WHERE charge_id = %s", (round(annualfee+annualfee*0.2,2), unpaid[i][0]))
                         cur.execute("SELECT email FROM member WHERE member_id = %s", (unpaid[i][1],))
                         email = cur.fetchone()[0]
                         try:
@@ -117,9 +117,12 @@ def refreshReservation():
 
 
 
-schedule.every().day.at("05:30").do(lambda: addYearlyFee())
-schedule.every().day.at("05:30").do(lambda: addLateFee())
-schedule.every().day.at("22:00").do(lambda: refreshReservation())
+#schedule.every().day.at("05:30").do(lambda: addYearlyFee())
+#schedule.every().day.at("05:30").do(lambda: addLateFee())
+#schedule.every().day.at("22:00").do(lambda: refreshReservation())
 
-stop_run_continuously = run_continouously(43200)
 
+
+#stop_run_continuously = run_continouously(43200)
+
+refreshReservation()
