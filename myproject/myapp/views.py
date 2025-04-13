@@ -13,28 +13,40 @@ def directory_view(request):
         directory = Directory()
         if request.POST.get('submittype') == 'View the Full Directory':
             results = directory.getAll(request.session.get('member_id'))
-            return render(request, 'myapp/directory.html', {'results': results})
+
         elif request.POST.get('submittype') == 'Search':
             attribute = request.POST.get('attribute')
             value = request.POST.get('value')
             results = directory.searchAttr(request.session.get('member_id'), attribute, value)
-            return render(request, 'myapp/directory.html', {'results': results})
+            if results == -1:
+                return render(request, 'myapp/directory.html', {'Error': 'Invalid input. Try again.'})
+            else:
+                return render(request, 'myapp/directory.html', {'results': results})
         elif request.POST.get('submittype') == 'Create Member':
             mem = President()
-            mem.createMember(request.POST.get('fname'), request.POST.get('lname'), request.POST.get('email'),
+            ret = mem.createMember(request.POST.get('fname'), request.POST.get('lname'), request.POST.get('email'),
                              request.POST.get('phonenum'), request.POST.get('optin'), request.POST.get('password'))
-            success = True
-            return render(request, 'myapp/directory.html', {'success': success})
+            if ret == 0:
+                return render(request, 'myapp/directory.html', {'Success': 'Member created!'})
+            else:
+                return render(request, 'myapp/directory.html', {'Error': 'Invalid Input'})
         elif request.POST.get('submittype') == 'Deactivate Member':
             mem = President()
-            mem.deactivateMember(request.POST.get('memid'))
-            success = True
-            return render(request, 'myapp/directory.html', {'success': success})
+            ret = mem.deactivateMember(request.POST.get('memid'))
+            if ret == 0:
+                return render(request, 'myapp/directory.html', {'Success': 'Member deactivated!'})
+            elif ret == -2:
+                return render(request, 'myapp/directory.html', {'Error': 'You cannot deactivate the President or Billing Staff accounts.'})
+            else:
+                return render(request, 'myapp/directory.html', {'Error': 'Invalid Input'})
+
         elif request.POST.get('submittype') == 'Update Member':
             mem = President()
-            mem.updateInformation(request.POST.get('member_id'), request.POST.get('attribute'), request.POST.get('value'))
-            success = True
-            return render(request, 'myapp/directory.html', {'success': success})
+            ret = mem.updateInformation(request.POST.get('member_id'), request.POST.get('attribute'), request.POST.get('value'))
+            if ret == 0:
+                return render(request, 'myapp/directory.html', {'Success': 'Member updated!'})
+            else:
+                return render(request, 'myapp/directory.html', {'Error': 'Invalid Input'})
 
     return render(request, 'myapp/directory.html')
 
@@ -171,7 +183,10 @@ def scheduler_view(request):
                     guests = [request.POST.get('guest1')]
                 else:  # 0 guest passes, 2 members
                     mem2 = request.POST.get('member2').split(" ")
-                    members = [dir.nameLookup(mem2[0], mem2[1])]
+                    try:
+                        members = [dir.nameLookup(mem2[0], mem2[1])]
+                    except IndexError:
+                        return render(request, 'myapp/scheduler.html', {'Error': 'Invalid input. Try again.'})
                     guests = []
                 ret = mem.createReservation(
                     request.session.get('type'),
@@ -188,11 +203,18 @@ def scheduler_view(request):
                     case '1':  # 1 guest pass, 3 members
                         mem2 = request.POST.get('member2').split(" ")
                         mem3 = request.POST.get('member3').split(" ")
-                        members = [dir.nameLookup(mem2[0], mem2[1]), dir.nameLookup(mem3[0], mem3[1])]
+                        try:
+                            members = [dir.nameLookup(mem2[0], mem2[1]), dir.nameLookup(mem3[0], mem3[1])]
+                        except IndexError:
+                            return render(request, 'myapp/scheduler.html', {'Error': 'Invalid input. Try again.'})
+
                         guests = [request.POST.get('guest1')]
                     case '2':  # 2 guest passes, 2 members
                         mem2 = request.POST.get('member2').split(" ")
-                        members = [dir.nameLookup(mem2[0], mem2[1])]
+                        try:
+                            members = [dir.nameLookup(mem2[0], mem2[1])]
+                        except:
+                            return render(request, 'myapp/scheduler.html', {'Error': 'Invalid member name. Try again.'})
                         guests = [request.POST.get('guest1'), request.POST.get('guest2')]
                     case '3':  # 3 guest passes, 1 member
                         members = []
@@ -201,11 +223,14 @@ def scheduler_view(request):
                         mem2 = request.POST.get('member2').split(" ")
                         mem3 = request.POST.get('member3').split(" ")
                         mem4 = request.POST.get('member4').split(" ")
-                        members = [
-                            dir.nameLookup(mem2[0], mem2[1]),
-                            dir.nameLookup(mem3[0], mem3[1]),
-                            dir.nameLookup(mem4[0], mem4[1]),
-                        ]
+                        try:
+                            members = [
+                                dir.nameLookup(mem2[0], mem2[1]),
+                                dir.nameLookup(mem3[0], mem3[1]),
+                                dir.nameLookup(mem4[0], mem4[1]),
+                            ]
+                        except IndexError:
+                            return render(request, 'myapp/scheduler.html', {'Error': 'Invalid member name. Try again.'})
                         guests = []
                 ret = mem.createReservation(
                     request.session.get('type'),
@@ -232,19 +257,33 @@ def scheduler_view(request):
                 return render(request, 'myapp/scheduler.html', {'Error':'You have reached the maximum number of reservations in a 7 day period.'})
             elif ret == 9:
                 return render(request, 'myapp/scheduler.html', {'Error':'Your reservation does not occupy a valid time slot.'})
+            elif ret == 11:
+                return render(request, 'myapp/scheduler.html', {'Error':'Invalid member name. Try again.'})
+            elif ret == 12:
+                return render(request, 'myapp/scheduler.html', {'Error':'Invalid guest name. Try again.'})
             elif ret == False:
                 return render(request, 'myapp/scheduler.html', {'Error':'Invalid input. Try again.'})
             else:
                 return render(request, 'myapp/scheduler.html', {'Success': 'Reservation Created!'})
         elif submittype == 'Lookup Reservation':
             res_results = cal.lookupReservation(request.POST.get('res_id'))
-            request.session['res_id'] = request.POST.get('res_id')
-            request.session['update_type'] = res_results[0][4]
-            attendees = cal.getAttendees(request.POST.get('res_id'))
+            if res_results == -1:
+                return render(request, 'myapp/scheduler.html', {'Error':'Invalid input. Try again.'})
+            elif res_results:
+                request.session['res_id'] = request.POST.get('res_id')
+                request.session['update_type'] = res_results[0][4]
+                attendees = cal.getAttendees(request.POST.get('res_id'))
+            else:
+                return render(request, 'myapp/scheduler.html', {'Error':'Reservation does not exist.'})
         elif submittype == 'Delete Reservation':
             mem = Member(request.session.get('member_id'))
-            mem.deleteReservation(int(request.POST.get('res_id')))
-            success = True
+            ret = mem.deleteReservation(request.POST.get('res_id'))
+            if ret == 1:
+                return render(request, 'myapp/scheduler.html', {'Success': 'Reservation deleted!'})
+            elif ret == -2:
+                return render(request, 'myapp/scheduler.html', {'Error': 'You do not own this reservation.'})
+            elif ret == 0:
+                return render(request, 'myapp/scheduler.html', {'Error': 'Invalid Input. Try Again'})
         elif submittype == 'Update Reservation':
             mem = Member(request.session.get('member_id'))
             if request.session.get('update_type') == 'singles':
@@ -255,9 +294,18 @@ def scheduler_view(request):
                 players.append(request.POST.get('player1'))
                 players.append(request.POST.get('player2'))
                 players.append(request.POST.get('player3'))
-            mem.updateReservation(int(request.session.get('res_id')),players)
+            ret = mem.updateReservation(int(request.session.get('res_id')),players)
             res_results = cal.lookupReservation(request.session.get('res_id'))
             attendees = cal.getAttendees(request.session.get('res_id'))
+            if ret == 1:
+                return render(request, 'myapp/scheduler.html', {'Success': 'Reservation Updated!'})
+            elif ret == -1:
+                return render(request, 'myapp/scheduler.html', {'Error': 'You do not have enough guest passes!'})
+            elif ret == -2:
+                return render(request, 'myapp/scheduler.html', {'Error': 'You do not own this reservation.'})
+            elif ret == 0:
+                return render(request, 'myapp/scheduler.html', {'Error': 'Invalid Input. Try Again'})
+
 
     processed_results = []
     if results:

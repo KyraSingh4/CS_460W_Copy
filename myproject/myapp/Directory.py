@@ -36,9 +36,9 @@ class Directory():
                                     (value,))
                         return cur.fetchall()
         except psycopg2.Error as e:
-            return False
+            return -1
         except TypeError as e:
-            return False
+            return -1
 
     def nameLookup(self, firstname: str, lastname: str):
         try:

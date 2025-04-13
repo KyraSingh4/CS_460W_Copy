@@ -54,11 +54,14 @@ class Member:
                         res_id = cur.fetchone()
 
                     for i in range(len(members)):
-                        with conn.cursor() as cur:
-                            cur.execute("SELECT firstname, lastname FROM member WHERE member_ID = (%s)", (members[i],))
-                            memname = cur.fetchall()
-                            cur.execute("INSERT INTO attendees VALUES ((%s), (%s), (%s), (%s))",
-                                (res_id[0], memname[0][0], memname[0][1],members[i]))
+                        try:
+                            with conn.cursor() as cur:
+                                cur.execute("SELECT firstname, lastname FROM member WHERE member_ID = (%s)", (members[i],))
+                                memname = cur.fetchall()
+                                cur.execute("INSERT INTO attendees VALUES ((%s), (%s), (%s), (%s))",
+                                    (res_id[0], memname[0][0], memname[0][1],members[i]))
+                        except:
+                            return 11
 
                     with conn.cursor() as cur:
                         cur.execute("SELECT guestfee FROM billing_constants")
@@ -67,8 +70,11 @@ class Member:
                     for i in range(len(guests)):
                         guest = guests[i].split()
                         with conn.cursor() as cur:
-                            cur.execute("INSERT INTO attendees (reservation_id, firstname, lastname) VALUES ((%s), (%s), (%s))",
-                                (res_id[0], guest[0], guest[1]))
+                            try:
+                                cur.execute("INSERT INTO attendees (reservation_id, firstname, lastname) VALUES ((%s), (%s), (%s))",
+                                    (res_id[0], guest[0], guest[1]))
+                            except IndexError:
+                                return 12
                             cur.execute("SELECT guestpass FROM member WHERE member_id = (%s)", (self.memberid,))
                             rem_passes = cur.fetchall()
                             cur.execute("UPDATE member SET guestpass = (%s) WHERE member_id = (%s)",
@@ -88,98 +94,112 @@ class Member:
             return False
 
     def deleteReservation(self, res_id: int):
-        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-            with conn.cursor() as cur:
-                cur.execute("SELECT reservation_id FROM reservation WHERE member_id = %s ", (self.memberid,))
-                result = cur.fetchall()
-                check_ids = []
-                for i in range(len(result)):
-                    check_ids.append(result[i][0])
-            if res_id in check_ids:
+        try:
+            res_id = int(res_id)
+            with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
                 with conn.cursor() as cur:
-                    # Checking Guestpasses
-                    cur.execute("SELECT member_id FROM attendees WHERE reservation_id = (%s)", (res_id,))
-                    attendees = cur.fetchall()
-                    cur.execute("SELECT guestpass FROM member WHERE member_id = (%s)", (self.memberid,))
-                    guestpass = cur.fetchone()[0]
-                    cur.execute("SELECT charge_id FROM charges WHERE member_id = (%s) AND description = 'Guest Fee'", (self.memberid,))
-                    charges = cur.fetchall()
+                    cur.execute("SELECT reservation_id FROM reservation WHERE member_id = %s ", (self.memberid,))
+                    result = cur.fetchall()
+                    check_ids = []
+                    for i in range(len(result)):
+                        check_ids.append(result[i][0])
+                if res_id in check_ids:
+                    with conn.cursor() as cur:
+                        # Checking Guestpasses
+                        cur.execute("SELECT member_id FROM attendees WHERE reservation_id = (%s)", (res_id,))
+                        attendees = cur.fetchall()
+                        cur.execute("SELECT guestpass FROM member WHERE member_id = (%s)", (self.memberid,))
+                        guestpass = cur.fetchone()[0]
+                        cur.execute("SELECT charge_id FROM charges WHERE member_id = (%s) AND description = 'Guest Fee'", (self.memberid,))
+                        charges = cur.fetchall()
+                        chr_inc = 0
+                        for i in range(len(attendees)):
+                            if attendees[i][0] is None:
+                                guestpass = guestpass+1
+                                cur.execute("DELETE FROM charges WHERE charge_id = %s", (charges[chr_inc][0],))
+                                chr_inc=chr_inc+1
+
+                        print(guestpass)
+                        cur.execute("UPDATE member SET guestpass = %s WHERE member_id = %s", (guestpass, self.memberid))
+                        cur.execute("DELETE FROM reservation WHERE reservation_id = %s", (res_id,))
+
+                    return 1
+                else:
+                    return -2
+        except:
+            return 0
+
+    def updateReservation(self, res_id, players: list[str]):
+        try:
+            with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+                with conn.cursor() as cur:
+                    cur.execute("SELECT reservation_id FROM reservation WHERE member_id = %s ", (self.memberid,))
+                    result = cur.fetchall()
+                    check_ids = []
+                    for i in range(len(result)):
+                        check_ids.append(result[i][0])
+
+                if res_id in check_ids:
+                    with conn.cursor() as cur:
+                        cur.execute("SELECT type FROM reservation WHERE reservation_id = (%s)", (res_id,))
+                        typ = cur.fetchone()[0]
+                    if typ == 'singles':
+                        if len(players) != 1:
+                            return 1
+                    elif typ == 'doubles':
+                        if len(players) != 3:
+                            return 1
+
+                    with conn.cursor() as cur:
+                        cur.execute("SELECT member_id FROM attendees WHERE reservation_id = (%s)", (res_id,))
+                        attendees = cur.fetchall()
+                        cur.execute("SELECT guestpass FROM member WHERE member_id = (%s)", (self.memberid,))
+                        guestpass = cur.fetchone()[0]
+                        cur.execute("SELECT charge_id FROM charges WHERE member_id = (%s) AND description = 'Guest Fee'",
+                                (self.memberid,))
+                        charges = cur.fetchall()
                     chr_inc = 0
                     for i in range(len(attendees)):
                         if attendees[i][0] is None:
-                            guestpass = guestpass+1
-                            cur.execute("DELETE FROM charges WHERE charge_id = %s", (charges[chr_inc][0],))
-                            chr_inc=chr_inc+1
-
-                    print(guestpass)
-                    cur.execute("UPDATE member SET guestpass = %s WHERE member_id = %s", (guestpass, self.memberid))
-
-
-                    cur.execute("DELETE FROM reservation WHERE reservation_id = %s", (res_id,))
-            else:
-                return False
-
-    def updateReservation(self, res_id, players: list[str]):
-
-        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-            with conn.cursor() as cur:
-                cur.execute("SELECT reservation_id FROM reservation WHERE member_id = %s ", (self.memberid,))
-                result = cur.fetchall()
-                check_ids = []
-                for i in range(len(result)):
-                    check_ids.append(result[i][0])
-
-            if res_id in check_ids:
-                with conn.cursor() as cur:
-                    cur.execute("SELECT type FROM reservation WHERE reservation_id = (%s)", (res_id,))
-                    typ = cur.fetchone()[0]
-                if typ == 'singles':
-                    if len(players) != 1:
-                        return 1
-                elif typ == 'doubles':
-                    if len(players) != 3:
-                        return 1
-
-                with conn.cursor() as cur:
-                    cur.execute("SELECT member_id FROM attendees WHERE reservation_id = (%s)", (res_id,))
-                    attendees = cur.fetchall()
-                    cur.execute("SELECT guestpass FROM member WHERE member_id = (%s)", (self.memberid,))
-                    guestpass = cur.fetchone()[0]
-                    cur.execute("SELECT charge_id FROM charges WHERE member_id = (%s) AND description = 'Guest Fee'",
-                            (self.memberid,))
-                    charges = cur.fetchall()
-                chr_inc = 0
-                for i in range(len(attendees)):
-                    if attendees[i][0] is None:
-                        guestpass = guestpass + 1
-                        with conn.cursor() as cur:
-                            cur.execute("DELETE FROM charges WHERE charge_id = %s", (charges[chr_inc][0],))
-                        chr_inc = chr_inc + 1
-                with conn.cursor() as cur:
-                    cur.execute("DELETE FROM attendees WHERE reservation_id = (%s)", (res_id,))
-                    cur.execute("UPDATE member SET guestpass = %s WHERE member_id = %s", (guestpass, self.memberid))
-
-                with conn.cursor() as cur:
-                    cur.execute("SELECT guestfee FROM billing_constants")
-                    guestfee = cur.fetchall()[0][0]
-
-                for player in players:
+                            guestpass = guestpass + 1
+                            with conn.cursor() as cur:
+                                cur.execute("DELETE FROM charges WHERE charge_id = %s", (charges[chr_inc][0],))
+                            chr_inc = chr_inc + 1
                     with conn.cursor() as cur:
-                        try:
-                            cur.execute("SELECT member_id FROM member WHERE firstname = %s AND lastname = %s",(player.split(" ")[0],player.split(" ")[1]))
-                            member_id = cur.fetchone()[0]
-                        except:
-                            member_id = None
+                        cur.execute("SELECT * FROM attendees WHERE reservation_id = (%s)", (res_id,))
+                        old_attendees = cur.fetchall()
+                        cur.execute("DELETE FROM attendees WHERE reservation_id = (%s)", (res_id,))
+                        cur.execute("UPDATE member SET guestpass = %s WHERE member_id = %s", (guestpass, self.memberid))
+
                     with conn.cursor() as cur:
-                        cur.execute("INSERT INTO attendees VALUES (%s, %s, %s, %s)", (res_id,player.split(" ")[0],player.split(" ")[1],member_id))
-                    if member_id is None:
+                        cur.execute("SELECT guestfee FROM billing_constants")
+                        guestfee = cur.fetchall()[0][0]
+
+                    for player in players:
                         with conn.cursor() as cur:
-                            cur.execute("SELECT guestpass FROM member WHERE member_id = (%s)", (self.memberid,))
-                            guestpass = cur.fetchone()[0]
-                            cur.execute("UPDATE member SET guestpass = %s WHERE member_id = (%s)", (guestpass-1,self.memberid,))
-                            self.my_bill.createCharge(guestfee, "Guest Fee", "Other")
-            else:
-                return False
+                            try:
+                                cur.execute("SELECT member_id FROM member WHERE firstname = %s AND lastname = %s",(player.split(" ")[0],player.split(" ")[1]))
+                                member_id = cur.fetchone()[0]
+                            except:
+                                member_id = None
+                        with conn.cursor() as cur:
+                            if member_id is None:
+                                if guestpass == 0:
+                                    for old_attendee in old_attendees:
+                                        cur.execute("INSERT INTO attendees VALUES (%s, %s, %s, %s)", (res_id, old_attendee[1], old_attendee[2], old_attendee[3]))
+                                    return -1
+                                else:
+                                    cur.execute("SELECT guestpass FROM member WHERE member_id = (%s)", (self.memberid,))
+                                    guestpass = cur.fetchone()[0]
+                                    cur.execute("UPDATE member SET guestpass = %s WHERE member_id = (%s)", (guestpass-1,self.memberid,))
+                                    self.my_bill.createCharge(guestfee, "Guest Fee", "Other")
+                            cur.execute("INSERT INTO attendees VALUES (%s, %s, %s, %s)", (res_id,player.split(" ")[0],player.split(" ")[1],member_id))
+
+                    return 1
+                else:
+                    return -2
+        except:
+            return 0
 
 
 
@@ -293,8 +313,9 @@ class President(Member):
                     cur.execute("INSERT INTO member (firstname, lastname, email, phonenum, optin, password) "
                                 "VALUES (%s, %s, %s, %s, %s, crypt(%s, gen_salt('md5')))",
                                 (firstname, lastname, email, phonenum, optin, pw))
+            return 0
         except psycopg2.Error:
-            return False
+            return -1
 
     def updateInformation(self, member_id: int, attribute: str, value: str):
         try:
@@ -304,22 +325,26 @@ class President(Member):
                         cur.execute("UPDATE member SET password = crypt(%s, gen_salt('md5')) WHERE member_id = (%s)", (value,))
                     else:
                         cur.execute(sql.SQL("UPDATE member SET {attr} = %s WHERE member_id = %s").format(attr = sql.Identifier(attribute)),(value,member_id))
+            return 0
         except psycopg2.Error as e:
-            return False
+            return -1
         except TypeError as e:
-            return False
+            return -1
 
     def deactivateMember(self, memberid: int):
-        if memberid == 1 or memberid == 2:
-            return False
-        else:
-            try:
-                with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-                    with conn.cursor() as cur:
-                        cur.execute("UPDATE member SET active = FALSE WHERE member_id = %s", (memberid,))
-                return True
-            except psycopg2.Error as e:
-                return False
+        #try:
+            if int(memberid) == 1 or int(memberid) == 2:
+                return -2
+            else:
+                try:
+                    with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+                        with conn.cursor() as cur:
+                            cur.execute("UPDATE member SET active = FALSE WHERE member_id = %s", (memberid,))
+                    return 0
+                except psycopg2.Error as e:
+                    return -1
+        #except:
+            #return -1
 
     def getBill(self,memberid: int):
         bill = Bill(memberid)

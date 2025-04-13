@@ -187,7 +187,7 @@
   <h3>Lookup a Reservation</h3>
   <form method="post">
     {% csrf_token %}
-    <input name="res_id" type="searchbox" placeholder="Enter Reservation ID" required>
+    <input name="res_id" type="number" placeholder="Enter Reservation ID" required>
     <input name="submittype" type="submit" value="Lookup Reservation">
   </form>
   {% if res_results %}
@@ -201,7 +201,23 @@
         <th>Reservation Type</th>
       </tr>
       <tr>
-        <td>{{ res_results.0.0 }}</td>
+        <td>
+          {% if res_results.0.0 == 0 %}
+            Monday
+          {% elif res_results.0.0 == 1%}
+            Tuesday
+          {% elif res_results.0.0 == 2 %}
+            Wednesday
+          {% elif res_results.0.0 == 3 %}
+            Thursday
+          {% elif res_results.0.0 == 4 %}
+            Friday
+          {% elif res_results.0.0 == 5 %}
+            Saturday
+          {% elif res_results.0.0 == 6 %}
+            Sunday
+          {% endif %}
+        </td>
         <td>{{ res_results.0.1 }}</td>
         <td>{{ res_results.0.2 }}</td>
         <td>{{ res_results.0.3 }}</td>

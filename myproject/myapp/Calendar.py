@@ -9,7 +9,7 @@ class Calendar:
         pass
 
     def RetrieveDay(self,day):
-        if day < 0 or day > 6:
+        if int(day) < 0 or int(day) > 6:
             return None
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
             with conn.cursor() as cur:
@@ -18,13 +18,16 @@ class Calendar:
 
     def lookupReservation(self, res_id: int):
         result = None
-        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
-            with conn.cursor() as cur:
-                cur.execute("SELECT res_day, court_num, start_time, end_time, type, member_id FROM reservation WHERE reservation_id = %s", (res_id,))
-                result = cur.fetchall()
-                if not result:  # If no rows are returned
-                    return None
-        return result
+        try:
+            with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+                with conn.cursor() as cur:
+                    cur.execute("SELECT res_day, court_num, start_time, end_time, type, member_id FROM reservation WHERE reservation_id = %s", (res_id,))
+                    result = cur.fetchall()
+                    if not result:  # If no rows are returned
+                        return None
+            return result
+        except psycopg2.Error as e:
+            return -1
 
     def getAttendees(self, res_id: int):
         result = []

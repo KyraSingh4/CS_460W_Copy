@@ -24,16 +24,27 @@
 <center>
 
   <div class="dir-page">
-      {% if error %}
-    <div class="error-msg">
-      <div class="title-container">
-        <h2 class="error-title">Error</h2>
-      </div>
-      <div class="desc-container">
-        <span class="error-desc"></span>
-      </div>
+      {% if Error %}
+  <div class="error-msg">
+    <div class="title-container">
+      <h2 class="error-title">Error</h2>
     </div>
-      {% endif %}
+    <div class="desc-container">
+      <span class="error-desc">{{Error}}</span>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if Success %}
+  <div class="succ-msg">
+    <div class="title-container-succ">
+      <h2 class="succ-title">Success</h2>
+    </div>
+    <div class="desc-container">
+      <span class="succ-desc">{{Success}}</span>
+    </div>
+  </div>
+  {% endif %}
   <h2 id="dir-title">Search Directory</h2>
 <form class="dropdown" method="post">
     {% csrf_token %}
@@ -45,7 +56,7 @@
             <option class="attribute" value="email">Email</option>
             <option class="attribute" value="phonenum">Phone Number</option>
         </select>
-            <input name = "value" class="searchbar" placeholder="Select attribute, then search value">
+            <input name = "value" class="searchbar" placeholder="Select attribute, then search value" required>
             <input name ="submittype" id="search-btn" type="submit" value="Search">
     {% else %}
         <label class="drop-btn" for="search">Select Attribute:</label>
@@ -59,7 +70,7 @@
             <option class="attribute" value="optIN">Opt-In Status</option>
             <option class="attribute" value="active">Active Status</option>
         </select>
-            <input name="value" class="searchbar" placeholder="Select attribute, then search value">
+            <input name="value" class="searchbar" placeholder="Select attribute, then search value" required>
             <input name="submittype" type="submit" value="Search">
     {% endif %}
     </form>
@@ -72,42 +83,35 @@
 <h2>Register a New Member</h2>
 <form method="post">
     {% csrf_token %}
-    <input name="fname" class="searchbar" placeholder="First Name">
-    <input name="lname" class="searchbar" placeholder="Last Name">
-    <input name="email" class="searchbar" placeholder="Email">
-    <input name="phonenum" class="searchbar" placeholder="Phone Number">
-    <input name="optin" class="searchbar" placeholder="Opt-In Status (True or False)">
-    <input name="password" class="searchbar" placeholder="Password">
-    <input name="submittype" type="submit" value="Create Member">
+    <input name="fname" class="searchbar" placeholder="First Name" required>
+    <input name="lname" class="searchbar" placeholder="Last Name" required>
+    <input name="email" class="searchbar" placeholder="Email" required>
+    <input name="phonenum" class="searchbar" placeholder="Phone Number" required>
+    <input name="optin" class="searchbar" placeholder="Opt-In Status (True or False)" required>
+    <input name="password" class="searchbar" placeholder="Password" required>
+    <input name="submittype" type="submit" value="Create Member" required>
 </form>
-{% if success %}
-      <b>Member Created!</b>
-{% endif %}
 <h2>Update a Member</h2>
       <form method="post">
           {% csrf_token %}
-          <input name="member_id" class="searchbar" placeholder="Member ID">
+          <input name="member_id" class="searchbar" placeholder="Member ID" required>
           <select name="attribute">
             <option class="attribute" value="firstname">First Name</option>
             <option class="attribute" value="lastname">Last Name</option>
             <option class="attribute" value="email">Email</option>
             <option class="attribute" value="phonenum">Phone Number</option>
             <option class="attribute" value="optIN">Opt-In Status</option>
-            <option class="attribute" value="active">Active Status</option>
             <option class="attribute" value="password">Password</option>
           </select>
-          <input name="value" class="searchbar" placeholder="Value to Change">
+          <input name="value" class="searchbar" placeholder="Value to Change" required>
           <input name="submittype" type="submit" value="Update Member">
       </form>
 <h2>Deactivate a Member</h2>
     <form method="post">
         {% csrf_token %}
-        <input name="memid" class="searchbar" placeholder="Member ID">
+        <input name="memid" class="searchbar" placeholder="Member ID" required>
         <input name="submittype" type="submit" value="Deactivate Member">
     </form>
-{% if success %}
-      <b>Member Deactivated!</b>
-{% endif %}
 {% endif %}
 
 
@@ -158,11 +162,13 @@
 </div>
 </center>
 {% else %}
-<center>
-<div class="login-msg">
-<b>Please log in.</b>
-<a href="../login/" class="nav-elem">Log In</a>
-</div>
-</center>
+    <div class="error-msg">
+    <div class="title-container">
+      <h2 class="error-title">Please Log In</h2>
+    </div>
+    <div class="desc-container">
+      <a href="../login/" class="nav-elem">Go to Log In</a>
+    </div>
+  </div>
 {% endif %}
 </html>
