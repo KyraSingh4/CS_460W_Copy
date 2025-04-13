@@ -13,7 +13,7 @@ def directory_view(request):
         directory = Directory()
         if request.POST.get('submittype') == 'View the Full Directory':
             results = directory.getAll(request.session.get('member_id'))
-
+            return render(request, 'myapp/directory.html', {'results': results})
         elif request.POST.get('submittype') == 'Search':
             attribute = request.POST.get('attribute')
             value = request.POST.get('value')
@@ -183,10 +183,12 @@ def scheduler_view(request):
                     guests = [request.POST.get('guest1')]
                 else:  # 0 guest passes, 2 members
                     mem2 = request.POST.get('member2').split(" ")
+                    print(mem2)
                     try:
                         members = [dir.nameLookup(mem2[0], mem2[1])]
+                        print(members)
                     except IndexError:
-                        return render(request, 'myapp/scheduler.html', {'Error': 'Invalid input. Try again.'})
+                        return render(request, 'myapp/scheduler.html', {'Error': 'Invalid member name. Try again.'})
                     guests = []
                 ret = mem.createReservation(
                     request.session.get('type'),
