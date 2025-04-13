@@ -374,29 +374,44 @@ def account_view(request):
             return render(request, 'myapp/account.html', {'result': result})
         if request.POST.get('submittype') == 'Change First Name':
             mem = Member(request.session.get('member_id'))
-            mem.updateInformation('firstname', request.POST.get('value'))
+            ret = mem.updateInformation('firstname', request.POST.get('value'))
             result = mem.getInformation()
-            return render(request, 'myapp/account.html', {'result': result})
+            if ret == 0:
+                return render(request, 'myapp/account.html', {'Success': 'Information Updated!', 'result' : result})
+            else:
+                return render(request, 'myapp/account.html', {'Error': 'Invalid input. Try Again.', 'result' : result})
         if request.POST.get('submittype') == 'Change Last Name':
             mem = Member(request.session.get('member_id'))
-            mem.updateInformation('lastname', request.POST.get('value'))
+            ret = mem.updateInformation('lastname', request.POST.get('value'))
             result = mem.getInformation()
-            return render(request, 'myapp/account.html', {'result': result})
+            if ret == 0:
+                return render(request, 'myapp/account.html', {'Success': 'Information Updated!', 'result': result})
+            else:
+                return render(request, 'myapp/account.html', {'Error': 'Invalid input. Try Again.', 'result': result})
         if request.POST.get('submittype') == 'Change Email':
             mem = Member(request.session.get('member_id'))
-            mem.updateInformation('email', request.POST.get('value'))
+            ret = mem.updateInformation('email', request.POST.get('value'))
             result = mem.getInformation()
-            return render(request, 'myapp/account.html', {'result': result})
+            if ret == 0:
+                return render(request, 'myapp/account.html', {'Success': 'Information Updated!', 'result' : result})
+            else:
+                return render(request, 'myapp/account.html', {'Error': 'Invalid input. Try Again.', 'result' : result})
         if request.POST.get('submittype') == 'Change Phone Number':
             mem = Member(request.session.get('member_id'))
-            mem.updateInformation('phonenum', request.POST.get('value'))
+            ret = mem.updateInformation('phonenum', request.POST.get('value'))
             result = mem.getInformation()
-            return render(request, 'myapp/account.html', {'result': result})
+            if ret == 0:
+                return render(request, 'myapp/account.html', {'Success': 'Information Updated!', 'result' : result})
+            else:
+                return render(request, 'myapp/account.html', {'Error': 'Invalid input. Try Again.', 'result' : result})
         if request.POST.get('submittype') == 'Change Opt-In':
             mem = Member(request.session.get('member_id'))
-            mem.updateInformation('optin', request.POST.get('optin'))
+            ret = mem.updateInformation('optin', request.POST.get('optin'))
             result = mem.getInformation()
-            return render(request, 'myapp/account.html', {'result': result})
+            if ret == 0:
+                return render(request, 'myapp/account.html', {'Success': 'Information Updated!', 'result' : result})
+            else:
+                return render(request, 'myapp/account.html', {'Error': 'Invalid input. Try Again.', 'result' : result})
         if request.POST.get('submittype') == 'Send Email':
             dir = Directory()
             emails = dir.getEmails()
@@ -409,6 +424,6 @@ def account_view(request):
                     email_success.append(email[0])
                 except:
                     pass
-            return render(request, 'myapp/account.html', {'email_success': email_success})
+            return render(request, 'myapp/account.html', {'Success': 'Announcement sent!'})
 
     return render(request, 'myapp/account.html')

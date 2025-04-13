@@ -22,22 +22,36 @@
   {% if request.session.member_id != none %}
 <div class="acc-page">
 <center>
+  {% if Error %}
   <div class="error-msg">
     <div class="title-container">
       <h2 class="error-title">Error</h2>
     </div>
     <div class="desc-container">
-      <span class="error-desc"></span>
+      <span class="error-desc">{{Error}}</span>
     </div>
   </div>
+  {% endif %}
+
+  {% if Success %}
+  <div class="succ-msg">
+    <div class="title-container-succ">
+      <h2 class="succ-title">Success</h2>
+    </div>
+    <div class="desc-container">
+      <span class="succ-desc">{{Success}}</span>
+    </div>
+  </div>
+  {% endif %}
+
   {% if request.session.member_id == 1 or request.session.member_id == 2 %}
 <h2 class="acc-title">Admin Dashboard</h2>
 <h3>Send an Email Announcement</h3>
   <form method="post">
     {% csrf_token %}
-    <input name="subject" type="searchbar" placeholder="Enter Email Subject">
+    <input name="subject" type="searchbar" placeholder="Enter Email Subject" required>
     <br>
-    <textarea name="emailbody" placeholder="Enter Email Body" rows="5" cols="35"></textarea>
+    <textarea name="emailbody" placeholder="Enter Email Body" rows="5" cols="35" required></textarea>
     <br>
     <input name="submittype" type="submit" value="Send Email">
   </form>
@@ -60,7 +74,7 @@
     {% endif %}
     <form method="post">
       {% csrf_token %}
-      <input name = "value" type="searchbar" placeholder="Enter First Name">
+      <input name = "value" type="searchbar" placeholder="Enter First Name" required>
       <input name="submittype" type="submit" value="Change First Name">
     </form>
     </span>
@@ -72,7 +86,7 @@
     {% endif %}
     <form method="post">
       {% csrf_token %}
-      <input name = "value" type="searchbar" placeholder="Enter Last Name">
+      <input name = "value" type="searchbar" placeholder="Enter Last Name" required>
       <input name="submittype" type="submit" value="Change Last Name">
     </form>
     </span>
@@ -84,7 +98,7 @@
     {% endif %}
     <form method="post">
       {% csrf_token %}
-      <input name = "value" type="searchbar" placeholder="Enter Email">
+      <input name = "value" type="email" placeholder="Enter Email" required>
       <input name="submittype" type="submit" value="Change Email">
     </form>
     </span>
@@ -96,7 +110,7 @@
     {% endif %}
     <form method="post">
       {% csrf_token %}
-      <input name = "value" type="searchbar" placeholder="Enter Phone Number">
+      <input name = "value" type="tel" placeholder="Enter Phone Number" required>
       <input name="submittype" type="submit" value="Change Phone Number">
     </form>
     </span>
@@ -112,7 +126,7 @@
         <option value="True">True</option>
         <option value="False">False</option>
       </select>
-      <input name="submittype" type="submit" value="Change Opt-In">
+      <input name="submittype" type="submit" value="Change Opt-In" required>
     </form>
     </span>
   </h4>
@@ -128,11 +142,13 @@
 </div>
   {% endif %}
 {% else %}
-<center>
-<div class="login-msg">
-<b>Please log in.</b>
-<a href="../login.html" class="nav-elem">Log In</a>
-</div>
-</center>
+    <div class="error-msg">
+    <div class="title-container">
+      <h2 class="error-title">Please Log In</h2>
+    </div>
+    <div class="desc-container">
+      <a href="../login/" class="nav-elem">Go to Log In</a>
+    </div>
+  </div>
 {% endif %}
 </html>

@@ -29,10 +29,11 @@ class Member:
                     cur.execute(
                         sql.SQL("UPDATE member SET {} = %s WHERE member_id = %s",).format(sql.Identifier(attribute)),
                     (value, self.memberid))
+            return 0
         except psycopg2.Error as e:
-            return False
+            return -1
         except TypeError as e:
-            return False
+            return -1
 
 
     def createReservation(self, restype: str, day: int, start: time, end: time, court: int, members: list[int], guests: list[str]):
