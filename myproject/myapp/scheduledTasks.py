@@ -116,13 +116,10 @@ def refreshReservation():
 
 
 
-
-#schedule.every().day.at("05:30").do(lambda: addYearlyFee())
-#schedule.every().day.at("05:30").do(lambda: addLateFee())
-#schedule.every().day.at("22:00").do(lambda: refreshReservation())
-
+schedule.every().day.at("05:30").do(lambda: addYearlyFee())
+schedule.every().day.at("05:30").do(lambda: addLateFee())
+schedule.every().day.at("22:00").do(lambda: refreshReservation())
 
 
-#stop_run_continuously = run_continouously(43200)
 
-refreshReservation()
+stop_run_continuously = run_continouously(43200)
