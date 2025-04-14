@@ -216,6 +216,20 @@ a {
   background-color: rgba(255,255,255,0.7);
 }
 
+table {
+  border-collapse: separate;
+}
+
+th:not(:first-child),
+td:not(:first-child) {
+  border-left-style: solid;
+}
+
+th[rowspan]:not(:last-child),
+td[rowspan]:not(:last-child) {
+  border-right-style: solid;
+}
+
 .calendar {
   background-color: rgba(255,255,255,0.7);
 }

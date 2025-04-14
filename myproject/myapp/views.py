@@ -150,7 +150,7 @@ def scheduler_view(request):
     dir = Directory()
     courts = list(range(1, 13))  # Courts 1 to 12
     hours = list(range(6, 21))  # Hours 6 AM to 8 PM
-    minutes = ["00", "15", "30", "45"]  # 15-minute intervals
+    minutes = ["00", "30"]  # 15-minute intervals
 
     if request.method == 'POST':
         submittype = request.POST.get('submittype')
@@ -312,6 +312,7 @@ def scheduler_view(request):
         for res in results:
             start_hour, start_minute = map(int, res[2].strftime("%H:%M").split(":"))
             end_hour, end_minute = map(int, res[3].strftime("%H:%M").split(":"))
+            dur = 0
             processed_results.append({
                 'court': res[1],
                 'start_hour': start_hour,
@@ -320,6 +321,7 @@ def scheduler_view(request):
                 'end_minute': end_minute,
                 'reservation_id': res[0],
                 'type': res[5],
+                'dur' : dur
             })
 
     # Create a time grid with reservation IDs for each court and time slot
@@ -331,15 +333,22 @@ def scheduler_view(request):
             row = {'time': f"{hour:02}:{minute}", 'courts': []}
             for court in courts:
                 reservation_id = None
+                dur = None
+                typ = None
                 for court_data in processed_results:
                     if court_data['court'] == court:
                         current_time = hour * 60 + int(minute)
                         start_time = court_data['start_hour'] * 60 + court_data['start_minute']
                         end_time = court_data['end_hour'] * 60 + court_data['end_minute']
-                        if start_time <= current_time <= end_time:
+                        if start_time == current_time:
                             reservation_id = court_data['reservation_id']
-                            break
-                row['courts'].append({'court': court, 'reservation_id': reservation_id})
+                            dur = (end_time - start_time)/30
+                            typ = court_data['type']
+                        #if start_time <= current_time <= end_time:
+                        #    reservation_id = court_data['reservation_id']
+                        #    break
+                row['courts'].append({'court': court, 'reservation_id': reservation_id, 'duration' : dur, 'type' : typ})
+                print(row['courts'])
             time_grid.append(row)
 
     context = {
