@@ -45,7 +45,7 @@
     </div>
   </div>
   {% endif %}
-  <h2 id="dir-title">Search Directory</h2>
+  <h2 class="page-titles" id="dir-title">Search Directory</h2>
 <form class="dropdown" method="post">
     {% csrf_token %}
     {% if request.session.member_id != 1 and request.session.member_id != 2 %}

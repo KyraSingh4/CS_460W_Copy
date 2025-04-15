@@ -59,6 +59,30 @@ a {
   padding: 10px;
 }
 
+.submit-btn {
+  background-color: #5F935A;
+  padding: 10px;
+  border: solid;
+  border-color: #5F935A;
+  color: white;
+  border-radius: 7px;
+  transition: padding 0.5s;
+}
+
+
+
+.submit-btn:hover {
+  background-color: white;
+  color: #5F935A;
+  padding: 13px;
+}
+
+#fetch-btn {
+  background-color: white;
+  color: #5F935A;
+}
+
+
 #login-btn:hover {
   background-color: white;
   color: #5F935A;
@@ -90,11 +114,6 @@ a {
 .nav-elem:hover {
   background-color: #5F935A;
   color: white;
-}
-
-#dir-title {
-  color: white;
-  margin-top: 10px;
 }
 
 .attribute {
@@ -142,6 +161,10 @@ a {
   color: white;
 }
 
+#res-title {
+  width: 300px;
+}
+
 .dir-page {
   margin-top: -10px;
   background-image: url('bg3.png');
@@ -157,6 +180,13 @@ a {
   padding: 30px;
 }
 
+.acc-input {
+  padding: 10px;
+  border: solid;
+  border-color: black;
+  border-width: thin;
+}
+
 .acc-info {
   width: 800px;
   border: solid;
@@ -164,8 +194,17 @@ a {
   border-color: #5F935A
 }
 
-.acc-title {
+.page-titles {
   padding: 30px;
+  background-color: white;
+  width: 200px;
+  margin-top: 20px;
+}
+
+#dir-title {
+  width: 300px;
+  color: black;
+  margin-top: 10px;
 }
 
 .acc-page {
@@ -254,6 +293,7 @@ td[rowspan]:not(:last-child) {
 .error-msg {
   border: solid;
   border-color: black;
+  width: 300px;
 }
 
 .title-container {

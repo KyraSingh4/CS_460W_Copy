@@ -53,16 +53,16 @@
     <br>
     <textarea name="emailbody" placeholder="Enter Email Body" rows="5" cols="35" required></textarea>
     <br>
-    <input name="submittype" type="submit" value="Send Email">
+    <input class="submit-btn" name="submittype" type="submit" value="Send Email">
   </form>
   {% if email_success %}
     <h3>{{email_success}}</h3>
   {% endif %}
   {% else %}
-<h2 class="acc-title">Your Account</h2>
+<h2 class="page-titles">Your Account</h2>
 <form method="post">
   {% csrf_token %}
-  <input id = "search-btn" name="submittype" type="submit" value="Fetch Information">
+  <input class="submit-btn" id="fetch-btn" name="submittype" type="submit" value="Fetch Information">
 </form>
 </center>
 <center>
@@ -74,8 +74,8 @@
     {% endif %}
     <form method="post">
       {% csrf_token %}
-      <input name = "value" type="searchbar" placeholder="Enter First Name" required>
-      <input name="submittype" type="submit" value="Change First Name">
+      <input name = "value" class="acc-input" type="searchbar" placeholder="Enter First Name" required>
+      <input name="submittype" class="submit-btn" type="submit" value="Change First Name">
     </form>
     </span>
   </h4>
@@ -86,8 +86,8 @@
     {% endif %}
     <form method="post">
       {% csrf_token %}
-      <input name = "value" type="searchbar" placeholder="Enter Last Name" required>
-      <input name="submittype" type="submit" value="Change Last Name">
+      <input name = "value" class="acc-input" type="searchbar" placeholder="Enter Last Name" required>
+      <input name="submittype" class="submit-btn" type="submit" value="Change Last Name">
     </form>
     </span>
   </h4>
@@ -98,8 +98,8 @@
     {% endif %}
     <form method="post">
       {% csrf_token %}
-      <input name = "value" type="email" placeholder="Enter Email" required>
-      <input name="submittype" type="submit" value="Change Email">
+      <input name = "value" class="acc-input" type="email" placeholder="Enter Email" required>
+      <input name="submittype" class="submit-btn" type="submit" value="Change Email">
     </form>
     </span>
   </h4>
@@ -110,8 +110,8 @@
     {% endif %}
     <form method="post">
       {% csrf_token %}
-      <input name = "value" type="tel" placeholder="Enter Phone Number" required>
-      <input name="submittype" type="submit" value="Change Phone Number">
+      <input name = "value" type="tel" class="acc-input" placeholder="Enter Phone Number" required>
+      <input name="submittype" class="submit-btn" type="submit" value="Change Phone Number">
     </form>
     </span>
   </h4>
@@ -126,7 +126,7 @@
         <option value="True">True</option>
         <option value="False">False</option>
       </select>
-      <input name="submittype" type="submit" value="Change Opt-In" required>
+      <input name="submittype" class="submit-btn" type="submit" value="Change Opt-In" required>
     </form>
     </span>
   </h4>
