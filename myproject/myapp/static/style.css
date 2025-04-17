@@ -134,6 +134,18 @@ a {
   padding: 10px;
 }
 
+.group-content {
+  padding:10px;
+  background-color: white;
+  width: 700px;
+  border: solid;
+  border-radius: 10px;
+  border-color: black;
+  margin-left: 50px;
+  text-align: center;
+}
+
+
 #search-btn {
   border: solid;
   border-color: white;
@@ -144,12 +156,6 @@ a {
   margin-left: 20px;
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
-}
-
-#search-dir {
-  padding: 10px;
-  background-color: white;
-  width: 500px;
 }
 
 #view-dir {
@@ -206,11 +212,19 @@ a {
   background-color: white;
   width: 200px;
   margin-top: 20px;
+  border-color: white;
+  border: solid;
+  border-radius: 7px;
 }
 
 #dir-title {
   color: black;
   margin-top: 10px;
+}
+
+#search-dir-title {
+  color: black;
+  text-align: center;
 }
 
 .acc-page {

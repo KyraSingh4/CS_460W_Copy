@@ -21,9 +21,8 @@
 </div>
 
   {% if request.session.member_id != none %}
-<center>
-
   <div class="dir-page">
+    <center>
       {% if Error %}
   <div class="error-msg">
     <div class="title-container">
@@ -45,8 +44,12 @@
     </div>
   </div>
   {% endif %}
+
   <h2 class="page-titles" id="dir-title">Directory</h2>
-<div id="search-dir">
+</center>
+<div id="search-dir" class="group-content">
+  <h2 id="search-dir-title">Search Directory</h2>
+  <center>
   <form class="dropdown" method="post">
       {% csrf_token %}
       {% if request.session.member_id != 1 and request.session.member_id != 2 %}
@@ -72,17 +75,21 @@
               <option class="attribute" value="active">Active Status</option>
           </select>
               <input name="value" class="searchbar" placeholder="Select attribute, then search value" required>
-              <input name="submittype" type="submit" value="Search">
+              <input class="submit-btn" name="submittype" type="submit" value="Search">
       {% endif %}
       </form>
+    </center>
   <br> <br>
+  <center>
   <form method="post">
       {% csrf_token %}
-      <input name="submittype" type="submit" value="View the Full Directory">
+      <input class="submit-btn" name="submittype" type="submit" value="View the Full Directory">
   </form>
+</center>
 </div>
-<div id="register-member">
+<div id="register-member" class="group-content">
   {% if request.session.member_id == 1 %}
+  <center>
   <h2>Register a New Member</h2>
   <form method="post">
       {% csrf_token %}
@@ -92,10 +99,12 @@
       <input name="phonenum" class="searchbar" placeholder="Phone Number" required>
       <input name="optin" class="searchbar" placeholder="Opt-In Status (True or False)" required>
       <input name="password" class="searchbar" placeholder="Password" required>
-      <input name="submittype" type="submit" value="Create Member" required>
+      <br><br>
+      <input class="submit-btn" name="submittype" type="submit" value="Create Member" required>
   </form>
+</center>
 </div>
-<div id="update-member">
+<div id="update-member" class="group-content">
     <h2>Update a Member</h2>
       <form method="post">
           {% csrf_token %}
@@ -109,15 +118,19 @@
             <option class="attribute" value="password">Password</option>
           </select>
           <input name="value" class="searchbar" placeholder="Value to Change" required>
-          <input name="submittype" type="submit" value="Update Member">
+          <br><br>
+          <input class="submit-btn" name="submittype" type="submit" value="Update Member">
       </form>
 </div>
+<div class="group-content" id="deactivate">
 <h2>Deactivate a Member</h2>
     <form method="post">
         {% csrf_token %}
         <input name="memid" class="searchbar" placeholder="Member ID" required>
-        <input name="submittype" type="submit" value="Deactivate Member">
+        <br><br>
+        <input class="submit-btn" name="submittype" type="submit" value="Deactivate Member">
     </form>
+  </div>
 {% endif %}
 
 
@@ -166,13 +179,12 @@
     </table>
 {% endif %}
 </div>
-</center>
 {% else %}
 <center>
     <div class="error-msg">
-    <div class="title-container">
-      <h2 class="error-title">Please Log In</h2>
-    </div>
+      <div class="title-container">
+        <h2 class="error-title">Please Log In</h2>
+      </div>
     <div class="desc-container">
       <a href="../login/" class="nav-elem">Go to Log In</a>
     </div>
