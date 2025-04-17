@@ -149,6 +149,7 @@ a {
 #search-dir {
   padding: 10px;
   background-color: white;
+  width: 500px;
 }
 
 #view-dir {
@@ -208,7 +209,6 @@ a {
 }
 
 #dir-title {
-  width: 300px;
   color: black;
   margin-top: 10px;
 }
@@ -299,7 +299,7 @@ td[rowspan]:not(:last-child) {
 .error-msg {
   border: solid;
   border-color: black;
-  width: 300px;
+  width: 500px;
 }
 
 .title-container {
