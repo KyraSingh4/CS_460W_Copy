@@ -146,6 +146,11 @@ a {
   font-weight: 600;
 }
 
+#search-dir {
+  padding: 10px;
+  background-color: white;
+}
+
 #view-dir {
   border: solid;
   border-color: white;
