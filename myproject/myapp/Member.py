@@ -323,7 +323,7 @@ class President(Member):
             with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
                 with conn.cursor() as cur:
                     if attribute == 'password':
-                        cur.execute("UPDATE member SET password = crypt(%s, gen_salt('md5')) WHERE member_id = (%s)", (value,))
+                        cur.execute("UPDATE member SET password = crypt(%s, gen_salt('md5')) WHERE member_id = (%s)", (value,member_id))
                     else:
                         cur.execute(sql.SQL("UPDATE member SET {attr} = %s WHERE member_id = %s").format(attr = sql.Identifier(attribute)),(value,member_id))
             return 0
@@ -331,9 +331,11 @@ class President(Member):
             return -1
         except TypeError as e:
             return -1
+        except:
+            return -1
 
     def deactivateMember(self, memberid: int):
-        #try:
+        try:
             if int(memberid) == 1 or int(memberid) == 2:
                 return -2
             else:
@@ -344,8 +346,8 @@ class President(Member):
                     return 0
                 except psycopg2.Error as e:
                     return -1
-        #except:
-            #return -1
+        except:
+            return -1
 
     def getBill(self,memberid: int):
         bill = Bill(memberid)
