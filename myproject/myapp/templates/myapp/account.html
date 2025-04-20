@@ -45,18 +45,24 @@
   {% endif %}
 
   {% if request.session.member_id == 1 or request.session.member_id == 2 %}
-<h2 class="acc-title">Admin Dashboard</h2>
-<h3>Send an Email Announcement</h3>
-  <form method="post">
-    {% csrf_token %}
-    <input name="subject" type="searchbar" placeholder="Enter Email Subject" required>
+  <h2 class="page-titles">Admin Dashboard</h2>
+  <div class="group-content">
+    <div class="title-container">
+      <h3>Send an Email Announcement</h3>
+    </div>
     <br>
-    <textarea name="emailbody" placeholder="Enter Email Body" rows="5" cols="35" required></textarea>
+    <form method="post">
+      {% csrf_token %}
+      <p style="display: inline">Subject:</p><input name="subject" class="searchbar" type="searchbar" placeholder="Enter Email Subject" required>
+      <br><br>
+      <textarea name="emailbody" class="searchbar" placeholder="Enter Email Body" rows="5" cols="35" required></textarea>
+      <br><br>
+      <input class="submit-btn" name="submittype" type="submit" value="Send Email">
+    </form>
     <br>
-    <input class="submit-btn" name="submittype" type="submit" value="Send Email">
-  </form>
   {% if email_success %}
     <h3>{{email_success}}</h3>
+  </div>
   {% endif %}
   {% else %}
 <h2 class="page-titles">Your Account</h2>

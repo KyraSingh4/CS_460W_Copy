@@ -60,7 +60,7 @@
   {% elif request.session.member_id == 1 or request.session.member_id == 2 %}
   <h2 class="page-titles">Billing Menu</h2>
   <div class="side-by-side">
-  <div class="group-content">
+  <div class="group-content" id="billing-group-content">
     <div class="title-container">
       <h3>Search for a Bill</h3>
     </div>
@@ -179,7 +179,7 @@
 
 
   {% else %}
-  <h2 id="charges-title">Billing Menu</h2>
+  <h2 id="page-titles">Billing Menu</h2>
     <form method = "post">
       {% csrf_token %}
       <input name="submittype" class= "submit-btn" type="submit" value="Get Bill">
@@ -208,6 +208,7 @@
     <div class="title-container">
       <h2>Pay Your Bill</h2>
     </div>
+    <br>
     <form method="post">
       {% csrf_token %}
       <input name="year" class ="searchbar" type="number" min="2000" max="3000" step="1" placeholder="Year" required>

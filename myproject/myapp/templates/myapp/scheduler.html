@@ -25,7 +25,7 @@
 
 {% if Error %}
   <div class="error-msg">
-    <div class="title-container">
+    <div class="title-container-error">
       <h2 class="error-title">Error</h2>
     </div>
     <div class="desc-container">
@@ -45,38 +45,61 @@
   </div>
   {% endif %}
 
-  <h2 class="page-titles" id="res-title">Make Reservation</h2>
-  <form method="post">
-    {% csrf_token %}
-    <input name="submittype" type="submit" value="Reset Process">
-  </form>
-  <h3>Select Day:</h3>
-  <form method = "post">
-    {% csrf_token %}
-    <select name="day">
-      <option class="day" value="6">Sunday</option>
-      <option class="day" value="0">Monday</option>
-      <option class="day" value="1">Tuesday</option>
-      <option class="day" value="2">Wednesday</option>
-      <option class="day" value="3">Thursday</option>
-      <option class="day" value="4">Friday</option>
-      <option class="day" value="5">Saturday</option>
-    </select>
-    <input name="submittype" type="submit" value="Select Day">
-  </form>
-  {% if request.session.scheduler_stage == 'Type' %}
-    <h3>Select Reservation Type:</h3>
+  <h2 class="page-titles" id="res-title">Court Scheduler</h2>
+  <div class="group-content">
+    <div class="title-container">
+      <h2>Reset Process</h2>
+    </div>
+    <br>
+    <form method="post">
+      {% csrf_token %}
+      <input name="submittype" class="submit-btn" type="submit" value="Reset">
+    </form>
+  </div>
+  <br>
+  <div class="group-content">
+    <div class="title-container">
+      <h3>Select Day:</h3>
+    </div>
+    <br>
     <form method = "post">
-    {% csrf_token %}
-    <select name="type">
-      <option class="type" value="singles">Singles</option>
-      <option class="type" value="doubles">Doubles</option>
-    </select>
-    <input name="submittype" type="submit" value="Select Type">
-  </form>
+      {% csrf_token %}
+      <select name="day">
+        <option class="day" value="6">Sunday</option>
+        <option class="day" value="0">Monday</option>
+        <option class="day" value="1">Tuesday</option>
+        <option class="day" value="2">Wednesday</option>
+        <option class="day" value="3">Thursday</option>
+        <option class="day" value="4">Friday</option>
+        <option class="day" value="5">Saturday</option>
+      </select>
+      <input class="submit-btn" name="submittype" type="submit" value="Select Day">
+    </form>
+  </div>
+  <br>
+  {% if request.session.scheduler_stage == 'Type' %}
+  <div class="group-content">
+    <div class="title-container">
+      <h3>Select Reservation Type:</h3>
+    </div>
+    <br>
+    <form method = "post">
+      {% csrf_token %}
+      <select name="type">
+        <option class="type" value="singles">Singles</option>
+        <option class="type" value="doubles">Doubles</option>
+      </select>
+      <input name="submittype" class="submit-btn" type="submit" value="Select Type">
+    </form>
+  </div>
+  <br>
   {% endif %}
   {% if request.session.scheduler_stage == 'Guests' %}
-  <h3>Select Number of Non-Member Guests</h3>
+  <div class="group-content">
+    <div class="title-container">
+      <h3>Select Number of Non-Member Guests</h3>
+    </div>
+    <br>
     {% if request.session.type == 'singles' %}
       <form method="post">
         {% csrf_token %}
@@ -84,7 +107,7 @@
           <option class="guests" value="0">0</option>
           <option class="guests" value="1">1</option>
         </select>
-        <input name="submittype" type="submit" value="Designate Guests">
+        <input name="submittype" class="submit-btn" type="submit" value="Designate Guests">
       </form>
     {% elif request.session.type == 'doubles' %}
       <form method="post">
@@ -95,13 +118,19 @@
           <option class="guests" value="2">2</option>
           <option class="guests" value="3">3</option>
         </select>
-        <input name="submittype" type="submit" value="Designate Guests">
+        <input name="submittype" class="submit-btn" type="submit" value="Designate Guests">
       </form>
+  </div>
+  <br>
     {% endif %}
   {% endif %}
 
   {% if request.session.scheduler_stage == 'Reserve' %}
-    <h3>Enter Reservation Information</h3>
+  <div class="group-content">
+    <div class="title-container">
+      <h3>Enter Reservation Information</h3>
+    </div>
+    <br>
     <form method="post">
       {% csrf_token %}
       Start Time
@@ -151,12 +180,18 @@
           <input name="guest3" type="searchbox" placeholder="Enter Guest Name" required>
         {% endif %}
       {% endif %}
-      <input name="submittype" type="submit" value="Reserve">
+      <input name="submittype" class="submit-btn" type="submit" value="Reserve">
     </form>
+    </div>
+    <br>
   {% endif %}
 
   {% if results %}
-    <h2>Reservations for the Day</h2>
+  <div class="group-content">
+    <div class="title-container">
+      <h2>Reservations for the Day</h2>
+    </div>
+    <br>
     <table border="1" class="calendar">
       <thead>
           <tr>
@@ -181,18 +216,29 @@
           {% endfor %}
       </tbody>
     </table>
+    </div>
   {% endif %}
-
-    </table>
-  <h3>Lookup a Reservation</h3>
+  <br>
+<div class="group-content">
+  <div class="title-container">
+    <h3>Lookup a Reservation</h3>
+  </div>
+  <br>
   <form method="post">
     {% csrf_token %}
     <input name="res_id" type="number" placeholder="Enter Reservation ID" required>
-    <input name="submittype" type="submit" value="Lookup Reservation">
+    <input name="submittype" class="submit-btn" type="submit" value="Lookup Reservation">
   </form>
+  </div>
+  <br>
   {% if res_results %}
-    <h2>Reservation:</h2>
-    <table border="1">
+  <div class="group-content">
+    <div class="title-container">
+      <h2>Reservation:</h2>
+    </div>
+    <br>
+    <center>
+    <table border="1" class="calendar">
       <tr>
         <th>Day</th>
         <th>Court Number</th>
@@ -225,7 +271,7 @@
       </tr>
     </table>
     <h3>Players:</h3>
-    <table border="1">
+    <table border="1" class="calendar">
       <tr>
         <th>First Name</th>
         <th>Last Name</th>
@@ -237,27 +283,39 @@
       </tr>
       {% endfor %}
     </table>
-    <h3>Update This Reservation</h3>
+    </center>
+  </div>
+  <br>
+    <div class="group-content">
+      <div class="title-container">
+        <h3>Update This Reservation</h3>
+      </div>
+      <br>
+      <form method="post">
+        {% csrf_token %}
+        {% if request.session.update_type == 'singles' %}
+          <input name="player1" type="searchbox" placeholder="Enter Player Name" required>
+        {% elif request.session.update_type == 'doubles' %}
+          <input name="player1" type="searchbox" placeholder="Enter Player Name" required>
+          <input name="player2" type="searchbox" placeholder="Enter Player Name" required>
+          <input name="player3" type="searchbox" placeholder="Enter Player Name" required>
+        {% endif %}
+        <input name="submittype" class="submit-btn" type="submit" value="Update Reservation">
+
+      </form>
+    </div>
+    <br>
+  {% endif %}
+  <div class="group-content">
+    <div class="title-container">
+      <h3>Delete a Reservation</h3>
+    </div>
+    <br>
     <form method="post">
       {% csrf_token %}
-      {% if request.session.update_type == 'singles' %}
-        <input name="player1" type="searchbox" placeholder="Enter Player Name" required>
-      {% elif request.session.update_type == 'doubles' %}
-        <input name="player1" type="searchbox" placeholder="Enter Player Name" required>
-        <input name="player2" type="searchbox" placeholder="Enter Player Name" required>
-        <input name="player3" type="searchbox" placeholder="Enter Player Name" required>
-      {% endif %}
-      <input name="submittype" type="submit" value="Update Reservation">
-
+      <input name="res_id" type="searchbox" placeholder="Enter Reservation ID">
+      <input name="submittype" class="submit-btn" type="submit" value="Delete Reservation">
     </form>
-  {% endif %}
-  <div id="delete-res">
-  <h3>Delete a Reservation</h3>
-  <form method="post">
-    {% csrf_token %}
-    <input name="res_id" type="searchbox" placeholder="Enter Reservation ID">
-    <input name="submittype" type="submit" value="Delete Reservation">
-  </form>
   </div>
 </div>
 

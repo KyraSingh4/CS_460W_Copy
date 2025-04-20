@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900');
 
-html {
-  width: 100%;
+html, body {
   height: 100%;
+  width: 100%;
   font-family: "Montserrat", sans-serif;
 }
 
@@ -99,16 +99,23 @@ a {
 .nav-elem {
   padding: 30px;
   color: #5F935A;
-  margin-left: 60px;
-  margin-right: 60px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  /* margin-left: 60px;
+  margin-right: 60px; */
 }
 
 .nav {
   border: solid;
   border-color: #5F935A;
-  padding: 30px;
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 30px;
 }
 
 .nav-elem:hover {
@@ -145,7 +152,9 @@ a {
   flex: 1;
   padding:10px;
   background-color: rgba(255,255,255,0.7);
-  max-width: 700px;
+  width: fit-content;
+  min-width: 500px;
+  max-width: 800px;
   border: solid;
   border-radius: 10px;
   border-color: transparent;
@@ -157,7 +166,7 @@ a {
 
 .title-container {
   background-color: white;
-  padding: 15px;
+  padding: 10px;
   border-color: white;
   border-radius: 7px;
 }
@@ -191,10 +200,6 @@ a {
   color: white;
 }
 
-#res-title {
-  width: 300px;
-}
-
 .dir-page {
   margin-top: -10px;
   background-image: url('bg3.png');
@@ -202,7 +207,19 @@ a {
   background-attachment: fixed;
   background-size: cover;
   padding-bottom: 30px;
+  min-height: 100vh;
+  height: auto;
   /* height: 550px; */
+}
+
+#dir-title {
+  color: black;
+  margin-top: 10px;
+}
+
+#search-dir-title {
+  color: black;
+  text-align: center;
 }
 
 .acc-labels {
@@ -226,22 +243,12 @@ a {
 
 .page-titles {
   padding: 30px;
-  background-color: white;
-  width: 200px;
+  background-color: rgba(255,255,255,0.8);
+  width: fit-content;
   margin-top: 20px;
-  border-color: white;
   border: solid;
+  border-color: white;
   border-radius: 7px;
-}
-
-#dir-title {
-  color: black;
-  margin-top: 10px;
-}
-
-#search-dir-title {
-  color: black;
-  text-align: center;
 }
 
 .acc-page {
@@ -250,7 +257,8 @@ a {
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
-  height: 750px;
+  min-height: 100vh;
+  height: auto;
 }
 .admin-billing-title {
   margin-top: 80px;
@@ -262,7 +270,8 @@ a {
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
-  height: 730px;
+  min-height: 100vh;
+  height: auto;
 }
 
 .res-title {
@@ -272,13 +281,22 @@ a {
   padding: 30px;
 }
 
+#delete-res {
+  padding: 20px;
+}
+
 .billing-pg {
   margin-top: -20px;
   background-image: url('tennis-bg.png');
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
-  height: 800px;
+  min-height: 100vh;
+  height: auto;
+}
+
+#billing-group-content {
+  width: 400px;
 }
 
 .billing-body {
@@ -307,11 +325,8 @@ td[rowspan]:not(:last-child) {
 }
 
 .calendar {
-  background-color: rgba(255,255,255,0.7);
-}
-
-#delete-res {
-  padding: 20px;
+  background-color: rgba(255,255,255,0.65);
+  text-align: center;
 }
 
 .login-msg {
@@ -354,6 +369,7 @@ td[rowspan]:not(:last-child) {
 .succ-msg {
   border: solid;
   border-color: black;
+  width: 500px;
 }
 
 .title-container-succ {
