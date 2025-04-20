@@ -124,9 +124,10 @@ a {
   display: inline;
   width: 200px;
   margin-left: 20px;
-  padding: 20px;
+  padding: 10px;
   border-radius: 10px;
-  border-color: black;
+  border-color: transparent;
+  /* border-color: black; */
 }
 
 .dropdown {
@@ -134,15 +135,31 @@ a {
   padding: 10px;
 }
 
+.side-by-side {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
 .group-content {
+  flex: 1;
   padding:10px;
-  background-color: white;
-  width: 700px;
+  background-color: rgba(255,255,255,0.7);
+  max-width: 700px;
   border: solid;
   border-radius: 10px;
-  border-color: black;
-  margin-left: 50px;
+  border-color: transparent;
+  /* margin-left: 50px; */
   text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.title-container {
+  background-color: white;
+  padding: 15px;
+  border-color: white;
+  border-radius: 7px;
 }
 
 
@@ -316,7 +333,7 @@ td[rowspan]:not(:last-child) {
   width: 500px;
 }
 
-.title-container {
+.title-container-error {
   background-color: red;
   border: solid;
   border-color: red;
