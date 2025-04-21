@@ -164,6 +164,10 @@ a {
   margin-right: auto;
 }
 
+#search-results {
+  max-width: 100vw;
+}
+
 .title-container {
   background-color: white;
   padding: 10px;

@@ -156,7 +156,11 @@
 
 
 {% if results %}
-    <h2>Search Results</h2>
+<br><br>
+<div class="group-content" id="search-results">
+    <div class="title-container">
+      <h2>Search Results</h2>
+    </div>
     <table border="1" class="table-style" id="dir-view">
         {% if request.session.member_id != 1 and request.session.member_id != 2 %}
             <tr>
@@ -198,6 +202,7 @@
             {% endfor %}
         {% endif %}
     </table>
+  </div>
 {% endif %}
 </center>
 </div>
