@@ -11,7 +11,7 @@ def directory_view(request):
     success = None
     if request.method == 'POST':
         directory = Directory()
-        if request.POST.get('submittype') == 'View the Full Directory':
+        if request.POST.get('submittype') == 'View Full Directory':
             results = directory.getAll(request.session.get('member_id'))
             return render(request, 'myapp/directory.html', {'results': results})
         elif request.POST.get('submittype') == 'Search':

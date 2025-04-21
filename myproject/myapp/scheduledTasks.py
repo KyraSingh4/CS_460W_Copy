@@ -114,6 +114,13 @@ def refreshReservation():
         with conn.cursor() as cur:
             cur.execute("DELETE FROM reservation WHERE res_day = %s", (day,))
 
+def resetGuestPass():
+    if datetime.datetime.now.day() == 1:
+        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+            with conn.cursor() as cur:
+                cur.execute("UPDATE member SET guastpass = 4")
+
+
 
 
 schedule.every().day.at("05:30").do(lambda: addYearlyFee())
