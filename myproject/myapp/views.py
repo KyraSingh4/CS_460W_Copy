@@ -25,7 +25,7 @@ def directory_view(request):
         elif request.POST.get('submittype') == 'Create Member':
             mem = President()
             ret = mem.createMember(request.POST.get('fname'), request.POST.get('lname'), request.POST.get('email'),
-                             request.POST.get('phonenum'), request.POST.get('optin'), request.POST.get('password'))
+                             request.POST.get('phonenum'), request.POST.get('dropdown-option'), request.POST.get('password'))
             if ret == 0:
                 return render(request, 'myapp/directory.html', {'Success': 'Member created!'})
             else:

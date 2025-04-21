@@ -120,7 +120,11 @@ def resetGuestPass():
             with conn.cursor() as cur:
                 cur.execute("UPDATE member SET guastpass = 4")
 
-
+def backupDB():
+    if datetime.datetime.today.weekday() == 4:
+        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+            with conn.cursor() as cur:
+                cur.execute("pg_dump aced > acedbackup")
 
 
 schedule.every().day.at("05:30").do(lambda: addYearlyFee())
