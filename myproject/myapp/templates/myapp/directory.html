@@ -54,6 +54,7 @@
     <div class="title-container">
       <h2 id="search-dir-title">Search Directory</h2>
     </div>
+    <br>
     <form class="dropdown" method="post">
         {% csrf_token %}
         {% if request.session.member_id != 1 and request.session.member_id != 2 %}
@@ -67,7 +68,7 @@
                 <input name = "value" class="searchbar" placeholder="Select attribute, then search value" required>
                 <input name ="submittype" id="search-btn" type="submit" value="Search">
         {% else %}
-            <label class="drop-btn" for="search">Select Attribute:</label>
+            <label class="dropdown" for="search">Select Attribute:</label>
             <select name ="attribute" id="attribute-list">
                 <option class="attribute" value="member_id">Member ID</option>
                 <option class="attribute" value="firstname">First Name</option>
@@ -82,18 +83,14 @@
                 <input class="submit-btn" name="submittype" type="submit" value="Search">
         {% endif %}
         </form>
-
     <br> <br>
-
     <form method="post">
         {% csrf_token %}
         <input class="submit-btn" name="submittype" type="submit" value="View Full Directory">
     </form>
-
   </div>
   <div id="register-member" class="group-content">
     {% if request.session.member_id == 1 %}
-
       <div class="title-container">
         <h2>Register a New Member</h2>
       </div>
@@ -107,7 +104,7 @@
         <!-- <input name="optin" class="searchbar" placeholder="Opt-In Status (True or False)" required> -->
         <input name="password" class="searchbar" placeholder="Password" required>
         <br><br>
-        <label class="dropdown-optin" for="opt-in">Opt-In</label>
+        <label class="dropdown" for="opt-in">Opt-In</label>
         <select name="dropdown-option">
           <option class="attribute" value="True">Yes</option>
           <option class="attribute" value="False">No</option>
@@ -115,7 +112,7 @@
         <br><br>
         <input class="submit-btn" name="submittype" type="submit" value="Create Member" required>
     </form>
-
+    <br>
   </div>
 </div>
 <br><br>
@@ -125,7 +122,7 @@
       <h2>Update a Member</h2>
     </div>
     <br>
-        <form method="post">
+        <form method="post" class="dropdown">
             {% csrf_token %}
             <input name="member_id" class="searchbar" placeholder="Member ID" required>
             <select name="attribute">
@@ -159,7 +156,11 @@
 
 
 {% if results %}
-    <h2>Search Results</h2>
+<br><br>
+<div class="group-content" id="search-results">
+    <div class="title-container">
+      <h2>Search Results</h2>
+    </div>
     <table border="1" class="table-style" id="dir-view">
         {% if request.session.member_id != 1 and request.session.member_id != 2 %}
             <tr>
@@ -201,6 +202,7 @@
             {% endfor %}
         {% endif %}
     </table>
+  </div>
 {% endif %}
 </center>
 </div>
@@ -212,7 +214,7 @@
         <h2 class="error-title">Please Log In</h2>
       </div>
     <div class="desc-container">
-      <a href="../login/" class="nav-elem">Go to Log In</a>
+      <a href="../login/" class="submit-btn">Go to Log In</a>
     </div>
   </div>
 </center>

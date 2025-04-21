@@ -62,7 +62,7 @@
       <h3>Select Day:</h3>
     </div>
     <br>
-    <form method = "post">
+    <form method = "post" class="dropdown">
       {% csrf_token %}
       <select name="day">
         <option class="day" value="6">Sunday</option>
@@ -156,28 +156,28 @@
       <br>
       {% if request.session.type == 'singles' %}
         {% if request.session.num_guests == '1' %}
-          <input name="guest1" type="searchbox" placeholder="Enter Guest Name" required>
+          <input name="guest1" class="searchbar" type="searchbox" placeholder="Enter Guest Name" required>
         {% elif request.session.num_guests == '0' %}
-          <input name="member2" type="searchbox" placeholder="Enter Member Name" required>
+          <input name="member2" class="searchbar" type="searchbox" placeholder="Enter Member Name" required>
         {% endif %}
       {% endif %}
       {% if request.session.type == 'doubles' %}
         {% if request.session.num_guests == '0' %}
-          <input name="member2" type="searchbox" placeholder="Enter Member Name" required>
-          <input name="member3" type="searchbox" placeholder="Enter Member Name" required>
-          <input name="member4" type="searchbox" placeholder="Enter Member Name" required>
+          <input name="member2" class="searchbar" type="searchbox" placeholder="Enter Member Name" required>
+          <input name="member3" class="searchbar" type="searchbox" placeholder="Enter Member Name" required>
+          <input name="member4" class="searchbar" type="searchbox" placeholder="Enter Member Name" required>
         {% elif request.session.num_guests == '1' %}
-          <input name="member2" type="searchbox" placeholder="Enter Member Name" required>
-          <input name="member3" type="searchbox" placeholder="Enter Member Name" required>
-          <input name="guest1" type="searchbox" placeholder="Enter Guest Name" required>
+          <input name="member2" class="searchbar" type="searchbox" placeholder="Enter Member Name" required>
+          <input name="member3" class="searchbar" type="searchbox" placeholder="Enter Member Name" required>
+          <input name="guest1" class="searchbar" type="searchbox" placeholder="Enter Guest Name" required>
         {% elif request.session.num_guests == '2' %}
-          <input name="member2" type="searchbox" placeholder="Enter Member Name" required>
-          <input name="guest1" type="searchbox" placeholder="Enter Guest Name" required>
-          <input name="guest2" type="searchbox" placeholder="Enter Guest Name" required>
+          <input name="member2" class="searchbar" type="searchbox" placeholder="Enter Member Name" required>
+          <input name="guest1" class="searchbar" type="searchbox" placeholder="Enter Guest Name" required>
+          <input name="guest2" class="searchbar" type="searchbox" placeholder="Enter Guest Name" required>
         {% elif request.session.num_guests == '3' %}
-          <input name="guest1" type="searchbox" placeholder="Enter Guest Name" required>
-          <input name="guest2" type="searchbox" placeholder="Enter Guest Name" required>
-          <input name="guest3" type="searchbox" placeholder="Enter Guest Name" required>
+          <input name="guest1" class="searchbar" type="searchbox" placeholder="Enter Guest Name" required>
+          <input name="guest2" class="searchbar" type="searchbox" placeholder="Enter Guest Name" required>
+          <input name="guest3" class="searchbar" type="searchbox" placeholder="Enter Guest Name" required>
         {% endif %}
       {% endif %}
       <input name="submittype" class="submit-btn" type="submit" value="Reserve">
@@ -226,7 +226,7 @@
   <br>
   <form method="post">
     {% csrf_token %}
-    <input name="res_id" type="number" placeholder="Enter Reservation ID" required>
+    <input name="res_id" class="searchbar" type="number" placeholder="Enter Reservation ID" required>
     <input name="submittype" class="submit-btn" type="submit" value="Lookup Reservation">
   </form>
   </div>
@@ -294,11 +294,11 @@
       <form method="post">
         {% csrf_token %}
         {% if request.session.update_type == 'singles' %}
-          <input name="player1" type="searchbox" placeholder="Enter Player Name" required>
+          <input name="player1" class="searchbar" type="searchbox" placeholder="Enter Player Name" required>
         {% elif request.session.update_type == 'doubles' %}
-          <input name="player1" type="searchbox" placeholder="Enter Player Name" required>
-          <input name="player2" type="searchbox" placeholder="Enter Player Name" required>
-          <input name="player3" type="searchbox" placeholder="Enter Player Name" required>
+          <input name="player1" class="searchbar" type="searchbox" placeholder="Enter Player Name" required>
+          <input name="player2" class="searchbar" type="searchbox" placeholder="Enter Player Name" required>
+          <input name="player3" class="searchbar" type="searchbox" placeholder="Enter Player Name" required>
         {% endif %}
         <input name="submittype" class="submit-btn" type="submit" value="Update Reservation">
 
@@ -313,7 +313,7 @@
     <br>
     <form method="post">
       {% csrf_token %}
-      <input name="res_id" type="searchbox" placeholder="Enter Reservation ID">
+      <input name="res_id" class="searchbar" type="searchbox" placeholder="Enter Reservation ID">
       <input name="submittype" class="submit-btn" type="submit" value="Delete Reservation">
     </form>
   </div>
@@ -328,7 +328,7 @@
       <h2 class="error-title">Please Log In</h2>
     </div>
     <div class="desc-container">
-      <a href="../login/" class="nav-elem">Go to Log In</a>
+      <a href="../login/" class="submit-btn">Go to Log In</a>
     </div>
   </div>
 </center>
