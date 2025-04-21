@@ -421,6 +421,18 @@ def account_view(request):
                 return render(request, 'myapp/account.html', {'Success': 'Information Updated!', 'result' : result})
             else:
                 return render(request, 'myapp/account.html', {'Error': 'Invalid input. Try Again.', 'result' : result})
+        if request.POST.get('submittype') == 'Change Password':
+            mem = Member(request.session.get('member_id'))
+            password = request.POST.get('password')
+            confirm_password = request.POST.get('confirm_password')
+            if password != confirm_password:
+                return render(request, 'myapp/account.html', {'Error': 'Passwords do not match. Try again.'})
+            ret = mem.updateInformation('password', request.POST.get('password'))
+            result = mem.getInformation()
+            if ret == 0:
+                return render(request, 'myapp/account.html', {'Success': 'Information Updated!', 'result' : result})
+            else:
+                return render(request, 'myapp/account.html', {'Error': 'Invalid input. Try Again.', 'result' : result})
         if request.POST.get('submittype') == 'Send Email':
             dir = Directory()
             emails = dir.getEmails()
