@@ -1,4 +1,4 @@
-
+drop database aced;
 create database aced;
 CREATE USER aceduser WITH PASSWORD 'acedpassword';
 
