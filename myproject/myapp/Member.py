@@ -26,8 +26,11 @@ class Member:
         try:
             with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
                 with conn.cursor() as cur:
-                    cur.execute(
-                        sql.SQL("UPDATE member SET {} = %s WHERE member_id = %s",).format(sql.Identifier(attribute)),
+                    if attribute == 'password':
+                        cur.execute("UPDATE member SET password = crypt(%s, gen_salt('md5')) WHERE member_id = (%s)",
+                                (value, self.memberid))
+                    else:
+                        cur.execute(sql.SQL("UPDATE member SET {} = %s WHERE member_id = %s",).format(sql.Identifier(attribute)),
                     (value, self.memberid))
             return 0
         except psycopg2.Error as e:

@@ -423,11 +423,11 @@ def account_view(request):
                 return render(request, 'myapp/account.html', {'Error': 'Invalid input. Try Again.', 'result' : result})
         if request.POST.get('submittype') == 'Change Password':
             mem = Member(request.session.get('member_id'))
-            password = request.POST.get('password')
-            confirm_password = request.POST.get('confirm_password')
+            password = request.POST.get('pass')
+            confirm_password = request.POST.get('pass_verify')
             if password != confirm_password:
                 return render(request, 'myapp/account.html', {'Error': 'Passwords do not match. Try again.'})
-            ret = mem.updateInformation('password', request.POST.get('password'))
+            ret = mem.updateInformation('password', request.POST.get('pass'))
             result = mem.getInformation()
             if ret == 0:
                 return render(request, 'myapp/account.html', {'Success': 'Information Updated!', 'result' : result})

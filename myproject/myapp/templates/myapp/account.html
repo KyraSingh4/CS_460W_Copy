@@ -121,6 +121,17 @@
     </form>
     </span>
   </h4>
+  <h4 class="acc-labels" id="password-label">
+    <span id="pass">
+      <form method="post">
+        {% csrf_token %}
+        <input name = "pass" class="acc-input" type="searchbar" placeholder="Enter New Password">
+        <input name = "pass_verify" class="acc-input" type="searchbar" placeholder="Verify New Password">
+        <input name = "submittype" class="submit-btn" type="submit" value = "Change Password">
+      </form>
+
+    </span>
+  </h4>
   <h4 class="acc-labels" id="optin-label">Member Directory Opt In:
     <span id="optin">
     {% if result %}
@@ -136,6 +147,7 @@
     </form>
     </span>
   </h4>
+
   <h4 class="acc-labels" id="gpass-label">Remaining Guest Passes:
     <span id="gpass">
     {% if result %}
