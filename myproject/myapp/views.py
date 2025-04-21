@@ -56,6 +56,7 @@ def login_view(request):
         password = request.POST.get('password')
         auth = Authenticator()
         id = auth.login(username, password)
+        print(id) #print debug
         if id != False:
             request.session['member_id'] = id
             return redirect('directory')  # Redirect to the search page on successful login
