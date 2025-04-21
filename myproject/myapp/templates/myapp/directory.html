@@ -54,6 +54,7 @@
     <div class="title-container">
       <h2 id="search-dir-title">Search Directory</h2>
     </div>
+    <br>
     <form class="dropdown" method="post">
         {% csrf_token %}
         {% if request.session.member_id != 1 and request.session.member_id != 2 %}
@@ -212,7 +213,7 @@
         <h2 class="error-title">Please Log In</h2>
       </div>
     <div class="desc-container">
-      <a href="../login/" class="nav-elem">Go to Log In</a>
+      <a href="../login/" class="submit-btn">Go to Log In</a>
     </div>
   </div>
 </center>

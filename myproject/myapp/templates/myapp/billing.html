@@ -51,7 +51,7 @@
       <h2 class="error-title">Please Log In</h2>
     </div>
     <div class="desc-container">
-      <a href="../login/" class="nav-elem">Go to Log In</a>
+      <a href="../login/" class="submit-btn">Go to Log In</a>
     </div>
   </div>
 
@@ -68,6 +68,7 @@
       <form method = "post">
         {% csrf_token %}
         <input name="mem_id" class="searchbar" placeholder="Enter Member ID" required>
+        <br><br>
         <input name="submittype" class="submit-btn" type="submit" value="Get Bill">
       </form>
   </div>
@@ -81,7 +82,9 @@
       <input name="mem_id" class="searchbar" placeholder="Enter Member ID" required>
       <input name="amount" class="searchbar" placeholder="Enter Amount" required>
       <input name="desc" class="searchbar" placeholder="Enter Charge Description" required>
+      <br><br>
       <input name="submittype" class="submit-btn" type="submit" value="Create Charge">
+      <br><br>
     </form>
   </div>
   <br>
