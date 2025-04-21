@@ -8,7 +8,7 @@ def format_time(hour, minute):
     return f"{hour:02}:{minute}"
 
 @register.simple_tag
-def is_within_time_range(hour, minute, start_time, end_time):
+def is_within_time_range(hour, minute, start_time, end_time): #unused
     # Convert current time to minutes
     current_time = hour * 60 + minute
 
