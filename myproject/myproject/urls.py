@@ -3,6 +3,7 @@ from django.urls import path
 from myapp.views import directory_view, login_view, logout_view, billing_view, account_view, scheduler_view  # Import the login view
 
 urlpatterns = [
+    path('', login_view, name='login'),
     path('admin/', admin.site.urls),
     path('directory/', directory_view, name='directory'),
     path('login/', login_view, name='login'),  # Add the login URL
