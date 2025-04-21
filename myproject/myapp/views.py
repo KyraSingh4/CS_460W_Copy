@@ -349,7 +349,6 @@ def scheduler_view(request):
                         #    reservation_id = court_data['reservation_id']
                         #    break
                 row['courts'].append({'court': court, 'reservation_id': reservation_id, 'duration' : dur, 'type' : typ})
-                print(row['courts'])
             time_grid.append(row)
 
     context = {
