@@ -10,13 +10,13 @@ class Directory():
         if memberid != 1 and memberid !=2:
             with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
                 with conn.cursor() as cur:
-                    cur.execute("SELECT firstname, lastname, email, phonenum FROM member WHERE optin = true AND active = true")
+                    cur.execute("SELECT firstname, lastname, email, phonenum FROM member WHERE optin = true AND active = true ORDER BY member_id")
                     return cur.fetchall()
             #Admin View
         else:
             with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
                 with conn.cursor() as cur:
-                    cur.execute("SELECT * FROM member")
+                    cur.execute("SELECT * FROM member ORDER BY member_id")
                     return cur.fetchall()
 
     def searchAttr(self, memberid: str, attribute: str, value: str):
@@ -25,14 +25,14 @@ class Directory():
             if memberid != 1 and memberid !=2:
                 with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
                     with conn.cursor() as cur:
-                        cur.execute(sql.SQL("SELECT firstname, lastname, email, phonenum FROM member WHERE optin = TRUE AND active = true AND {attr} = %s").format(attr=sql.Identifier(attribute)),
+                        cur.execute(sql.SQL("SELECT firstname, lastname, email, phonenum FROM member WHERE optin = TRUE AND active = true AND {attr} = %s ORDER BY member_id").format(attr=sql.Identifier(attribute)),
                                     (value,))
                         return cur.fetchall()
                 #Admin View
             else:
                 with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
                     with conn.cursor() as cur:
-                        cur.execute(sql.SQL("SELECT * FROM member WHERE {attr} = %s").format(attr=sql.Identifier(attribute)),
+                        cur.execute(sql.SQL("SELECT * FROM member WHERE {attr} = %s ORDER BY member_id").format(attr=sql.Identifier(attribute)),
                                     (value,))
                         return cur.fetchall()
         except psycopg2.Error as e:
