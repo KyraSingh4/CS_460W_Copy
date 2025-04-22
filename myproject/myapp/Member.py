@@ -295,6 +295,23 @@ class Member:
                     conn.close()
                     return 9
 
+            # Guests have another overlapping reservation.
+            if type(members) == int:
+                members = [members]
+            for mem in members:
+                with conn.cursor() as cur:
+                    cur.execute("SELECT start_time, end_time FROM reservation WHERE member_id = (%s)", (mem,))
+                    check = cur.fetchall()
+
+                for i in range(len(check)):
+                    if check[i][0] <= start <= check[i][1]:
+                        conn.close()
+                        return 10
+                    if check[i][0] <= end <= check[i][1]:
+                        conn.close()
+                        return 10
+
+
             conn.close()
             return 0
         except psycopg2.Error:

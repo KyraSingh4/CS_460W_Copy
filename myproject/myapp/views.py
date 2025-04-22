@@ -258,6 +258,8 @@ def scheduler_view(request):
                 return render(request, 'myapp/scheduler.html', {'Error':'You have reached the maximum number of reservations in a 7 day period.'})
             elif ret == 9:
                 return render(request, 'myapp/scheduler.html', {'Error':'Your reservation does not occupy a valid time slot.'})
+            elif ret == 10:
+                return render(request, 'myapp/scheduler.html', {'Error':'Another member on your reservation has an overlapping reservation.'})
             elif ret == 11:
                 return render(request, 'myapp/scheduler.html', {'Error':'Invalid member name. Try again.'})
             elif ret == 12:

@@ -5,6 +5,7 @@ import datetime
 import time
 from Bill import Bill
 from emailer import Emailer
+import pandas as pd
 
 
 def run_continouously(interval=1):
@@ -70,7 +71,7 @@ def getUnpaid():
 
 
 def addLateFee():
-   #if datetime.datetime.now().day == 1:
+    if datetime.datetime.now().day == 1:
         month = datetime.datetime.now().month
         year = datetime.datetime.now().year - 1
         unpaid = getUnpaid()
@@ -105,8 +106,12 @@ def addLateFee():
                             em.lateBillEmail(email)
                         except:
                             pass
-
-
+    elif datetime.datetime.now.day() == 31 and datetime.datetime.now.month() == 3:
+        unpaid = getUnpaid()
+        with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+            with conn.cursor() as cur:
+                for member in unpaid:
+                    cur.execute("UPDATE member SET active = false WHERE member_id = %s",(member[1],))
 
 def refreshReservation():
     day = datetime.datetime.today().weekday()
@@ -121,16 +126,71 @@ def resetGuestPass():
                 cur.execute("UPDATE member SET guastpass = 4")
 
 def backupDB():
-    if datetime.datetime.today.weekday() == 4:
+    if datetime.datetime.now.day() == 4:
         with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
             with conn.cursor() as cur:
-                cur.execute("pg_dump aced > acedbackup")
+                cur.execute("SELECT * FROM member")
+                member = cur.fetchall()
+
+                cur.execute("SELECT * FROM reservation")
+                reservation = cur.fetchall()
+
+                cur.execute("SELECT * FROM charges")
+                charges = cur.fetchall()
+
+                cur.execute("SELECT * FROM attendees")
+                attendees = cur.fetchall()
+
+                cur.execute("SELECT * FROM billing_constants")
+                billing_constants = cur.fetchall()
+        member = pd.DataFrame(member)
+        reservation = pd.DataFrame(reservation)
+        charges = pd.DataFrame(charges)
+        attendees = pd.DataFrame(attendees)
+        billing_constants = pd.DataFrame(billing_constants)
+
+        member.to_csv('Backups/member.csv')
+        reservation.to_csv('Backups/reservation.csv')
+        charges.to_csv('Backups/charges.csv')
+        attendees.to_csv('Backups/attendees.csv')
+        billing_constants.to_csv('Backups/billing_constants.csv')
+
+def loadBackup():
+    member = pd.read_csv('Backups/member.csv', index_col=0).to_dict('records')
+    reservation = pd.read_csv('Backups/reservation.csv', index_col=0).to_dict('records')
+    charges = pd.read_csv('Backups/charges.csv', index_col=0).to_dict('records')
+    attendees = pd.read_csv('Backups/attendees.csv', index_col=0).to_dict('records')
+    billing_constants = pd.read_csv('Backups/billing_constants.csv', index_col=0).to_dict('records')
+
+    with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
+        for mem in member:
+            with conn.cursor() as cur:
+                cur.execute("INSERT INTO member VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                            (mem['0'],mem['1'], mem['2'], mem['3'], mem['4'],mem['5'],mem['6'],mem['7'],mem['8']))
+        for res in reservation:
+            with conn.cursor() as cur:
+                cur.execute("INSERT INTO reservation VALUES (%s, %s, %s, %s, %s, %s, %s)",
+                            (res['0'], res['1'], res['2'], res['3'], res['4'], res['5'], res['6']))
+        for chrg in charges:
+            with conn.cursor() as cur:
+                cur.execute("INSERT INTO charges VALUES (%s, %s, %s, %s, %s, %s, %s)",
+                            (chrg['0'], chrg['1'], chrg['2'], chrg['3'], chrg['4'], chrg['5'], chrg['6']))
+        for attn in attendees:
+            with conn.cursor() as cur:
+                cur.execute("INSERT INTO attendees VALUES (%s, %s, %s, %s)",
+                            (attn['0'], attn['1'], attn['2'], attn['3']))
+
+        for bill in billing_constants:
+            with conn.cursor() as cur:
+                cur.execute("INSERT INTO billing_constants VALUES (%s, %s)",
+                            (bill['0'], bill['1']))
 
 
-schedule.every().day.at("05:30").do(lambda: addYearlyFee())
-schedule.every().day.at("05:30").do(lambda: addLateFee())
-schedule.every().day.at("22:00").do(lambda: refreshReservation())
+#schedule.every().day.at("05:30").do(lambda: addYearlyFee())
+#schedule.every().day.at("05:30").do(lambda: addLateFee())
+#schedule.every().day.at("22:00").do(lambda: refreshReservation())
 
 
 
-stop_run_continuously = run_continouously(43200)
+#stop_run_continuously = run_continouously(43200)
+

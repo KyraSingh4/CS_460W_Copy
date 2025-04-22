@@ -8,7 +8,7 @@ class Authenticator:
         try:
             with psycopg2.connect(dbname="aced", user="aceduser", password="acedpassword", port="5432") as conn:
                 with conn.cursor() as cur:
-                    cur.execute("SELECT member_id, firstname, lastname, (password = crypt(%s, password)) FROM member", (password,))
+                    cur.execute("SELECT member_id, firstname, lastname, (password = crypt(%s, password)) FROM member WHERE active = true", (password,))
                     members = cur.fetchall()
 
 
