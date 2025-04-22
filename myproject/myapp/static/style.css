@@ -44,10 +44,6 @@ a {
   border-style: solid;
 }
 
-/* #pwd-login {
-  margin-left: 700px;
-} */
-
 #login-btn {
   width: 100px;
   background-color: #5F935A;
@@ -69,12 +65,10 @@ a {
   transition: padding 0.2s;
 }
 
-
-
 .submit-btn:hover {
   background-color: white;
   color: #5F935A;
-  padding: 13px;
+  padding: 12px;
 }
 
 #fetch-btn {
@@ -132,9 +126,8 @@ a {
   width: 200px;
   margin-left: 20px;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 7px;
   border-color: transparent;
-  /* border-color: black; */
 }
 
 /* .dropdown {
