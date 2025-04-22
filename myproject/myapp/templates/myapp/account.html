@@ -3,22 +3,22 @@
 {% load static %}
   <link rel="stylesheet" href="{% static 'style.css' %}" />
 
-<div class="navbar">
-  <h1 class="app-name">A.C.E.D.</h1>
-  <nav class="nav">
-    <a href="../scheduler/" class="nav-elem">Court Scheduler</a>
-    <a href="../billing/" class="nav-elem">Billing</a>
-    <a href="../directory/" class="nav-elem">Member Directory</a>
-    <a href="../account/" class="nav-elem">
-      {% if request.session.member_id == 1 or request.session.member_id == 2 %}
-        Admin Dashboard
-      {% else %}
-        My Account
-      {% endif %}
-    </a>
-    <a href="../logout/" class="nav-elem">Log Out</a>
-  </nav>
-</div>
+  <div class="app-name-container">
+    <h1 class="app-name">A.C.E.D.</h1>
+  </div>
+    <nav class="navbar">
+      <a href="../scheduler/" class="nav-elem">Court Scheduler</a>
+      <a href="../billing/" class="nav-elem">Billing</a>
+      <a href="../directory/" class="nav-elem">Member Directory</a>
+      <a href="../account/" class="nav-elem">
+          {% if request.session.member_id == 1 or request.session.member_id == 2 %}
+              Admin Dashboard
+          {% else %}
+          My Account
+          {% endif %}
+      </a>
+      <a href="../logout/" class="nav-elem">Log Out</a>
+    </nav>
   {% if request.session.member_id != none %}
 <div class="acc-page">
 <center>
@@ -70,6 +70,7 @@
   {% csrf_token %}
   <input class="submit-btn" id="fetch-btn" name="submittype" type="submit" value="Fetch Information">
 </form>
+<br>
 </center>
 <center>
 <div class="acc-info">

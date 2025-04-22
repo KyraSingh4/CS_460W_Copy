@@ -3,9 +3,10 @@
 {% load static %}
   <link rel="stylesheet" href="{% static 'style.css' %}" />
 
-<div class="navbar">
+<div class="app-name-container">
   <h1 class="app-name">A.C.E.D.</h1>
-  <nav class="nav">
+</div>
+  <nav class="navbar">
     <a href="../scheduler/" class="nav-elem">Court Scheduler</a>
     <a href="../billing/" class="nav-elem">Billing</a>
     <a href="../directory/" class="nav-elem">Member Directory</a>
@@ -18,7 +19,6 @@
     </a>
     <a href="../logout/" class="nav-elem">Log Out</a>
   </nav>
-</div>
 <body>
   {% if request.session.member_id != none %}
   <div class="dir-page">
@@ -66,7 +66,7 @@
                 <option class="dd-content" value="phonenum">Phone Number</option>
             </select>
                 <input name = "value" class="searchbar" placeholder="Select attribute, then search value" required>
-                <input name ="submittype" class="submit-btn" id="search-btn" type="submit" value="Search">
+                <input name ="submittype" class="submit-btn" type="submit" value="Search">
         {% else %}
             <label for="search">Select Attribute:</label>
             <select name ="attribute" class="dd-list">
@@ -125,13 +125,13 @@
         <form method="post" class="dropdown">
             {% csrf_token %}
             <input name="member_id" class="searchbar" placeholder="Member ID" required>
-            <select name="attribute">
-              <option class="dd-list" value="firstname">First Name</option>
-              <option class="dd-list" value="lastname">Last Name</option>
-              <option class="dd-list" value="email">Email</option>
-              <option class="dd-list" value="phonenum">Phone Number</option>
-              <option class="dd-list" value="optIN">Opt-In Status</option>
-              <option class="dd-list" value="password">Password</option>
+            <select name="attribute" class="dd-list">
+              <option class="attribute" value="firstname">First Name</option>
+              <option class="attribute" value="lastname">Last Name</option>
+              <option class="attribute" value="email">Email</option>
+              <option class="attribute" value="phonenum">Phone Number</option>
+              <option class="attribute" value="optIN">Opt-In Status</option>
+              <option class="attribute" value="password">Password</option>
             </select>
             <input name="value" class="searchbar" placeholder="Value to Change" required>
             <br><br>

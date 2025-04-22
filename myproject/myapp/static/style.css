@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900');
 
-html, body {
+html {
   height: 100%;
   width: 100%;
   font-family: "Montserrat", sans-serif;
@@ -84,25 +84,11 @@ a {
 
 .navbar {
   text-align: center;
-}
-
-.app-name {
-  color: #5F935A;
-}
-
-.nav-elem {
-  padding: 30px;
-  color: #5F935A;
-  display: flex;
-  justify-content: center;
-  flex-wrap: nowrap;
-  /* margin-left: 60px;
-  margin-right: 60px; */
-}
-
-.nav {
-  border: solid;
-  border-color: #5F935A;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  /* border: solid;
+  border-color: white; */
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
   display: flex;
@@ -111,6 +97,29 @@ a {
   overflow-x: auto;
   gap: 30px;
 }
+
+.app-name-container {
+  background-color: #5F935A;
+  padding: 10px;
+  text-align: center;
+}
+
+.app-name {
+  color:white;
+}
+
+.nav-elem {
+  padding: 20px;
+  color: #5F935A;
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  /* margin-left: 60px;
+  margin-right: 60px; */
+}
+
+/* .nav {
+} */
 
 .nav-elem:hover {
   background-color: #5F935A;
@@ -243,7 +252,7 @@ a {
   padding: 30px;
   background-color: rgba(255,255,255,0.8);
   width: fit-content;
-  margin-top: 20px;
+  /* margin-top: 50px; */
   border: solid;
   border-color: white;
   border-radius: 7px;
@@ -302,6 +311,18 @@ a {
   border: solid;
   border-color: black;
   border-radius: 7px;
+}
+
+#get-bill-btn {
+  background-color: white;
+  color: #5F935A;
+  margin-bottom: 20px;
+}
+
+#get-bill-btn:hover {
+  color: white;
+  background-color: #5F935A;
+  border-color: white;
 }
 
 .table-style {
