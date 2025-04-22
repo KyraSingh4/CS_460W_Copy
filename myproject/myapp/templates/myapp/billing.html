@@ -156,7 +156,13 @@
     {% endif %}
 
     {% if bill %}
+    <br>
+    <div class="group-content">
+      <div class="title-container">
         <h2>Bill</h2>
+        </div>
+        <center>
+          <br>
         <table border = "1" class="table-style">
           <tr>
             <th>Charge ID</th>
@@ -175,12 +181,9 @@
           </tr>
         {% endfor %}
         </table>
+        </center>
     {% endif %}
-
-
-
-
-
+    </div>
   {% else %}
   <h2 class="page-titles">Billing Menu</h2>
     <form method = "post">
@@ -188,7 +191,12 @@
       <input name="submittype" id="get-bill-btn" class= "submit-btn" type="submit" value="Get Bill">
     </form>
     {% if bill %}
+    <div class="group-content">
+      <div class="title-container">
       <h2>Your Bill</h2>
+      </div>
+      <center>
+        <br>
       <table border = "1" class="table-style">
         <tr>
           <th>Amount</th>
@@ -205,8 +213,10 @@
         </tr>
       {% endfor %}
       </table>
+      </center>
+      </div>
     {% endif %}
-
+<br>
   <div class="group-content">
     <div class="title-container">
       <h2>Pay Your Bill</h2>
