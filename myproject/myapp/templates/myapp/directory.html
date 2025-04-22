@@ -50,34 +50,34 @@
 <br>
 <center>
 <div class="side-by-side">
-  <div id="search-dir" class="group-content">
+  <div class="group-content">
     <div class="title-container">
       <h2 id="search-dir-title">Search Directory</h2>
     </div>
     <br>
-    <form class="dropdown" method="post">
+    <form method="post">
         {% csrf_token %}
         {% if request.session.member_id != 1 and request.session.member_id != 2 %}
-            <label class="drop-btn" for="search">Select Attribute:</label>
-            <select name = "attribute" id="attribute">
-                <option class="attribute" value="firstname">First Name</option>
-                <option class="attribute" value="lastname">Last Name</option>
-                <option class="attribute" value="email">Email</option>
-                <option class="attribute" value="phonenum">Phone Number</option>
+            <label for="search">Select Attribute:</label>
+            <select name = "attribute" class="dd-list">
+                <option class="dd-content" value="firstname">First Name</option>
+                <option class="dd-content" value="lastname">Last Name</option>
+                <option class="dd-content" value="email">Email</option>
+                <option class="dd-content" value="phonenum">Phone Number</option>
             </select>
                 <input name = "value" class="searchbar" placeholder="Select attribute, then search value" required>
                 <input name ="submittype" class="submit-btn" id="search-btn" type="submit" value="Search">
         {% else %}
-            <label class="dropdown" for="search">Select Attribute:</label>
-            <select name ="attribute" id="attribute-list">
-                <option class="attribute" value="member_id">Member ID</option>
-                <option class="attribute" value="firstname">First Name</option>
-                <option class="attribute" value="lastname">Last Name</option>
-                <option class="attribute" value="email">Email</option>
-                <option class="attribute" value="phonenum">Phone Number</option>
-                <option class="attribute" value="guestpass">Guest Passes</option>
-                <option class="attribute" value="optIN">Opt-In Status</option>
-                <option class="attribute" value="active">Active Status</option>
+            <label for="search">Select Attribute:</label>
+            <select name ="attribute" class="dd-list">
+                <option class="dd-content" value="member_id">Member ID</option>
+                <option class="dd-content" value="firstname">First Name</option>
+                <option class="dd-content" value="lastname">Last Name</option>
+                <option class="dd-content" value="email">Email</option>
+                <option class="dd-content" value="phonenum">Phone Number</option>
+                <option class="dd-content" value="guestpass">Guest Passes</option>
+                <option class="dd-content" value="optIN">Opt-In Status</option>
+                <option class="dd-content" value="active">Active Status</option>
             </select>
                 <input name="value" class="searchbar" placeholder="Select attribute, then search value" required>
                 <input class="submit-btn" name="submittype" type="submit" value="Search">
@@ -105,7 +105,7 @@
         <input name="password" class="searchbar" placeholder="Password" required>
         <br><br>
         <label class="dropdown" for="opt-in">Opt-In</label>
-        <select name="dropdown-option">
+        <select name="dropdown-option" class="dd-list">
           <option class="attribute" value="True">Yes</option>
           <option class="attribute" value="False">No</option>
         </select>
@@ -126,12 +126,12 @@
             {% csrf_token %}
             <input name="member_id" class="searchbar" placeholder="Member ID" required>
             <select name="attribute">
-              <option class="attribute" value="firstname">First Name</option>
-              <option class="attribute" value="lastname">Last Name</option>
-              <option class="attribute" value="email">Email</option>
-              <option class="attribute" value="phonenum">Phone Number</option>
-              <option class="attribute" value="optIN">Opt-In Status</option>
-              <option class="attribute" value="password">Password</option>
+              <option class="dd-list" value="firstname">First Name</option>
+              <option class="dd-list" value="lastname">Last Name</option>
+              <option class="dd-list" value="email">Email</option>
+              <option class="dd-list" value="phonenum">Phone Number</option>
+              <option class="dd-list" value="optIN">Opt-In Status</option>
+              <option class="dd-list" value="password">Password</option>
             </select>
             <input name="value" class="searchbar" placeholder="Value to Change" required>
             <br><br>
@@ -161,13 +161,14 @@
     <div class="title-container">
       <h2>Search Results</h2>
     </div>
+    <br>
     <table border="1" class="table-style" id="dir-view">
         {% if request.session.member_id != 1 and request.session.member_id != 2 %}
             <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Phone Number</th>
+                <th class="dir-header">First Name</th>
+                <th class="dir-header">Last Name</th>
+                <th class="dir-header">Email</th>
+                <th class="dir-header">Phone Number</th>
             </tr>
             {% for result in results %}
                 <tr>
@@ -179,14 +180,14 @@
             {% endfor %}
         {% else %}
             <tr>
-                <th>Member ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Phone Number</th>
-                <th>Guest Passes</th>
-                <th>Opt In Status</th>
-                <th>Active Status</th>
+                <th class="dir-header">Member ID</th>
+                <th class="dir-header">First Name</th>
+                <th class="dir-header">Last Name</th>
+                <th class="dir-header">Email</th>
+                <th class="dir-header">Phone Number</th>
+                <th class="dir-header">Guest Passes</th>
+                <th class="dir-header">Opt In Status</th>
+                <th class="dir-header">Active Status</th>
             </tr>
             {% for result in results %}
                 <tr>

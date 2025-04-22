@@ -130,10 +130,11 @@ a {
   border-color: transparent;
 }
 
-/* .dropdown {
-  margin-top: 100px;
-  padding: 10px;
-} */
+.dd-list {
+  border: none;
+  padding: 7px;
+  border-radius: 7px;
+}
 
 .side-by-side {
   display: flex;
@@ -331,12 +332,16 @@ td[rowspan]:not(:last-child) {
 }
 
 #dir-view {
-  width: 1350px;
+  width: fit-content;
+}
+
+.dir-header {
+  padding: 20px;
 }
 
 .dir-elem {
   padding: 15px;
-  border-radius: 7px;
+  /* border-radius: 7px; */
 }
 
 .error-msg {
