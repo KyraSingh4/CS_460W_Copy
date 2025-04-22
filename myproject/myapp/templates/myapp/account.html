@@ -72,92 +72,148 @@
 </form>
 <br>
 </center>
-<center>
-<div class="acc-info">
-  <h4 class="acc-labels" id="fname-label">First Name:
-    <span id="fname">
+<div class="side-by-side">
+  <div class="group-content">
+    <div class="title-container">
+  <h4 class="acc-labels" id="fname-label">First Name
+    <span id="fname" class="acc-result">
     {% if result %}
-      {{ result.0.0 }}
+      : {{ result.0.0 }}
     {% endif %}
+    </span>
+  </h4>
+  </div>
+    <br><br>
     <form method="post">
       {% csrf_token %}
-      <input name = "value" class="acc-input" type="searchbar" placeholder="Enter First Name" required>
+      <center>
+      <input name = "value" class="searchbar" type="searchbar" placeholder="Enter First Name" required>
       <input name="submittype" class="submit-btn" type="submit" value="Change First Name">
+      </center>
     </form>
-    </span>
-  </h4>
-  <h4 class="acc-labels" id="lname-label">Last Name:
-    <span id="lname">
-    {% if result %}
-      {{ result.0.1 }}
-    {% endif %}
-    <form method="post">
-      {% csrf_token %}
-      <input name = "value" class="acc-input" type="searchbar" placeholder="Enter Last Name" required>
-      <input name="submittype" class="submit-btn" type="submit" value="Change Last Name">
-    </form>
-    </span>
-  </h4>
-  <h4 class="acc-labels" id="email-label">Email:
-    <span id="email">
-    {% if result %}
-      {{ result.0.2 }}
-    {% endif %}
-    <form method="post">
-      {% csrf_token %}
-      <input name = "value" class="acc-input" type="email" placeholder="Enter Email" required>
-      <input name="submittype" class="submit-btn" type="submit" value="Change Email">
-    </form>
-    </span>
-  </h4>
-  <h4 class="acc-labels" id="num-label">Phone Number:
-    <span id="num">
-    {% if result %}
-      {{ result.0.3 }}
-    {% endif %}
-    <form method="post">
-      {% csrf_token %}
-      <input name = "value" type="tel" class="acc-input" placeholder="Enter Phone Number" required>
-      <input name="submittype" class="submit-btn" type="submit" value="Change Phone Number">
-    </form>
-    </span>
-  </h4>
-  <h4 class="acc-labels" id="password-label">
-    <span id="pass">
+  </div>
+  <div class="group-content">
+    <div class="title-container">
+    <h4 class="acc-labels" id="lname-label">Last Name
+      <span id="lname" class="acc-result">
+      {% if result %}
+        : {{ result.0.1 }}
+      {% endif %}
+      </span>
+    </h4>
+    </div>
+      <br><br>
       <form method="post">
         {% csrf_token %}
-        <input name = "pass" class="acc-input" type="searchbar" placeholder="Enter New Password">
-        <input name = "pass_verify" class="acc-input" type="searchbar" placeholder="Verify New Password">
-        <input name = "submittype" class="submit-btn" type="submit" value = "Change Password">
+        <center>
+          <input name = "value" class="searchbar" type="searchbar" placeholder="Enter Last Name" required>
+          <input name="submittype" class="submit-btn" type="submit" value="Change Last Name">
+        </center>
       </form>
-
+  </div>
+</div>
+<div class="side-by-side">
+<div class="group-content">
+  <div class="title-container">
+  <h4 class="acc-labels" id="email-label">Email
+    <span id="email" class="acc-result">
+    {% if result %}
+      : {{ result.0.2 }}
+    {% endif %}
     </span>
   </h4>
-  <h4 class="acc-labels" id="optin-label">Member Directory Opt In:
-    <span id="optin">
-    {% if result %}
-      {{ result.0.4 }}
-    {% endif %}
+  </div>
+    <br><br>
     <form method="post">
       {% csrf_token %}
-      <select name = "optin">
+      <center>
+      <input name = "value" class="searchbar" type="email" placeholder="Enter Email" required>
+      <input name="submittype" class="submit-btn" type="submit" value="Change Email">
+    </center>
+    </form>
+  </div>
+  <div class="group-content">
+    <div class="title-container">
+  <h4 class="acc-labels" id="num-label">Phone Number
+    <span id="num" class="acc-result">
+    {% if result %}
+      : {{ result.0.3 }}
+    {% endif %}
+    </span>
+  </h4>
+  </div>
+    <br><br>
+    <form method="post">
+      {% csrf_token %}
+      <center>
+      <input name = "value" type="tel" class="searchbar" placeholder="Enter Phone Number" required>
+      <input name="submittype" class="submit-btn" type="submit" value="Change Phone Number">
+    </center>
+    </form>
+  </div>
+  </div>
+  <!-- <div class="group-content">
+    <h4 class="acc-labels" id="password-label">Change Password
+      <span id="pass">
+        <br><br>
+        <form method="post">
+          {% csrf_token %}
+          <center>
+          <input name = "pass" class="searchbar" type="searchbar" placeholder="Enter New Password">
+          <input name = "pass_verify" class="searchbar" type="searchbar" placeholder="Verify New Password">
+          <input name = "submittype" class="submit-btn" type="submit" value = "Change Password">
+        </center>
+        </form>
+
+      </span>
+    </h4>
+  </div> -->
+  <div class="side-by-side">
+    <div class="group-content">
+      <div class="title-container">
+  <h4 class="acc-labels" id="optin-label">Member Directory Opt In
+    <span id="optin" class="acc-result">
+    {% if result %}
+      : {{ result.0.4 }}
+    {% endif %}
+    </span>
+  </h4>
+  </div>
+    <br><br>
+    <form method="post">
+      {% csrf_token %}
+      <select name = "optin" class="dd-list">
         <option value="True">True</option>
         <option value="False">False</option>
       </select>
       <input name="submittype" class="submit-btn" type="submit" value="Change Opt-In" required>
     </form>
-    </span>
-  </h4>
-
-  <h4 class="acc-labels" id="gpass-label">Remaining Guest Passes:
-    <span id="gpass">
+</div>
+<div class="group-content">
+  <div class="title-container">
+  <h4 class="acc-labels" id="gpass-label">Remaining Guest Passes
+    <span id="gpass" class="acc-result">
     {% if result %}
-      {{ result.0.5 }}
+      : {{ result.0.5 }}
     {% endif %}
     </span>
   </h4>
+  </div>
+  </div>
 </div>
-</center>
+<div class="group-content">
+  <div class="title-container">
+  <h4 class="acc-labels">Change Password</h4>
+  </div>
+      <br><br>
+      <form method="post">
+        {% csrf_token %}
+        <center>
+        <input name = "pass" class="searchbar" type="searchbar" placeholder="Enter New Password">
+        <input name = "pass_verify" class="searchbar" type="searchbar" placeholder="Verify New Password">
+        <input name = "submittype" class="submit-btn" type="submit" value = "Change Password">
+      </center>
+      </form>
 </div>
   {% endif %}
 {% else %}
@@ -170,6 +226,7 @@
       <a href="../login/" class="submit-btn">Go to Log In</a>
     </div>
   </div>
-  </center>
+</center>
+</div>
 {% endif %}
 </html>

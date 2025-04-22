@@ -133,7 +133,7 @@ a {
 .searchbar {
   display: inline;
   width: 200px;
-  margin-left: 20px;
+  /* margin-left: 20px; */
   padding: 10px;
   border-radius: 7px;
   border-color: transparent;
@@ -229,32 +229,22 @@ a {
   text-align: center;
 }
 
-.acc-labels {
+/* .acc-labels {
   text-align: left;
   padding: 30px;
-}
+} */
 
-.acc-input {
-  padding: 10px;
-  border: solid;
-  border-color: black;
-  border-width: thin;
-}
-
-.acc-info {
-  width: 800px;
-  border: solid;
-  background-color: white;
-  border-color: #5F935A
+.acc-result {
+  font-size: 20px;
 }
 
 .page-titles {
   padding: 30px;
   background-color: rgba(255,255,255,0.8);
   width: fit-content;
-  /* margin-top: 50px; */
+  margin: 20px;
   border: solid;
-  border-color: white;
+  border-color: transparent;
   border-radius: 7px;
 }
 
